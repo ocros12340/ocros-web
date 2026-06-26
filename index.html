@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>if(location.pathname==='/index.html')history.replaceState(null,'','/');</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Okros — Sound Designer</title>
@@ -1245,6 +1246,11 @@
       display: flex;
       align-items: center;
       gap: 0.4rem;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      font-family: inherit;
     }
     .footer__back:hover { color: var(--accent); }
 
@@ -1713,7 +1719,7 @@
   ───────────────────────────────────────── -->
   <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
     <div class="nav__inner">
-      <a href="#" class="nav__logo" aria-label="Okros — Sound Designer">
+      <a href="/" class="nav__logo" aria-label="Okros — Sound Designer">
         <svg class="nav__logomark" viewBox="38 134 204 116" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <clipPath id="okros-clip-nav">
@@ -2150,7 +2156,7 @@
     <div class="footer__inner">
 
       <div class="footer__brand">
-        <a href="#" class="footer__wordmark" aria-label="Okros — back to top">Okros</a>
+        <a href="/" class="footer__wordmark" aria-label="Okros — back to top">Okros</a>
         <span class="footer__tagline" data-i18n="footer.tagline">Sound that stays.</span>
       </div>
 
@@ -2158,9 +2164,9 @@
         <p class="footer__copy">
           &copy; <span id="year"></span> Okros. <span data-i18n="footer.rights">All rights reserved.</span>
         </p>
-        <a href="#" class="footer__back" data-i18n="footer.back">
+        <button type="button" class="footer__back" data-i18n="footer.back" onclick="window.scrollTo({top:0,behavior:'smooth'})">
           Back to top <span aria-hidden="true">↑</span>
-        </a>
+        </button>
       </div>
 
     </div>
