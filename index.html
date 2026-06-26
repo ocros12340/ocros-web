@@ -2213,7 +2213,7 @@
         'work.item4.desc':          'Short description — format, episode count, production scope.',
 
         'about.label':              'About',
-        'about.title':              'Sound is the\nfirst thing you feel.',
+        'about.title':              'Sound is the<br>first thing <em>you feel.</em>',
         'about.p1':                 'Ocros started with classical piano at five, and spent the next fifteen years building one of the most complete audio educations available in Hungary — graduating from the University of Theatre and Film Arts Budapest with a degree in Film Sound, after formal training in sound engineering, studio recording, music theory, and post-production.',
         'about.p2':                 'Most recently, Ocros handled sound design, post-production, and original score for Valami Igazi / Homebound, a feature film directed by Kristóf Lendvai — responsible for the full audio pipeline from shoot to final mix. His approach is collaborative and precise: he listens carefully to what a project needs, then brings his own creative judgment to make it more than what was asked for.',
         'about.p3':                 'Available for film, commercial, and music projects worldwide.',
@@ -2270,7 +2270,7 @@
         'work.item4.desc':          'Rövid leírás — formátum, epizódszám, produkciós hatókör.',
 
         'about.label':              'Rólam',
-        'about.title':              'A hang az,\namit először érzel.',
+        'about.title':              'A hang az,<br>amit először <em>érzel.</em>',
         'about.p1':                 'Ocros ötéves korában kezdett zongorázni, majd másfél évtizeden át szerezte meg Magyarország egyik legteljesebb hangoktatási hátterét — a Színház- és Filmművészeti Egyetemen hangmester diplomát szerzett, miután a Szent István Király Zeneművészeti Szakgimnáziumban hangtechnikát, stúdiófelvételt, zeneelméletet és hangutómunkát tanult.',
         'about.p2':                 'Legutóbb Lendvai Kristóf rendező Valami Igazi / Homebound című nagyjátékfilmjén dolgozott hangdesignerként, utómunkavezetőként és zeneszerzőként — a teljes audio pipeline-t kezelte a forgatástól a végső mixig. Munkamódszere együttműködő és precíz: figyelmesen hallgatja meg, mire van szüksége egy projektnek, majd a saját kreatív ítélőképességével visz bele többet annál, amit kértek tőle.',
         'about.p3':                 'Elérhető film-, reklám- és zenei projektekhez világszerte.',
@@ -2341,7 +2341,7 @@
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
         const val = i18n[lang][key];
-        if (val !== undefined) el.textContent = val;
+        if (val !== undefined) el.innerHTML = val;
       });
       document.getElementById('lang-en').classList.toggle('active', lang === 'en');
       document.getElementById('lang-hu').classList.toggle('active', lang === 'hu');
