@@ -3187,6 +3187,11 @@
           initAlbumCards(track);
         }
       });
+
+      // Re-apply language after dynamic content is injected
+      if (typeof setLang === 'function') {
+        setLang(localStorage.getItem('ocros-lang') || 'en');
+      }
     }
 
     if (document.readyState === 'loading') {
