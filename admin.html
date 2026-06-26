@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Okros — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #141820;
+      --bg-surface: #1A2030;
+      --bg-card:   #1E2535;
+      --accent:    #C4956A;
+      --text:      #E8E4DC;
+      --text-dim:  #8A8F9E;
+      --text-muted:#5A5F6E;
+      --film:      #5BADA8;
+      --comm:      #C4956A;
+      --music:     #9B7BB5;
+      --pod:       #7BA5C4;
+      --radius:    12px;
+      --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      min-height: 100vh;
+    }
+
+    /* ── Login ── */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at 50% 40%, rgba(196,149,106,0.06) 0%, transparent 65%);
+    }
+
+    .login-box {
+      width: 360px;
+      padding: 48px 40px;
+      background: linear-gradient(148deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.016) 100%);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .login-logo h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      color: var(--text);
+      letter-spacing: 0.05em;
+    }
+
+    .login-logo span {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      display: block;
+      margin-top: 4px;
+    }
+
+    .login-box input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .login-box input:focus { border-color: rgba(196,149,106,0.4); }
+
+    .btn {
+      padding: 11px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #141820;
+      width: 100%;
+    }
+
+    .btn-ghost {
+      background: rgba(255,255,255,0.06);
+      color: var(--text-dim);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .btn-danger {
+      background: rgba(196,60,60,0.15);
+      color: #e07070;
+      border: 1px solid rgba(196,60,60,0.2);
+      font-size: 0.75rem;
+      padding: 7px 12px;
+    }
+
+    .btn-edit {
+      background: rgba(255,255,255,0.06);
+      color: var(--text-dim);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.75rem;
+      padding: 7px 12px;
+    }
+
+    .login-error {
+      color: #e07070;
+      font-size: 0.8rem;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    /* ── Dashboard ── */
+    #dashboard { display: none; }
+
+    .admin-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(20,24,32,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0 clamp(24px, 4vw, 56px);
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .admin-nav__brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      color: var(--text);
+    }
+
+    .admin-nav__brand span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    .admin-nav__actions { display: flex; gap: 10px; align-items: center; }
+
+    .admin-main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(32px, 4vw, 56px) clamp(24px, 4vw, 56px);
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    /* ── Category section ── */
+    .category-section { display: flex; flex-direction: column; gap: 16px; }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .category-header__left { display: flex; align-items: center; gap: 12px; }
+
+    .category-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .category-title {
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .category-count {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.05);
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+
+    /* ── Project cards ── */
+    .projects-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .project-card {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius);
+      transition: border-color 0.3s;
+    }
+
+    .project-card:hover { border-color: rgba(255,255,255,0.1); }
+
+    .project-card.hidden-project { opacity: 0.45; }
+
+    .project-card__info { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+    .project-card__title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .project-card__title.empty { color: var(--text-muted); font-style: italic; }
+
+    .project-card__meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .project-card__url {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 400px;
+    }
+
+    .tag {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .tag-video { background: rgba(91,173,168,0.15); color: #5BADA8; }
+    .tag-audio { background: rgba(155,123,181,0.15); color: #9B7BB5; }
+    .tag-hidden { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+
+    .project-card__actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+    .empty-state {
+      padding: 28px 20px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: rgba(255,255,255,0.02);
+      border: 1px dashed rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+    }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s var(--ease-out);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg-surface);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+      transform: translateY(16px);
+      transition: transform 0.3s var(--ease-out);
+      overflow: hidden;
+    }
+
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    .modal__header {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal__title {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .modal__close {
+      width: 32px; height: 32px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.05);
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .modal__close:hover { background: rgba(255,255,255,0.1); }
+
+    .modal__body {
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .field { display: flex; flex-direction: column; gap: 6px; }
+
+    .field label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .field input, .field select, .field textarea {
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+      transition: border-color 0.3s;
+      width: 100%;
+    }
+
+    .field input:focus, .field select:focus { border-color: rgba(196,149,106,0.4); }
+
+    .field select option { background: var(--bg-surface); }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .field-check {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .field-check input[type="checkbox"] {
+      width: 16px; height: 16px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .field-check span { font-size: 0.85rem; color: var(--text-dim); }
+
+    .modal__footer {
+      padding: 16px 28px 24px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .modal__footer .btn { width: auto; }
+
+    /* ── Change password modal ── */
+    #pw-modal .modal { max-width: 400px; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 1000;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      background: #2A3444;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--text);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transform: translateY(8px);
+      opacity: 0;
+      transition: all 0.3s var(--ease-out);
+      pointer-events: none;
+    }
+
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-color: rgba(91,173,168,0.3); color: #5BADA8; }
+    .toast.error { border-color: rgba(196,60,60,0.3); color: #e07070; }
+
+    /* ── Upload zone ── */
+    .upload-zone {
+      border: 1.5px dashed rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: border-color 0.3s, background 0.3s;
+      cursor: pointer;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .upload-zone.drag-over {
+      border-color: var(--accent);
+      background: rgba(196,149,106,0.06);
+    }
+
+    .upload-zone__idle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    .upload-zone__sub { font-size: 0.78rem; color: var(--text-muted); }
+
+    .upload-browse-btn {
+      background: none;
+      border: none;
+      color: var(--accent);
+      cursor: pointer;
+      font-size: 0.78rem;
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .upload-zone__progress {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .upload-bar-wrap {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .upload-bar {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.2s;
+    }
+
+    #upload-status { font-size: 0.78rem; color: var(--text-dim); }
+
+    .upload-zone__done {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 0.85rem;
+      color: #5BADA8;
+    }
+
+    #upload-filename {
+      max-width: 280px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .upload-remove-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 2px 4px;
+      transition: color 0.2s;
+    }
+    .upload-remove-btn:hover { color: #e07070; }
+
+    /* ── Confirm dialog ── */
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .confirm-overlay.open { opacity: 1; pointer-events: all; }
+
+    .confirm-box {
+      background: var(--bg-surface);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 28px;
+      max-width: 360px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .confirm-box p { color: var(--text-dim); font-size: 0.9rem; line-height: 1.5; }
+    .confirm-box strong { color: var(--text); }
+    .confirm-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+    /* ── Album admin cards ── */
+    .album-admin-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .album-admin-card:hover { border-color: rgba(255,255,255,0.1); }
+    .album-admin-card.hidden-album { opacity: 0.45; }
+    .album-admin-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+    }
+    .album-admin-info { display: flex; flex-direction: column; gap: 4px; }
+    .album-admin-title { font-size: 0.95rem; font-weight: 500; color: var(--text); }
+    .album-admin-meta { font-size: 0.75rem; color: var(--text-muted); display: flex; gap: 10px; align-items: center; }
+    .tag-album { background: rgba(196,149,106,0.15); color: #C4956A; }
+    .album-admin-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+    .album-tracks-list {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 12px 20px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .track-admin-item {
+      display: grid;
+      grid-template-columns: 24px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 8px;
+    }
+    .track-num { font-size: 0.72rem; color: var(--text-muted); text-align: center; font-weight: 500; }
+    .track-title-cell { font-size: 0.88rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .track-actions { display: flex; gap: 6px; flex-shrink: 0; }
+    .add-track-btn {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1.5px dashed rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+      width: 100%;
+    }
+    .add-track-btn:hover { border-color: rgba(196,149,106,0.3); color: var(--accent); }
+    .section-btn-group { display: flex; gap: 8px; }
+  </style>
+</head>
+<body>
+
+  <!-- ── Login ── -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="login-logo">
+        <h1>Okros</h1>
+        <span>Admin Panel</span>
+      </div>
+      <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password">
+      <button class="btn btn-primary" id="login-btn">Enter</button>
+      <p class="login-error" id="login-error"></p>
+    </div>
+  </div>
+
+  <!-- ── Dashboard ── -->
+  <div id="dashboard">
+    <nav class="admin-nav">
+      <div class="admin-nav__brand">
+        Okros <span>Admin</span>
+      </div>
+      <div class="admin-nav__actions">
+        <button class="btn btn-ghost" id="change-pw-btn">Change password</button>
+        <button class="btn btn-ghost" id="logout-btn">Logout</button>
+      </div>
+    </nav>
+
+    <main class="admin-main" id="admin-main">
+      <!-- Rendered by JS -->
+    </main>
+  </div>
+
+  <!-- ── Project modal (add / edit) ── -->
+  <div class="modal-overlay" id="project-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <span class="modal__title" id="modal-title">Add project</span>
+        <button class="modal__close" id="modal-close">✕</button>
+      </div>
+      <div class="modal__body">
+        <input type="hidden" id="modal-id">
+        <input type="hidden" id="modal-category">
+        <div class="field">
+          <label>Project title</label>
+          <input type="text" id="modal-proj-title" placeholder="e.g. Short Film — Aftermath">
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <input type="text" id="modal-desc" placeholder="e.g. Director: John Doe · Feature film · Sound design">
+        </div>
+        <div class="field">
+          <label>Media file</label>
+          <div class="upload-zone" id="upload-zone">
+            <input type="file" id="upload-input" accept="video/*,audio/*" style="display:none">
+            <div class="upload-zone__idle" id="upload-idle">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Drag & drop file here</span>
+              <span class="upload-zone__sub">or <button type="button" class="upload-browse-btn" id="upload-browse">browse</button></span>
+            </div>
+            <div class="upload-zone__progress" id="upload-progress" style="display:none">
+              <div class="upload-bar-wrap"><div class="upload-bar" id="upload-bar"></div></div>
+              <span id="upload-status">Uploading…</span>
+            </div>
+            <div class="upload-zone__done" id="upload-done" style="display:none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5BADA8" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span id="upload-filename"></span>
+              <button type="button" class="upload-remove-btn" id="upload-remove">✕</button>
+            </div>
+          </div>
+          <input type="url" id="modal-url" placeholder="Or paste Cloudinary URL directly" style="margin-top:8px;font-size:0.78rem;opacity:0.7">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Media type</label>
+            <select id="modal-media-type">
+              <option value="video">Video</option>
+              <option value="audio">Audio</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Display order</label>
+            <input type="number" id="modal-order" value="0" min="0">
+          </div>
+        </div>
+        <label class="field-check">
+          <input type="checkbox" id="modal-visible" checked>
+          <span>Visible on site</span>
+        </label>
+        <div class="field">
+          <label>Cover image <span style="color:var(--text-muted);font-size:0.7rem;text-transform:none;letter-spacing:0">(screenshot / album art)</span></label>
+          <div class="upload-zone upload-zone--cover" id="cover-zone">
+            <input type="file" id="cover-input" accept="image/*" style="display:none">
+            <div class="upload-zone__idle" id="cover-idle">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Drag & drop image</span>
+              <span class="upload-zone__sub">or <button type="button" class="upload-browse-btn" id="cover-browse">browse</button></span>
+            </div>
+            <div class="upload-zone__progress" id="cover-progress" style="display:none">
+              <div class="upload-bar-wrap"><div class="upload-bar" id="cover-bar"></div></div>
+              <span id="cover-status">Uploading…</span>
+            </div>
+            <div class="upload-zone__done" id="cover-done" style="display:none">
+              <img id="cover-preview" style="width:56px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0">
+              <span id="cover-filename" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.82rem;color:var(--text-dim)"></span>
+              <button type="button" class="upload-remove-btn" id="cover-remove">✕</button>
+            </div>
+          </div>
+          <input type="url" id="modal-cover-url" placeholder="Or paste image URL" style="margin-top:8px;font-size:0.78rem;opacity:0.7">
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn-ghost" id="modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="modal-save">Save project</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Change password modal ── -->
+  <div class="modal-overlay" id="pw-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <span class="modal__title">Change password</span>
+        <button class="modal__close" id="pw-modal-close">✕</button>
+      </div>
+      <div class="modal__body">
+        <div class="field">
+          <label>New password</label>
+          <input type="password" id="new-pw" placeholder="New password">
+        </div>
+        <div class="field">
+          <label>Confirm new password</label>
+          <input type="password" id="confirm-pw" placeholder="Confirm password">
+        </div>
+        <p class="login-error" id="pw-error"></p>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn-ghost" id="pw-cancel">Cancel</button>
+        <button class="btn btn-primary" id="pw-save">Save password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Confirm delete ── -->
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-box">
+      <p>Delete <strong id="confirm-title"></strong>? This cannot be undone.</p>
+      <div class="confirm-actions">
+        <button class="btn btn-ghost" id="confirm-cancel">Cancel</button>
+        <button class="btn btn-danger" id="confirm-ok">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Album modal ── -->
+  <div class="modal-overlay" id="album-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <span class="modal__title" id="album-modal-title">Add album</span>
+        <button class="modal__close" id="album-modal-close">✕</button>
+      </div>
+      <div class="modal__body">
+        <input type="hidden" id="album-modal-id">
+        <input type="hidden" id="album-modal-category">
+        <div class="field">
+          <label>Album title</label>
+          <input type="text" id="album-modal-name" placeholder="e.g. Valami Igazi — Original Score">
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <input type="text" id="album-modal-desc" placeholder="e.g. Feature film · 2024">
+        </div>
+        <div class="field">
+          <label>Cover image <span style="color:var(--text-muted);font-size:0.7rem;text-transform:none;letter-spacing:0">(album art)</span></label>
+          <div class="upload-zone" id="album-cover-zone">
+            <input type="file" id="album-cover-input" accept="image/*" style="display:none">
+            <div class="upload-zone__idle" id="album-cover-idle">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.4"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <span>Drag & drop image</span>
+              <span class="upload-zone__sub">or <button type="button" class="upload-browse-btn" id="album-cover-browse">browse</button></span>
+            </div>
+            <div class="upload-zone__progress" id="album-cover-progress" style="display:none">
+              <div class="upload-bar-wrap"><div class="upload-bar" id="album-cover-bar"></div></div>
+              <span id="album-cover-status">Uploading…</span>
+            </div>
+            <div class="upload-zone__done" id="album-cover-done" style="display:none">
+              <img id="album-cover-preview" style="width:56px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0">
+              <span id="album-cover-filename" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.82rem;color:var(--text-dim)"></span>
+              <button type="button" class="upload-remove-btn" id="album-cover-remove">✕</button>
+            </div>
+          </div>
+          <input type="url" id="album-modal-cover-url" placeholder="Or paste image URL" style="margin-top:8px;font-size:0.78rem;opacity:0.7">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Display order</label>
+            <input type="number" id="album-modal-order" value="0" min="0">
+          </div>
+        </div>
+        <label class="field-check">
+          <input type="checkbox" id="album-modal-visible" checked>
+          <span>Visible on site</span>
+        </label>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn-ghost" id="album-modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="album-modal-save">Save album</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Track modal ── -->
+  <div class="modal-overlay" id="track-modal">
+    <div class="modal">
+      <div class="modal__header">
+        <span class="modal__title" id="track-modal-title">Add track</span>
+        <button class="modal__close" id="track-modal-close">✕</button>
+      </div>
+      <div class="modal__body">
+        <input type="hidden" id="track-modal-id">
+        <input type="hidden" id="track-modal-album-id">
+        <input type="hidden" id="track-modal-category">
+        <div class="field">
+          <label>Track title</label>
+          <input type="text" id="track-modal-name" placeholder="e.g. Take Me Away">
+        </div>
+        <div class="field">
+          <label>Audio file</label>
+          <div class="upload-zone" id="track-audio-zone">
+            <input type="file" id="track-audio-input" accept="audio/*,video/*" style="display:none">
+            <div class="upload-zone__idle" id="track-audio-idle">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" opacity="0.4"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Drag & drop audio file</span>
+              <span class="upload-zone__sub">or <button type="button" class="upload-browse-btn" id="track-audio-browse">browse</button></span>
+            </div>
+            <div class="upload-zone__progress" id="track-audio-progress" style="display:none">
+              <div class="upload-bar-wrap"><div class="upload-bar" id="track-audio-bar"></div></div>
+              <span id="track-audio-status">Uploading…</span>
+            </div>
+            <div class="upload-zone__done" id="track-audio-done" style="display:none">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5BADA8" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              <span id="track-audio-filename"></span>
+              <button type="button" class="upload-remove-btn" id="track-audio-remove">✕</button>
+            </div>
+          </div>
+          <input type="url" id="track-modal-url" placeholder="Or paste Cloudinary URL directly" style="margin-top:8px;font-size:0.78rem;opacity:0.7">
+        </div>
+        <div class="field">
+          <label>Display order</label>
+          <input type="number" id="track-modal-order" value="0" min="0">
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn-ghost" id="track-modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="track-modal-save">Save track</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Toast ── -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const CLD_CLOUD  = 'dlbardl1q';
+    const CLD_PRESET = 'fkr8z3st';
+
+    // ── Cloudinary upload ──────────────────────────────────────────
+    const uploadZone    = document.getElementById('upload-zone');
+    const uploadInput   = document.getElementById('upload-input');
+    const uploadIdle    = document.getElementById('upload-idle');
+    const uploadProgress= document.getElementById('upload-progress');
+    const uploadDone    = document.getElementById('upload-done');
+    const uploadBar     = document.getElementById('upload-bar');
+    const uploadStatus  = document.getElementById('upload-status');
+    const uploadFilename= document.getElementById('upload-filename');
+    const modalUrlInput = document.getElementById('modal-url');
+
+    function resetUploadZone() {
+      uploadIdle.style.display = '';
+      uploadProgress.style.display = 'none';
+      uploadDone.style.display = 'none';
+      uploadBar.style.width = '0%';
+      uploadInput.value = '';
+    }
+
+    async function uploadFile(file) {
+      uploadIdle.style.display = 'none';
+      uploadProgress.style.display = '';
+      uploadDone.style.display = 'none';
+      uploadBar.style.width = '0%';
+      uploadStatus.textContent = 'Uploading…';
+
+      // Auto-detect resource type
+      const isAudio = file.type.startsWith('audio/');
+      const isVideo = file.type.startsWith('video/');
+      const resourceType = isAudio ? 'video' : (isVideo ? 'video' : 'auto');
+      // Note: Cloudinary uses 'video' resource_type for both video AND audio
+
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('upload_preset', CLD_PRESET);
+
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLD_CLOUD}/${resourceType}/upload`);
+
+        xhr.upload.addEventListener('progress', e => {
+          if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 100);
+            uploadBar.style.width = pct + '%';
+            uploadStatus.textContent = pct + '%';
+          }
+        });
+
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            const url = data.secure_url;
+
+            // Auto-detect media type from file and set dropdown
+            const mediaTypeSelect = document.getElementById('modal-media-type');
+            if (isAudio) mediaTypeSelect.value = 'audio';
+            else if (isVideo) mediaTypeSelect.value = 'video';
+
+            // Fill URL field
+            modalUrlInput.value = url;
+
+            // Show done state
+            uploadProgress.style.display = 'none';
+            uploadDone.style.display = '';
+            uploadFilename.textContent = file.name;
+            resolve(url);
+          } else {
+            uploadStatus.textContent = 'Upload failed.';
+            reject(new Error('Upload failed: ' + xhr.status));
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          uploadStatus.textContent = 'Network error.';
+          reject(new Error('Network error'));
+        });
+
+        xhr.send(fd);
+      });
+    }
+
+    // Drag & drop
+    uploadZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      uploadZone.classList.add('drag-over');
+    });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+    uploadZone.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) uploadFile(file).catch(err => toast(err.message, 'error'));
+    });
+
+    // Click to browse
+    document.getElementById('upload-browse').addEventListener('click', e => {
+      e.stopPropagation();
+      uploadInput.click();
+    });
+    uploadZone.addEventListener('click', () => {
+      if (uploadDone.style.display !== '') return; // already uploaded
+      uploadInput.click();
+    });
+    uploadInput.addEventListener('change', () => {
+      const file = uploadInput.files[0];
+      if (file) uploadFile(file).catch(err => toast(err.message, 'error'));
+    });
+
+    // Remove uploaded file
+    document.getElementById('upload-remove').addEventListener('click', e => {
+      e.stopPropagation();
+      resetUploadZone();
+      modalUrlInput.value = '';
+    });
+
+    // ── Cover image upload ─────────────────────────────────────────
+    const coverZone    = document.getElementById('cover-zone');
+    const coverInput   = document.getElementById('cover-input');
+    const coverIdle    = document.getElementById('cover-idle');
+    const coverProgress= document.getElementById('cover-progress');
+    const coverDone    = document.getElementById('cover-done');
+    const coverBar     = document.getElementById('cover-bar');
+    const coverStatus  = document.getElementById('cover-status');
+    const coverFilename= document.getElementById('cover-filename');
+    const coverPreview = document.getElementById('cover-preview');
+    const coverUrlInput= document.getElementById('modal-cover-url');
+
+    function resetCoverZone() {
+      coverIdle.style.display = '';
+      coverProgress.style.display = 'none';
+      coverDone.style.display = 'none';
+      coverBar.style.width = '0%';
+      coverPreview.src = '';
+      coverInput.value = '';
+    }
+
+    function compressImage(file, maxPx, quality) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          let w = img.width, h = img.height;
+          if (w > maxPx || h > maxPx) {
+            if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+            else       { w = Math.round(w * maxPx / h); h = maxPx; }
+          }
+          const c = document.createElement('canvas');
+          c.width = w; c.height = h;
+          c.getContext('2d').drawImage(img, 0, 0, w, h);
+          c.toBlob(blob => resolve(blob || file), 'image/jpeg', quality);
+        };
+        img.onerror = () => resolve(file);
+        img.src = url;
+      });
+    }
+
+    async function uploadCover(file) {
+      coverIdle.style.display = 'none';
+      coverProgress.style.display = '';
+      coverDone.style.display = 'none';
+      coverBar.style.width = '0%';
+      coverStatus.textContent = 'Compressing…';
+
+      const compressed = await compressImage(file, 1920, 0.85);
+      coverStatus.textContent = 'Uploading…';
+
+      const fd = new FormData();
+      fd.append('file', compressed, 'cover.jpg');
+      fd.append('upload_preset', CLD_PRESET);
+
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`);
+
+        xhr.upload.addEventListener('progress', e => {
+          if (e.lengthComputable) {
+            const pct = Math.round((e.loaded / e.total) * 100);
+            coverBar.style.width = pct + '%';
+            coverStatus.textContent = pct + '%';
+          }
+        });
+
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            const url = data.secure_url;
+            coverUrlInput.value = url;
+            coverProgress.style.display = 'none';
+            coverDone.style.display = '';
+            coverPreview.src = url;
+            coverFilename.textContent = file.name;
+            resolve(url);
+          } else {
+            let msg = 'Upload failed.';
+            try { const d = JSON.parse(xhr.responseText); if (d.error && d.error.message) msg = d.error.message; } catch(e){}
+            coverStatus.textContent = msg;
+            reject(new Error(msg));
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          coverStatus.textContent = 'Network error.';
+          reject(new Error('Network error'));
+        });
+
+        xhr.send(fd);
+      });
+    }
+
+    coverZone.addEventListener('dragover', e => { e.preventDefault(); coverZone.classList.add('drag-over'); });
+    coverZone.addEventListener('dragleave', () => coverZone.classList.remove('drag-over'));
+    coverZone.addEventListener('drop', e => {
+      e.preventDefault(); coverZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) uploadCover(file).catch(err => toast(err.message, 'error'));
+    });
+    document.getElementById('cover-browse').addEventListener('click', e => { e.stopPropagation(); coverInput.click(); });
+    coverZone.addEventListener('click', () => { if (coverDone.style.display !== '') return; coverInput.click(); });
+    coverInput.addEventListener('change', () => {
+      const file = coverInput.files[0];
+      if (file) uploadCover(file).catch(err => toast(err.message, 'error'));
+    });
+    document.getElementById('cover-remove').addEventListener('click', e => {
+      e.stopPropagation(); resetCoverZone(); coverUrlInput.value = '';
+    });
+
+    // Show existing cover when editing
+    function loadExistingCover(url) {
+      if (!url) { resetCoverZone(); return; }
+      coverUrlInput.value = url;
+      coverIdle.style.display = 'none';
+      coverProgress.style.display = 'none';
+      coverDone.style.display = '';
+      coverPreview.src = url;
+      coverFilename.textContent = 'Current cover';
+    }
+
+    // ── Album cover upload ─────────────────────────────────────────
+    const albumCoverZone     = document.getElementById('album-cover-zone');
+    const albumCoverInput    = document.getElementById('album-cover-input');
+    const albumCoverIdle     = document.getElementById('album-cover-idle');
+    const albumCoverProgress = document.getElementById('album-cover-progress');
+    const albumCoverDone     = document.getElementById('album-cover-done');
+    const albumCoverBar      = document.getElementById('album-cover-bar');
+    const albumCoverStatus   = document.getElementById('album-cover-status');
+    const albumCoverFilename = document.getElementById('album-cover-filename');
+    const albumCoverPreview  = document.getElementById('album-cover-preview');
+    const albumCoverUrlInput = document.getElementById('album-modal-cover-url');
+
+    function resetAlbumCoverZone() {
+      albumCoverIdle.style.display = ''; albumCoverProgress.style.display = 'none';
+      albumCoverDone.style.display = 'none'; albumCoverBar.style.width = '0%';
+      albumCoverPreview.src = ''; albumCoverInput.value = ''; albumCoverUrlInput.value = '';
+    }
+    function loadExistingAlbumCover(url) {
+      if (!url) { resetAlbumCoverZone(); return; }
+      albumCoverUrlInput.value = url; albumCoverIdle.style.display = 'none';
+      albumCoverDone.style.display = ''; albumCoverPreview.src = url;
+      albumCoverFilename.textContent = 'Current cover';
+    }
+    async function uploadAlbumCover(file) {
+      albumCoverIdle.style.display = 'none'; albumCoverProgress.style.display = '';
+      albumCoverDone.style.display = 'none'; albumCoverBar.style.width = '0%';
+      albumCoverStatus.textContent = 'Compressing…';
+      const compressed = await compressImage(file, 1920, 0.85);
+      albumCoverStatus.textContent = 'Uploading…';
+      const fd = new FormData(); fd.append('file', compressed, 'cover.jpg'); fd.append('upload_preset', CLD_PRESET);
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLD_CLOUD}/image/upload`);
+        xhr.upload.addEventListener('progress', e => {
+          if (e.lengthComputable) { const pct = Math.round((e.loaded/e.total)*100); albumCoverBar.style.width=pct+'%'; albumCoverStatus.textContent=pct+'%'; }
+        });
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            albumCoverUrlInput.value = data.secure_url; albumCoverProgress.style.display = 'none';
+            albumCoverDone.style.display = ''; albumCoverPreview.src = data.secure_url;
+            albumCoverFilename.textContent = file.name; resolve(data.secure_url);
+          } else {
+            let msg = 'Upload failed.';
+            try { const d = JSON.parse(xhr.responseText); if (d.error) msg = d.error.message; } catch(e) {}
+            albumCoverStatus.textContent = msg; reject(new Error(msg));
+          }
+        });
+        xhr.addEventListener('error', () => { albumCoverStatus.textContent = 'Network error.'; reject(new Error('Network error')); });
+        xhr.send(fd);
+      });
+    }
+    albumCoverZone.addEventListener('dragover', e => { e.preventDefault(); albumCoverZone.classList.add('drag-over'); });
+    albumCoverZone.addEventListener('dragleave', () => albumCoverZone.classList.remove('drag-over'));
+    albumCoverZone.addEventListener('drop', e => {
+      e.preventDefault(); albumCoverZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) uploadAlbumCover(file).catch(err => toast(err.message, 'error'));
+    });
+    document.getElementById('album-cover-browse').addEventListener('click', e => { e.stopPropagation(); albumCoverInput.click(); });
+    albumCoverInput.addEventListener('change', () => { const f = albumCoverInput.files[0]; if (f) uploadAlbumCover(f).catch(err => toast(err.message,'error')); });
+    document.getElementById('album-cover-remove').addEventListener('click', e => { e.stopPropagation(); resetAlbumCoverZone(); });
+
+    // ── Track audio upload ─────────────────────────────────────────
+    const trackAudioZone     = document.getElementById('track-audio-zone');
+    const trackAudioInput    = document.getElementById('track-audio-input');
+    const trackAudioIdle     = document.getElementById('track-audio-idle');
+    const trackAudioProgress = document.getElementById('track-audio-progress');
+    const trackAudioDone     = document.getElementById('track-audio-done');
+    const trackAudioBar      = document.getElementById('track-audio-bar');
+    const trackAudioStatus   = document.getElementById('track-audio-status');
+    const trackAudioFilename = document.getElementById('track-audio-filename');
+    const trackAudioUrlInput = document.getElementById('track-modal-url');
+
+    function resetTrackAudioZone() {
+      trackAudioIdle.style.display = ''; trackAudioProgress.style.display = 'none';
+      trackAudioDone.style.display = 'none'; trackAudioBar.style.width = '0%';
+      trackAudioInput.value = ''; trackAudioUrlInput.value = '';
+    }
+    async function uploadTrackAudio(file) {
+      trackAudioIdle.style.display = 'none'; trackAudioProgress.style.display = '';
+      trackAudioDone.style.display = 'none'; trackAudioBar.style.width = '0%';
+      trackAudioStatus.textContent = 'Uploading…';
+      const fd = new FormData(); fd.append('file', file); fd.append('upload_preset', CLD_PRESET);
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLD_CLOUD}/video/upload`);
+        xhr.upload.addEventListener('progress', e => {
+          if (e.lengthComputable) { const pct = Math.round((e.loaded/e.total)*100); trackAudioBar.style.width=pct+'%'; trackAudioStatus.textContent=pct+'%'; }
+        });
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            trackAudioUrlInput.value = data.secure_url; trackAudioProgress.style.display = 'none';
+            trackAudioDone.style.display = ''; trackAudioFilename.textContent = file.name; resolve(data.secure_url);
+          } else {
+            let msg = 'Upload failed.';
+            try { const d = JSON.parse(xhr.responseText); if (d.error) msg = d.error.message; } catch(e) {}
+            trackAudioStatus.textContent = msg; reject(new Error(msg));
+          }
+        });
+        xhr.addEventListener('error', () => { trackAudioStatus.textContent = 'Network error.'; reject(new Error('Network error')); });
+        xhr.send(fd);
+      });
+    }
+    trackAudioZone.addEventListener('dragover', e => { e.preventDefault(); trackAudioZone.classList.add('drag-over'); });
+    trackAudioZone.addEventListener('dragleave', () => trackAudioZone.classList.remove('drag-over'));
+    trackAudioZone.addEventListener('drop', e => {
+      e.preventDefault(); trackAudioZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file) uploadTrackAudio(file).catch(err => toast(err.message, 'error'));
+    });
+    document.getElementById('track-audio-browse').addEventListener('click', e => { e.stopPropagation(); trackAudioInput.click(); });
+    trackAudioInput.addEventListener('change', () => { const f = trackAudioInput.files[0]; if (f) uploadTrackAudio(f).catch(err => toast(err.message,'error')); });
+    document.getElementById('track-audio-remove').addEventListener('click', e => { e.stopPropagation(); resetTrackAudioZone(); });
+
+    const SUPABASE_URL = 'https://zspmnnrmcfcxdudmiegc.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_hex89ktAS2X0tyrSenty4g_pPlrTACL';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const CATEGORIES = [
+      { id: 'film',  label: 'Film Sound Design',       color: '#5BADA8', defaultType: 'video' },
+      { id: 'comm',  label: 'Commercial & Advertising', color: '#C4956A', defaultType: 'video' },
+      { id: 'music', label: 'Film Score Composition',   color: '#9B7BB5', defaultType: 'audio' },
+      { id: 'pod',   label: 'Podcast Production',       color: '#7BA5C4', defaultType: 'audio' },
+    ];
+
+    let projects = [];
+    let albums   = [];
+    let deleteTarget = null; // { type: 'project'|'album'|'track', id }
+
+    // ── Toast ──────────────────────────────────────────────────────
+    function toast(msg, type = '') {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = 'toast show ' + type;
+      setTimeout(() => { el.className = 'toast'; }, 3000);
+    }
+
+    // ── Login ──────────────────────────────────────────────────────
+    async function login() {
+      const pw = document.getElementById('pw-input').value.trim();
+      const errEl = document.getElementById('login-error');
+      errEl.textContent = '';
+      if (!pw) return;
+
+      const { data, error } = await sb
+        .from('settings')
+        .select('value')
+        .eq('key', 'admin_password')
+        .single();
+
+      if (error || !data) {
+        errEl.textContent = 'Could not connect to database.';
+        return;
+      }
+
+      if (pw !== data.value) {
+        errEl.textContent = 'Incorrect password.';
+        document.getElementById('pw-input').value = '';
+        return;
+      }
+
+      sessionStorage.setItem('okros_admin', '1');
+      showDashboard();
+    }
+
+    function logout() {
+      sessionStorage.removeItem('okros_admin');
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('pw-input').value = '';
+    }
+
+    function showDashboard() {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      loadData();
+    }
+
+    // ── Load & render ───────────────────────────────────────────────
+    async function loadData() {
+      const [pRes, aRes] = await Promise.all([
+        sb.from('projects').select('*').is('album_id', null)
+          .order('display_order', { ascending: true }).order('created_at', { ascending: true }),
+        sb.from('albums').select('*')
+          .order('display_order', { ascending: true }).order('created_at', { ascending: true }),
+      ]);
+      if (pRes.error) { toast('Failed to load projects', 'error'); return; }
+      if (aRes.error) { toast('Failed to load albums', 'error'); return; }
+      projects = pRes.data || [];
+      albums   = aRes.data || [];
+      renderDashboard();
+    }
+
+    async function loadAlbumTracks(albumId) {
+      const { data } = await sb.from('projects').select('*')
+        .eq('album_id', albumId)
+        .order('display_order', { ascending: true }).order('created_at', { ascending: true });
+      return data || [];
+    }
+
+    function renderDashboard() {
+      const main = document.getElementById('admin-main');
+      main.innerHTML = '';
+
+      CATEGORIES.forEach(cat => {
+        const catProjects = projects.filter(p => p.category === cat.id);
+        const catAlbums   = albums.filter(a => a.category === cat.id);
+        const total = catProjects.length + catAlbums.length;
+        const section = document.createElement('div');
+        section.className = 'category-section';
+        section.innerHTML = `
+          <div class="category-header">
+            <div class="category-header__left">
+              <div class="category-dot" style="background:${cat.color}"></div>
+              <span class="category-title">${cat.label}</span>
+              <span class="category-count">${total}</span>
+            </div>
+            <div class="section-btn-group">
+              <button class="btn btn-ghost" style="font-size:0.75rem;padding:7px 14px"
+                onclick="openAddModal('${cat.id}')">+ Add project</button>
+              <button class="btn btn-ghost" style="font-size:0.75rem;padding:7px 14px"
+                onclick="openAddAlbumModal('${cat.id}')">+ Add album</button>
+            </div>
+          </div>
+          <div class="projects-grid" id="grid-${cat.id}">
+            ${total === 0
+              ? `<div class="empty-state">No projects yet — click "Add project" or "Add album" to get started</div>`
+              : [
+                  ...catProjects.map(p => projectCardHTML(p)),
+                  ...catAlbums.map(a => albumCardHTML(a))
+                ].join('')
+            }
+          </div>
+        `;
+        main.appendChild(section);
+      });
+
+      loadAllAlbumTracks();
+    }
+
+    function projectCardHTML(p) {
+      const isEmpty = !p.title;
+      return `
+        <div class="project-card ${p.visible ? '' : 'hidden-project'}" data-id="${p.id}">
+          <div class="project-card__info">
+            <div class="project-card__title ${isEmpty ? 'empty' : ''}">${p.title || '(no title)'}</div>
+            <div class="project-card__meta">
+              <span class="tag tag-${p.media_type}">${p.media_type}</span>
+              ${!p.visible ? '<span class="tag tag-hidden">hidden</span>' : ''}
+              <span class="project-card__url">${p.cloudinary_url || '— no URL yet'}</span>
+            </div>
+            ${p.description ? `<div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px">${p.description}</div>` : ''}
+          </div>
+          <div class="project-card__actions">
+            <button class="btn btn-edit" onclick="openEditModal('${p.id}')">Edit</button>
+            <button class="btn btn-danger" onclick="confirmDelete('project','${p.id}','${(p.title || 'this project').replace(/'/g, "\\'")}')">Delete</button>
+          </div>
+        </div>
+      `;
+    }
+
+    // ── Add / Edit modal ───────────────────────────────────────────
+    function openAddModal(categoryId) {
+      const cat = CATEGORIES.find(c => c.id === categoryId);
+      document.getElementById('modal-title').textContent = `Add project — ${cat.label}`;
+      document.getElementById('modal-id').value = '';
+      document.getElementById('modal-category').value = categoryId;
+      document.getElementById('modal-proj-title').value = '';
+      document.getElementById('modal-desc').value = '';
+      document.getElementById('modal-url').value = '';
+      document.getElementById('modal-media-type').value = cat.defaultType;
+      document.getElementById('modal-order').value = projects.filter(p => p.category === categoryId).length;
+      document.getElementById('modal-visible').checked = true;
+      resetUploadZone();
+      resetCoverZone();
+      openModal('project-modal');
+    }
+
+    function openEditModal(id) {
+      const p = projects.find(p => p.id === id);
+      if (!p) return;
+      const cat = CATEGORIES.find(c => c.id === p.category);
+      document.getElementById('modal-title').textContent = `Edit — ${p.title || 'project'}`;
+      document.getElementById('modal-id').value = p.id;
+      document.getElementById('modal-category').value = p.category;
+      document.getElementById('modal-proj-title').value = p.title;
+      document.getElementById('modal-desc').value = p.description;
+      document.getElementById('modal-url').value = p.cloudinary_url;
+      document.getElementById('modal-media-type').value = p.media_type;
+      document.getElementById('modal-order').value = p.display_order;
+      document.getElementById('modal-visible').checked = p.visible;
+      resetUploadZone();
+      loadExistingCover(p.cover_image_url || '');
+      openModal('project-modal');
+    }
+
+    async function saveProject() {
+      const id       = document.getElementById('modal-id').value;
+      const category = document.getElementById('modal-category').value;
+      const title    = document.getElementById('modal-proj-title').value.trim();
+      const desc     = document.getElementById('modal-desc').value.trim();
+      const url      = document.getElementById('modal-url').value.trim();
+      const type     = document.getElementById('modal-media-type').value;
+      const order    = parseInt(document.getElementById('modal-order').value) || 0;
+      const visible  = document.getElementById('modal-visible').checked;
+      const coverUrl = document.getElementById('modal-cover-url').value.trim();
+
+      const payload = { category, title, description: desc, cloudinary_url: url,
+                        media_type: type, display_order: order, visible,
+                        cover_image_url: coverUrl };
+
+      let error;
+      if (id) {
+        ({ error } = await sb.from('projects').update(payload).eq('id', id));
+      } else {
+        ({ error } = await sb.from('projects').insert(payload));
+      }
+
+      if (error) { toast('Save failed: ' + error.message, 'error'); return; }
+      closeModal('project-modal');
+      toast(id ? 'Project updated ✓' : 'Project added ✓', 'success');
+      loadProjects();
+    }
+
+    // ── Album card HTML ────────────────────────────────────────────
+    function albumCardHTML(a) {
+      return `
+        <div class="album-admin-card ${a.visible ? '' : 'hidden-album'}" id="album-card-${a.id}">
+          <div class="album-admin-header">
+            <div class="album-admin-info">
+              <div class="album-admin-title">
+                <span class="tag tag-album" style="margin-right:8px;font-size:0.6rem">Album</span>${a.title || '(no title)'}
+              </div>
+              <div class="album-admin-meta">
+                ${!a.visible ? '<span class="tag tag-hidden">hidden</span>' : ''}
+                ${a.description ? `<span>${a.description}</span>` : ''}
+              </div>
+            </div>
+            <div class="album-admin-actions">
+              <button class="btn btn-edit" onclick="openEditAlbumModal('${a.id}')">Edit</button>
+              <button class="btn btn-danger" onclick="confirmDelete('album','${a.id}','${(a.title||'this album').replace(/'/g,"\\'")}')">Delete</button>
+            </div>
+          </div>
+          <div class="album-tracks-list" id="tracks-${a.id}">
+            <div style="color:var(--text-muted);font-size:0.8rem;padding:4px 0">Loading tracks…</div>
+          </div>
+        </div>
+      `;
+    }
+
+    async function loadAllAlbumTracks() {
+      for (const a of albums) {
+        const tracks = await loadAlbumTracks(a.id);
+        const container = document.getElementById('tracks-' + a.id);
+        if (!container) continue;
+        const trackHTML = tracks.map((t, i) => `
+          <div class="track-admin-item">
+            <div class="track-num">${i + 1}</div>
+            <div class="track-title-cell">${t.title || '(no title)'}</div>
+            <div class="track-actions">
+              <button class="btn btn-edit" onclick="openEditTrackModal('${t.id}','${a.id}')">Edit</button>
+              <button class="btn btn-danger" onclick="confirmDelete('track','${t.id}','${(t.title||'this track').replace(/'/g,"\\'")}')">Delete</button>
+            </div>
+          </div>
+        `).join('');
+        container.innerHTML = trackHTML + `<button class="add-track-btn" onclick="openAddTrackModal('${a.id}','${a.category}')">+ Add track</button>`;
+      }
+    }
+
+    // ── Album modal ────────────────────────────────────────────────
+    function openAddAlbumModal(catId) {
+      document.getElementById('album-modal-title').textContent = 'Add album';
+      document.getElementById('album-modal-id').value = '';
+      document.getElementById('album-modal-category').value = catId;
+      document.getElementById('album-modal-name').value = '';
+      document.getElementById('album-modal-desc').value = '';
+      document.getElementById('album-modal-order').value = albums.filter(a => a.category === catId).length;
+      document.getElementById('album-modal-visible').checked = true;
+      resetAlbumCoverZone();
+      openModal('album-modal');
+    }
+
+    function openEditAlbumModal(albumId) {
+      const a = albums.find(a => a.id === albumId);
+      if (!a) return;
+      document.getElementById('album-modal-title').textContent = 'Edit album — ' + (a.title || 'album');
+      document.getElementById('album-modal-id').value = a.id;
+      document.getElementById('album-modal-category').value = a.category;
+      document.getElementById('album-modal-name').value = a.title;
+      document.getElementById('album-modal-desc').value = a.description;
+      document.getElementById('album-modal-order').value = a.display_order;
+      document.getElementById('album-modal-visible').checked = a.visible;
+      loadExistingAlbumCover(a.cover_image_url || '');
+      openModal('album-modal');
+    }
+
+    async function saveAlbum() {
+      const id      = document.getElementById('album-modal-id').value;
+      const cat     = document.getElementById('album-modal-category').value;
+      const title   = document.getElementById('album-modal-name').value.trim();
+      const desc    = document.getElementById('album-modal-desc').value.trim();
+      const order   = parseInt(document.getElementById('album-modal-order').value) || 0;
+      const visible = document.getElementById('album-modal-visible').checked;
+      const cover   = document.getElementById('album-modal-cover-url').value.trim();
+
+      const payload = { category: cat, title, description: desc, cover_image_url: cover, display_order: order, visible };
+      let error;
+      if (id) {
+        ({ error } = await sb.from('albums').update(payload).eq('id', id));
+      } else {
+        ({ error } = await sb.from('albums').insert(payload));
+      }
+      if (error) { toast('Save failed: ' + error.message, 'error'); return; }
+      closeModal('album-modal');
+      toast(id ? 'Album updated ✓' : 'Album added ✓', 'success');
+      loadData();
+    }
+
+    // ── Track modal ────────────────────────────────────────────────
+    function openAddTrackModal(albumId, catId) {
+      document.getElementById('track-modal-title').textContent = 'Add track';
+      document.getElementById('track-modal-id').value = '';
+      document.getElementById('track-modal-album-id').value = albumId;
+      document.getElementById('track-modal-category').value = catId;
+      document.getElementById('track-modal-name').value = '';
+      document.getElementById('track-modal-url').value = '';
+      const container = document.getElementById('tracks-' + albumId);
+      const count = container ? container.querySelectorAll('.track-admin-item').length : 0;
+      document.getElementById('track-modal-order').value = count;
+      resetTrackAudioZone();
+      openModal('track-modal');
+    }
+
+    async function openEditTrackModal(trackId, albumId) {
+      const { data: t } = await sb.from('projects').select('*').eq('id', trackId).single();
+      if (!t) return;
+      document.getElementById('track-modal-title').textContent = 'Edit track — ' + (t.title || 'track');
+      document.getElementById('track-modal-id').value = t.id;
+      document.getElementById('track-modal-album-id').value = albumId;
+      document.getElementById('track-modal-category').value = t.category;
+      document.getElementById('track-modal-name').value = t.title;
+      document.getElementById('track-modal-url').value = t.cloudinary_url;
+      document.getElementById('track-modal-order').value = t.display_order;
+      if (t.cloudinary_url) {
+        trackAudioIdle.style.display = 'none';
+        trackAudioDone.style.display = '';
+        trackAudioFilename.textContent = 'Current audio file';
+      } else {
+        resetTrackAudioZone();
+      }
+      openModal('track-modal');
+    }
+
+    async function saveTrack() {
+      const id      = document.getElementById('track-modal-id').value;
+      const albumId = document.getElementById('track-modal-album-id').value;
+      const cat     = document.getElementById('track-modal-category').value;
+      const title   = document.getElementById('track-modal-name').value.trim();
+      const url     = document.getElementById('track-modal-url').value.trim();
+      const order   = parseInt(document.getElementById('track-modal-order').value) || 0;
+
+      const payload = { album_id: albumId, category: cat, title, description: '',
+                        cloudinary_url: url, media_type: 'audio',
+                        display_order: order, visible: true, cover_image_url: '' };
+      let error;
+      if (id) {
+        ({ error } = await sb.from('projects').update(payload).eq('id', id));
+      } else {
+        ({ error } = await sb.from('projects').insert(payload));
+      }
+      if (error) { toast('Save failed: ' + error.message, 'error'); return; }
+      closeModal('track-modal');
+      toast(id ? 'Track updated ✓' : 'Track added ✓', 'success');
+      loadData();
+    }
+
+    // ── Delete ─────────────────────────────────────────────────────
+    function confirmDelete(type, id, name) {
+      deleteTarget = { type, id };
+      document.getElementById('confirm-title').textContent = name;
+      document.getElementById('confirm-overlay').classList.add('open');
+    }
+
+    async function doDelete() {
+      if (!deleteTarget) return;
+      const { type, id } = deleteTarget;
+      document.getElementById('confirm-overlay').classList.remove('open');
+      deleteTarget = null;
+
+      let error;
+      if (type === 'album') {
+        await sb.from('projects').delete().eq('album_id', id); // delete tracks first
+        ({ error } = await sb.from('albums').delete().eq('id', id));
+        if (error) { toast('Delete failed', 'error'); return; }
+        toast('Album deleted', 'success');
+      } else {
+        ({ error } = await sb.from('projects').delete().eq('id', id));
+        if (error) { toast('Delete failed', 'error'); return; }
+        toast(type === 'track' ? 'Track deleted' : 'Project deleted', 'success');
+      }
+      loadData();
+    }
+
+    // ── Change password ────────────────────────────────────────────
+    async function savePassword() {
+      const np = document.getElementById('new-pw').value;
+      const cp = document.getElementById('confirm-pw').value;
+      const errEl = document.getElementById('pw-error');
+      errEl.textContent = '';
+      if (!np) { errEl.textContent = 'Enter a new password.'; return; }
+      if (np !== cp) { errEl.textContent = 'Passwords do not match.'; return; }
+      if (np.length < 6) { errEl.textContent = 'Minimum 6 characters.'; return; }
+
+      const { error } = await sb.from('settings').update({ value: np }).eq('key', 'admin_password');
+      if (error) { errEl.textContent = 'Save failed.'; return; }
+      closeModal('pw-modal');
+      document.getElementById('new-pw').value = '';
+      document.getElementById('confirm-pw').value = '';
+      toast('Password changed ✓', 'success');
+    }
+
+    // ── Modal helpers ──────────────────────────────────────────────
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    // ── Event listeners ────────────────────────────────────────────
+    document.getElementById('login-btn').addEventListener('click', login);
+    document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+    document.getElementById('logout-btn').addEventListener('click', logout);
+    document.getElementById('change-pw-btn').addEventListener('click', () => openModal('pw-modal'));
+
+    document.getElementById('modal-close').addEventListener('click', () => closeModal('project-modal'));
+    document.getElementById('modal-cancel').addEventListener('click', () => closeModal('project-modal'));
+    document.getElementById('modal-save').addEventListener('click', saveProject);
+
+    document.getElementById('pw-modal-close').addEventListener('click', () => closeModal('pw-modal'));
+    document.getElementById('pw-cancel').addEventListener('click', () => closeModal('pw-modal'));
+    document.getElementById('pw-save').addEventListener('click', savePassword);
+
+    document.getElementById('confirm-cancel').addEventListener('click', () => {
+      document.getElementById('confirm-overlay').classList.remove('open');
+      deleteTarget = null;
+    });
+    document.getElementById('confirm-ok').addEventListener('click', doDelete);
+
+    // Album modal
+    document.getElementById('album-modal-close').addEventListener('click', () => closeModal('album-modal'));
+    document.getElementById('album-modal-cancel').addEventListener('click', () => closeModal('album-modal'));
+    document.getElementById('album-modal-save').addEventListener('click', saveAlbum);
+
+    // Track modal
+    document.getElementById('track-modal-close').addEventListener('click', () => closeModal('track-modal'));
+    document.getElementById('track-modal-cancel').addEventListener('click', () => closeModal('track-modal'));
+    document.getElementById('track-modal-save').addEventListener('click', saveTrack);
+
+    // Close modal on overlay click
+    ['project-modal', 'pw-modal', 'album-modal', 'track-modal'].forEach(id => {
+      document.getElementById(id).addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeModal(id);
+      });
+    });
+
+    // ── Auto-login if session exists ───────────────────────────────
+    if (sessionStorage.getItem('okros_admin')) showDashboard();
+  </script>
+</body>
+</html>
