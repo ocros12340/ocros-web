@@ -1463,7 +1463,7 @@
       if (error) { toast('Save failed: ' + error.message, 'error'); return; }
       closeModal('project-modal');
       toast(id ? 'Project updated ✓' : 'Project added ✓', 'success');
-      loadProjects();
+      loadData();
     }
 
     // ── Album card HTML ────────────────────────────────────────────
