@@ -959,6 +959,19 @@
       transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-soft);
     }
 
+    /* Vimeo embed */
+    .work-item__media--vimeo {
+      padding: 0;
+      aspect-ratio: 16/9;
+    }
+    .work-item__media--vimeo iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
     /* Colored bottom vignette */
     .work-item__media::after {
       content: '';
@@ -2794,6 +2807,12 @@
       pod:   'Podcast',
     };
 
+    function getVimeoId(url) {
+      if (!url) return null;
+      var m = url.match(/vimeo\.com\/(?:video\/|channels\/[^/]+\/|groups\/[^/]+\/videos\/|album\/[^/]+\/video\/)?(\d+)/);
+      return m ? m[1] : null;
+    }
+
     function buildItem(p) {
       var isAudio  = p.media_type === 'audio';
       var tag      = CAT_TAGS[p.category] || p.category;
@@ -2801,6 +2820,7 @@
       var hasCover = cover.length > 0;
       var title = p.title       ? escHtml(p.title)       : '[Project Title]';
       var desc  = p.description ? escHtml(p.description) : '';
+      var vimeoId  = getVimeoId(p.cloudinary_url);
 
       var mediaPart;
       if (isAudio) {
@@ -2817,6 +2837,15 @@
             + '<svg class="work-item__placeholder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>'
             + '<span class="work-item__placeholder-text">Audio — upload file</span>'
             + '</div>' : '')
+          + '</div>';
+      } else if (vimeoId) {
+        // Vimeo embed
+        var posterStyle = hasCover ? 'background-image:url(\'' + escAttr(cover) + '\');background-size:cover;background-position:center;' : '';
+        mediaPart = '<div class="work-item__media work-item__media--vimeo">'
+          + '<iframe src="https://player.vimeo.com/video/' + vimeoId
+          + '?badge=0&autopause=0&player_id=0&app_id=58479&dnt=1"'
+          + ' frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen'
+          + ' title="' + escAttr(p.title) + '"></iframe>'
           + '</div>';
       } else {
         // Video: cover as poster attribute
