@@ -2341,7 +2341,7 @@
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.dataset.i18n;
         const val = i18n[lang][key];
-        if (val !== undefined) el.innerHTML = val;
+        if (val !== undefined) el.innerHTML = val.replace(/\n/g, '<br>');
       });
       document.getElementById('lang-en').classList.toggle('active', lang === 'en');
       document.getElementById('lang-hu').classList.toggle('active', lang === 'hu');
