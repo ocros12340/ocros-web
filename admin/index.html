@@ -1275,6 +1275,13 @@
       setTimeout(() => { el.className = 'toast'; }, 3000);
     }
 
+    // ── Password hashing (SHA-256 via Web Crypto API) ──────────────
+    async function sha256(str) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    function isHash(str) { return /^[0-9a-f]{64}$/.test(str); }
+
     // ── Login ──────────────────────────────────────────────────────
     async function login() {
       const pw = document.getElementById('pw-input').value.trim();
@@ -1293,7 +1300,22 @@
         return;
       }
 
-      if (pw !== data.value) {
+      const stored = data.value;
+      let match = false;
+
+      if (isHash(stored)) {
+        // Already hashed — compare hash
+        match = (await sha256(pw)) === stored;
+      } else {
+        // Plaintext (legacy) — compare directly, then auto-migrate to hash
+        match = pw === stored;
+        if (match) {
+          const hashed = await sha256(pw);
+          await sb.from('settings').update({ value: hashed }).eq('key', 'admin_password');
+        }
+      }
+
+      if (!match) {
         errEl.textContent = 'Incorrect password.';
         document.getElementById('pw-input').value = '';
         return;
@@ -1651,7 +1673,8 @@
       if (np !== cp) { errEl.textContent = 'Passwords do not match.'; return; }
       if (np.length < 6) { errEl.textContent = 'Minimum 6 characters.'; return; }
 
-      const { error } = await sb.from('settings').update({ value: np }).eq('key', 'admin_password');
+      const hashed = await sha256(np);
+      const { error } = await sb.from('settings').update({ value: hashed }).eq('key', 'admin_password');
       if (error) { errEl.textContent = 'Save failed.'; return; }
       closeModal('pw-modal');
       document.getElementById('new-pw').value = '';
