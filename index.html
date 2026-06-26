@@ -2377,16 +2377,26 @@
       function setActive(id) {
         navLinks.forEach(function (a) {
           const href = a.getAttribute('href');
-          const isMatch = href === '#' + id;
+          const isMatch = id && href === '#' + id;
           a.classList.toggle('nav__link--active', isMatch);
         });
       }
 
       const obs = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting) setActive(entry.target.id);
+          if (entry.isIntersecting) {
+            if (entry.target.id === 'hero') {
+              setActive(''); // Hero látszik — töröljük az active state-t
+            } else {
+              setActive(entry.target.id);
+            }
+          }
         });
       }, { threshold: 0, rootMargin: '-20% 0px -55% 0px' });
+
+      // Hero is megfigyelve, hogy visszagörgetéskor törlődjön az active
+      const heroEl = document.getElementById('hero');
+      if (heroEl) obs.observe(heroEl);
 
       sections.forEach(function (id) {
         const el = document.getElementById(id);
