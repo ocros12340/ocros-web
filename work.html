@@ -76,6 +76,7 @@
     html {
       scroll-behavior: smooth;
       font-size: 16px;
+      scrollbar-gutter: stable;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -2643,6 +2644,13 @@
     })();
 
     // ── Hash anchor scroll (from Services page links) ────────────────────────
+    // If there's a hash, take over scroll control immediately so the browser
+    // doesn't jump to the element before our content is loaded.
+    if (window.location.hash) {
+      history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+    }
+
     window.__scrollToHash = function () {
       const hash = window.location.hash.slice(1);
       if (!hash) return;
@@ -2650,7 +2658,7 @@
       if (!target) return;
       const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 72;
       const top  = target.getBoundingClientRect().top + window.scrollY - navH - 24;
-      window.scrollTo({ top: top, behavior: 'smooth' });
+      window.scrollTo({ top: top, behavior: 'instant' });
     };
     window.addEventListener('hashchange', window.__scrollToHash);
 
