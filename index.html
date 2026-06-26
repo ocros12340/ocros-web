@@ -19,7 +19,6 @@
     :root {
       /* Base backgrounds — cool midnight blue palette */
       --bg:          #1A2030;
-      --bg-mid:      #171C2A;
       --bg-surface:  #1F2840;
 
       /* Section-specific backgrounds */
@@ -31,7 +30,6 @@
       /* Primary accent — amber */
       --accent:      #C4956A;
       --accent-dim:  #8C6440;
-      --accent-glow: rgba(196, 149, 106, 0.15);
 
       /* Service accent colors */
       --c-film:      #C4956A;          /* amber */
@@ -710,22 +708,18 @@
     /* Per-service colors */
     .service-card[data-service="film"] {
       --svc: var(--c-film);
-      --svc-bg: var(--c-film-bg);
       --svc-glow: var(--c-film-glow);
     }
     .service-card[data-service="comm"] {
       --svc: var(--c-comm);
-      --svc-bg: var(--c-comm-bg);
       --svc-glow: var(--c-comm-glow);
     }
     .service-card[data-service="pod"] {
       --svc: var(--c-pod);
-      --svc-bg: var(--c-pod-bg);
       --svc-glow: var(--c-pod-glow);
     }
     .service-card[data-service="music"] {
       --svc: var(--c-music);
-      --svc-bg: var(--c-music-bg);
       --svc-glow: var(--c-music-glow);
     }
 
