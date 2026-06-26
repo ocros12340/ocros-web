@@ -2102,17 +2102,23 @@
     const hamburger = document.getElementById('hamburger');
     const navLinks  = document.getElementById('nav-links');
 
+    function closeMenu() {
+      navLinks.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
     hamburger.addEventListener('click', () => {
       const open = navLinks.classList.toggle('open');
       hamburger.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
     });
 
-    navLinks.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        navLinks.classList.remove('open');
-        hamburger.setAttribute('aria-expanded', false);
-      });
-    });
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+    window.addEventListener('scroll', () => {
+      if (navLinks.classList.contains('open')) closeMenu();
+    }, { passive: true });
 
     // ── Scroll reveal ──────────────────────────────────────────────────────────
     const revealObs = new IntersectionObserver((entries) => {

@@ -2324,10 +2324,25 @@
     const hamburger = document.getElementById('hamburger');
     const navLinks  = document.getElementById('nav-links');
 
+    function closeMenu() {
+      navLinks.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
     hamburger.addEventListener('click', () => {
       const open = navLinks.classList.toggle('open');
       hamburger.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
     });
+
+    // Close on nav link click
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+    // Close on scroll (so the overlay doesn't float over content)
+    window.addEventListener('scroll', () => {
+      if (navLinks.classList.contains('open')) closeMenu();
+    }, { passive: true });
 
     navLinks.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
