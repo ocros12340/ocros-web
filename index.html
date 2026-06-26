@@ -2136,7 +2136,7 @@
         Available for film, commercial, and music projects.<br>
         Response within 24 hours.
       </p>
-      <a href="mailto:okros.sound@gmail.com" class="contact__email reveal reveal-delay-2" data-i18n="contact.email">
+      <a id="contact-email-link" href="mailto:okros.sound@gmail.com" class="contact__email reveal reveal-delay-2">
         okros.sound@gmail.com
       </a>
       <ul class="contact__social reveal reveal-delay-3" role="list">
@@ -2205,7 +2205,6 @@
         'contact.label':            'Get in touch',
         'contact.title':            'Let\'s make something worth hearing.',
         'contact.sub':              'Available for film sound design, commercial, film score, and podcast editing projects.\nResponse within 24 hours.',
-        'contact.email':            'okros.sound@gmail.com',
         'contact.social.linkedin':  'LinkedIn',
 
         'footer.tagline':           'Sound that stays.',
@@ -2243,7 +2242,6 @@
         'contact.label':            'Keress meg',
         'contact.title':            'Csináljunk valamit, ami megéri meghallgatni.',
         'contact.sub':              'Elérhető film, reklám és zenei projektekhez.\nVálasz 24 órán belül.',
-        'contact.email':            'okros.sound@gmail.com',
         'contact.social.linkedin':  'LinkedIn',
 
         'footer.tagline':           'Hang, ami marad.',
@@ -2344,6 +2342,11 @@
     }, { threshold: 0.12 });
 
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // ── Contact email — single source of truth ─────────────────────────────────
+    const CONTACT_EMAIL = 'okros.sound@gmail.com';
+    const emailLink = document.getElementById('contact-email-link');
+    if (emailLink) { emailLink.href = 'mailto:' + CONTACT_EMAIL; emailLink.textContent = CONTACT_EMAIL; }
 
     // ── Footer year ────────────────────────────────────────────────────────────
     document.getElementById('year').textContent = new Date().getFullYear();
