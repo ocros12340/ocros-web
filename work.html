@@ -1810,6 +1810,32 @@
     /* ── Work page overrides ───────────────────── */
     body { background-color: var(--bg-work); }
 
+    /* ─────────────────────────────────────────
+       MOBILE PERFORMANCE
+    ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .geo-fixed,
+      .geo-fixed * { animation: none !important; }
+      .geo-parallax { display: none !important; }
+      .float-wave, .float-eq, .float-scope,
+      .float-signal, .float-node { display: none !important; }
+      .hero__orb { animation: none !important; opacity: 0.25; }
+      .nav.scrolled {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(13, 17, 28, 0.96) !important;
+      }
+    }
+
+    .js-page-hidden .geo-fixed,
+    .js-page-hidden .geo-fixed * { animation-play-state: paused !important; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .geo-fixed, .geo-fixed *, .geo-parallax,
+      .float-wave, .float-eq, .float-scope,
+      .float-signal, .float-node { animation: none !important; }
+    }
+
     /* Nav logomark always visible — no hero fade on this page */
     .nav__logomark { opacity: 1 !important; transition: color 0.9s ease !important; }
 
@@ -2086,6 +2112,7 @@
     (function () {
       const parallaxEls = document.querySelectorAll('[data-parallax]');
       if (!parallaxEls.length) return;
+      if (window.innerWidth < 769) return; // skip on mobile
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
       // Cache each element's initial offset from the top of the document
@@ -2765,6 +2792,11 @@
       wrapper.appendChild(iframe);
     });
   })();
+
+  // Pause animations when tab is hidden
+  document.addEventListener('visibilitychange', function () {
+    document.documentElement.classList.toggle('js-page-hidden', document.hidden);
+  });
   </script>
 </body>
 </html>

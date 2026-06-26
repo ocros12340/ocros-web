@@ -1731,6 +1731,53 @@
     .reveal-delay-1 { transition-delay: 0.12s; }
     .reveal-delay-2 { transition-delay: 0.24s; }
     .reveal-delay-3 { transition-delay: 0.36s; }
+
+    /* ─────────────────────────────────────────
+       MOBILE PERFORMANCE — kill expensive GPU layers
+       All decorative animations off below 768px.
+       Content animations (reveal, hero text) preserved.
+    ───────────────────────────────────────── */
+    @media (max-width: 768px) {
+      /* Stop all rotating/drifting geo rings */
+      .geo-fixed,
+      .geo-fixed * { animation: none !important; }
+
+      /* Hide scroll-parallax shapes entirely — saves layout & JS cost */
+      .geo-parallax { display: none !important; }
+
+      /* Hide float decorations — wave, EQ bars, scope, signal, nodes */
+      .float-wave,
+      .float-eq,
+      .float-scope,
+      .float-signal,
+      .float-node { display: none !important; }
+
+      /* Kill orb drift animations, keep subtle opacity */
+      .hero__orb { animation: none !important; opacity: 0.25; }
+
+      /* Kill scroll indicator pulse */
+      .scroll-indicator { animation: none !important; }
+
+      /* Replace backdrop-filter on scrolled nav with solid bg (no GPU blur) */
+      .nav.scrolled {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(13, 17, 28, 0.96) !important;
+      }
+    }
+
+    /* Pause all animations when tab is hidden */
+    .js-page-hidden .geo-fixed,
+    .js-page-hidden .geo-fixed *,
+    .js-page-hidden .float-wave,
+    .js-page-hidden .float-signal { animation-play-state: paused !important; }
+
+    /* Respect OS reduced-motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      .geo-fixed, .geo-fixed *, .geo-parallax,
+      .float-wave, .float-eq, .float-scope, .float-signal, .float-node,
+      .hero__orb, .scroll-indicator { animation: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -2297,6 +2344,7 @@
     (function () {
       const parallaxEls = document.querySelectorAll('[data-parallax]');
       if (!parallaxEls.length) return;
+      if (window.innerWidth < 769) return; // skip on mobile — CSS hides elements anyway
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
       // Cache each element's initial offset from the top of the document
@@ -2443,6 +2491,7 @@
     (function () {
       const mpEls = document.querySelectorAll('[data-mpx]');
       if (!mpEls.length) return;
+      if (window.innerWidth < 769) return; // no mouse on mobile, skip rAF loop
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
       const LERP = 0.06; // fluid, weighted feel
@@ -2610,6 +2659,11 @@
         const link = card.querySelector('.service-card__link');
         if (link) window.location.href = link.href;
       });
+    });
+
+    // Pause animations when tab is hidden (saves battery/GPU)
+    document.addEventListener('visibilitychange', function () {
+      document.documentElement.classList.toggle('js-page-hidden', document.hidden);
     });
   </script>
 </body>
