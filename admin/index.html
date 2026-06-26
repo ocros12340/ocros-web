@@ -324,6 +324,9 @@
     .modal {
       width: 100%;
       max-width: 520px;
+      max-height: calc(100vh - 48px);
+      display: flex;
+      flex-direction: column;
       background: var(--bg-surface);
       border: 1px solid rgba(255,255,255,0.1);
       border-radius: 16px;
@@ -370,6 +373,8 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+      overflow-y: auto;
+      flex: 1;
     }
 
     .field { display: flex; flex-direction: column; gap: 6px; }
