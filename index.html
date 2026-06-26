@@ -1412,6 +1412,7 @@
       pointer-events: none;
       will-change: transform;
       z-index: 0;
+      opacity: 0.3;
     }
 
     .gp-ring {
@@ -1653,6 +1654,10 @@
       0%,100% { opacity: 0.5; transform: scaleX(1); }
       50%      { opacity: 1;   transform: scaleX(1.12); }
     }
+
+    /* ── GLOBAL BACKGROUND DIM ───────────────────────────────
+       All decorative float/parallax layers dimmed to 30%     */
+    .float-wave, .float-eq, .float-scope, .float-signal, .float-node { opacity: 0.3; }
 
     /* ── AUDIO NODES ─────────────────────────────────────────
        Glowing dots, multiple sizes                          */
