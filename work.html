@@ -2638,20 +2638,16 @@
     })();
 
     // ── Hash anchor scroll (from Services page links) ────────────────────────
-    (function () {
-      function scrollToHash() {
-        const hash = window.location.hash.slice(1);
-        if (!hash) return;
-        const target = document.getElementById(hash);
-        if (!target) return;
-        const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 72;
-        const top  = target.getBoundingClientRect().top + window.scrollY - navH - 24;
-        window.scrollTo({ top: top, behavior: 'smooth' });
-      }
-      // Run after page paints so element positions are settled
-      window.addEventListener('load', scrollToHash);
-      window.addEventListener('hashchange', scrollToHash);
-    })();
+    window.__scrollToHash = function () {
+      const hash = window.location.hash.slice(1);
+      if (!hash) return;
+      const target = document.getElementById(hash);
+      if (!target) return;
+      const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h')) || 72;
+      const top  = target.getBoundingClientRect().top + window.scrollY - navH - 24;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    };
+    window.addEventListener('hashchange', window.__scrollToHash);
 
     // ── Footer year ────────────────────────────────────────────────────────────
     document.getElementById('year').textContent = new Date().getFullYear();
@@ -3149,6 +3145,11 @@
       // Re-apply language after dynamic content is injected
       if (typeof setLang === 'function') {
         setLang(localStorage.getItem('ocros-lang') || 'en');
+      }
+
+      // Scroll to hash AFTER content is rendered (layout is settled now)
+      if (typeof window.__scrollToHash === 'function') {
+        window.__scrollToHash();
       }
     }
 
