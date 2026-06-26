@@ -2813,6 +2813,12 @@
       return m ? m[1] : null;
     }
 
+    function getYouTubeId(url) {
+      if (!url) return null;
+      var m = url.match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+      return m ? m[1] : null;
+    }
+
     function buildItem(p) {
       var isAudio  = p.media_type === 'audio';
       var tag      = CAT_TAGS[p.category] || p.category;
@@ -2820,7 +2826,8 @@
       var hasCover = cover.length > 0;
       var title = p.title       ? escHtml(p.title)       : '[Project Title]';
       var desc  = p.description ? escHtml(p.description) : '';
-      var vimeoId  = getVimeoId(p.cloudinary_url);
+      var vimeoId   = getVimeoId(p.cloudinary_url);
+      var youtubeId = getYouTubeId(p.cloudinary_url);
 
       var mediaPart;
       if (isAudio) {
@@ -2838,9 +2845,16 @@
             + '<span class="work-item__placeholder-text">Audio — upload file</span>'
             + '</div>' : '')
           + '</div>';
+      } else if (youtubeId) {
+        // YouTube embed
+        mediaPart = '<div class="work-item__media work-item__media--vimeo">'
+          + '<iframe src="https://www.youtube.com/embed/' + youtubeId
+          + '?rel=0&modestbranding=1"'
+          + ' frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen'
+          + ' title="' + escAttr(p.title) + '"></iframe>'
+          + '</div>';
       } else if (vimeoId) {
         // Vimeo embed
-        var posterStyle = hasCover ? 'background-image:url(\'' + escAttr(cover) + '\');background-size:cover;background-position:center;' : '';
         mediaPart = '<div class="work-item__media work-item__media--vimeo">'
           + '<iframe src="https://player.vimeo.com/video/' + vimeoId
           + '?badge=0&autopause=0&player_id=0&app_id=58479&dnt=1"'
