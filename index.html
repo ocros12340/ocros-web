@@ -244,6 +244,13 @@
       .lang-toggle { margin-left: 0; }
     }
 
+    /* iOS scroll lock when mobile menu is open */
+    html.menu-open,
+    html.menu-open body {
+      overflow: hidden;
+      height: 100%;
+    }
+
     /* ─────────────────────────────────────────
        HERO
     ───────────────────────────────────────── */
@@ -2327,22 +2334,17 @@
     function closeMenu() {
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      document.documentElement.classList.remove('menu-open');
     }
 
     hamburger.addEventListener('click', () => {
       const open = navLinks.classList.toggle('open');
       hamburger.setAttribute('aria-expanded', open);
-      document.body.style.overflow = open ? 'hidden' : '';
+      document.documentElement.classList.toggle('menu-open', open);
     });
 
     // Close on nav link click
     navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
-
-    // Close on scroll (so the overlay doesn't float over content)
-    window.addEventListener('scroll', () => {
-      if (navLinks.classList.contains('open')) closeMenu();
-    }, { passive: true });
 
     navLinks.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
