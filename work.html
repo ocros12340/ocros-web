@@ -1393,19 +1393,6 @@
       margin-top: 0.35rem;
     }
 
-    .work-item__arrow {
-      font-size: 1.1rem;
-      color: var(--wi, var(--accent));
-      opacity: 0;
-      transform: translateX(-6px);
-      transition: opacity 0.3s, transform 0.3s var(--ease-out);
-      flex-shrink: 0;
-      line-height: 1;
-    }
-    .work-item:hover .work-item__arrow {
-      opacity: 1;
-      transform: translateX(0);
-    }
 
     .work-item__placeholder-icon {
       width: 36px;
@@ -2317,7 +2304,7 @@
               <h3 class="work-item__title" data-i18n="work.item1.title">[Project Title]</h3>
               <p class="work-item__desc" data-i18n="work.item1.desc">Director, format, role.</p>
             </div>
-            <span class="work-item__arrow" aria-hidden="true">→</span>
+            
           </div>
         </div>
 
@@ -2335,7 +2322,7 @@
               <h3 class="work-item__title" data-i18n="work.item1.title">[Project Title]</h3>
               <p class="work-item__desc" data-i18n="work.item1.desc">Director, format, role.</p>
             </div>
-            <span class="work-item__arrow" aria-hidden="true">→</span>
+            
           </div>
         </div>
         </div>
@@ -2366,7 +2353,7 @@
               <h3 class="work-item__title" data-i18n="work.item2.title">[Project Title]</h3>
               <p class="work-item__desc" data-i18n="work.item2.desc">Brand, agency, deliverable.</p>
             </div>
-            <span class="work-item__arrow" aria-hidden="true">→</span>
+            
           </div>
         </div>
 
@@ -2384,7 +2371,7 @@
               <h3 class="work-item__title" data-i18n="work.item2.title">[Project Title]</h3>
               <p class="work-item__desc" data-i18n="work.item2.desc">Brand, agency, deliverable.</p>
             </div>
-            <span class="work-item__arrow" aria-hidden="true">→</span>
+            
           </div>
         </div>
         </div>
@@ -2415,7 +2402,7 @@
               <h3 class="work-item__title" data-i18n="work.item3.title">[Track Title]</h3>
               <p class="work-item__desc" data-i18n="work.item3.desc">Mood, context, intended use.</p>
             </div>
-            <span class="work-item__arrow" aria-hidden="true">→</span>
+            
           </div>
         </div>
 
@@ -2433,7 +2420,7 @@
               <h3 class="work-item__title" data-i18n="work.item3.title">[Track Title]</h3>
               <p class="work-item__desc" data-i18n="work.item3.desc">Mood, context, intended use.</p>
             </div>
-            <span class="work-item__arrow" aria-hidden="true">→</span>
+            
           </div>
         </div>
         </div>
@@ -2464,7 +2451,7 @@
               <h3 class="work-item__title" data-i18n="work.item4.title">[Podcast Name]</h3>
               <p class="work-item__desc" data-i18n="work.item4.desc">Format, episode count, scope.</p>
             </div>
-            <span class="work-item__arrow" aria-hidden="true">→</span>
+            
           </div>
         </div>
 
@@ -2482,7 +2469,7 @@
               <h3 class="work-item__title" data-i18n="work.item4.title">[Podcast Name]</h3>
               <p class="work-item__desc" data-i18n="work.item4.desc">Format, episode count, scope.</p>
             </div>
-            <span class="work-item__arrow" aria-hidden="true">→</span>
+            
           </div>
         </div>
         </div>
@@ -2919,7 +2906,7 @@
         + '<div class="work-item__footer"><div>'
         + '<h3 class="work-item__title">' + title + '</h3>'
         + '<p class="work-item__desc">' + desc + '</p>'
-        + '</div><span class="work-item__arrow" aria-hidden="true">→</span></div>'
+        + '</div></div>'
         + '</div>';
     }
 
@@ -3005,7 +2992,7 @@
         + '<div class="work-item__footer"><div>'
           + '<h3 class="work-item__title">' + title + '</h3>'
           + (desc ? '<p class="work-item__desc">' + desc + '</p>' : '')
-        + '</div><span class="work-item__arrow" aria-hidden="true">→</span></div>'
+        + '</div></div>'
         + '</div>';
     }
 
