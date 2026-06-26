@@ -1691,7 +1691,6 @@
     .reveal-delay-1 { transition-delay: 0.12s; }
     .reveal-delay-2 { transition-delay: 0.24s; }
     .reveal-delay-3 { transition-delay: 0.36s; }
-    .reveal-delay-4 { transition-delay: 0.48s; }
   </style>
 </head>
 <body>
@@ -2348,27 +2347,6 @@
     }, { threshold: 0.12 });
 
     document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-
-    // ── Work section drag-to-scroll ────────────────────────────────────────────
-    (function () {
-      const wrap = document.getElementById('workScroll');
-      if (!wrap) return;
-      let isDown = false, startX, scrollLeft;
-      wrap.addEventListener('mousedown', e => {
-        isDown = true;
-        wrap.classList.add('is-dragging');
-        startX = e.pageX - wrap.offsetLeft;
-        scrollLeft = wrap.scrollLeft;
-      });
-      document.addEventListener('mouseup', () => { isDown = false; wrap.classList.remove('is-dragging'); });
-      wrap.addEventListener('mouseleave', () => { isDown = false; wrap.classList.remove('is-dragging'); });
-      wrap.addEventListener('mousemove', e => {
-        if (!isDown) return;
-        e.preventDefault();
-        const x = e.pageX - wrap.offsetLeft;
-        wrap.scrollLeft = scrollLeft - (x - startX) * 1.2;
-      });
-    })();
 
     // ── Footer year ────────────────────────────────────────────────────────────
     document.getElementById('year').textContent = new Date().getFullYear();
