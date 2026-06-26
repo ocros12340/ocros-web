@@ -1363,6 +1363,27 @@
       color: var(--text-dim);
     }
 
+    /* ── Coming soon ── */
+    .work-coming-soon {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: clamp(32px, 5vw, 52px) clamp(24px, 4vw, 48px);
+      color: var(--text-dim);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+    .work-coming-soon::before {
+      content: '';
+      display: block;
+      width: 28px;
+      height: 1px;
+      background: var(--grp, var(--accent));
+      opacity: 0.35;
+      flex-shrink: 0;
+    }
+
     .work-item__tag {
       font-size: 0.68rem;
       letter-spacing: 0.18em;
@@ -2453,6 +2474,7 @@
         'work.title':                'Recent projects.',
         'work.placeholder.video':    'Video — upload file',
         'work.placeholder.audio':    'Audio — upload file',
+        'work.coming_soon':          'Coming soon',
         'work.item1.tag':            'Film Sound Design',
         'work.item1.title':          '[Project Title]',
         'work.item1.desc':           'Short description of the project — director, format, role.',
@@ -2490,6 +2512,7 @@
         'work.title':                'Legutóbbi projektek.',
         'work.placeholder.video':    'Videó — fájl feltöltése',
         'work.placeholder.audio':    'Hang — fájl feltöltése',
+        'work.coming_soon':          'Hamarosan',
         'work.item1.tag':            'Filmes hangdesign',
         'work.item1.title':          '[Projekt neve]',
         'work.item1.desc':           'Rövid leírás — rendező, formátum, szerepkör.',
@@ -3078,8 +3101,6 @@
       var projects = pRes.data || [];
       var albums   = aRes.data || [];
 
-      if (!projects.length && !albums.length) return; // Keep static placeholders
-
       // Fetch tracks for each album
       var albumTrackMap = {};
       for (var i = 0; i < albums.length; i++) {
@@ -3101,12 +3122,9 @@
         albumGrouped[a.category].push(a);
       });
 
-      // All categories with content
-      var allCats = {};
-      Object.keys(grouped).forEach(function (c) { allCats[c] = true; });
-      Object.keys(albumGrouped).forEach(function (c) { allCats[c] = true; });
-
-      Object.keys(allCats).forEach(function (cat) {
+      // Update all categories — show content or "Coming soon"
+      var lang = localStorage.getItem('ocros-lang') || 'en';
+      ['film', 'comm', 'music', 'pod'].forEach(function (cat) {
         var group = document.querySelector('.work-group[data-category="' + cat + '"]');
         if (!group) return;
         var track = group.querySelector('.work__track');
@@ -3122,6 +3140,9 @@
           track.innerHTML = html;
           applyCldMedia(track);
           initAlbumCards(track);
+        } else {
+          var label = (i18n[lang] && i18n[lang]['work.coming_soon']) || 'Coming soon';
+          track.innerHTML = '<div class="work-coming-soon" data-i18n="work.coming_soon">' + label + '</div>';
         }
       });
 
