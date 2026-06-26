@@ -889,6 +889,11 @@
       gap: clamp(20px, 2.5vw, 32px);
       width: max-content;
       padding-right: var(--gutter);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .work__track.is-loaded {
+      opacity: 1;
     }
 
     /* Per-work-item accent colors */
@@ -3146,6 +3151,11 @@
       if (typeof setLang === 'function') {
         setLang(localStorage.getItem('ocros-lang') || 'en');
       }
+
+      // Reveal tracks now that content is settled (prevents flash of empty state)
+      document.querySelectorAll('.work__track').forEach(function (t) {
+        t.classList.add('is-loaded');
+      });
 
       // Scroll to hash AFTER content is rendered (layout is settled now)
       if (typeof window.__scrollToHash === 'function') {
