@@ -6,13 +6,11 @@
   <title>Work — Okros</title>
   <meta name="description" content="Selected work by Okros — sound design for film, commercial, podcast and electronic music." />
 
-  <!-- Fonts -->
+  <!-- Fonts — async load so they never block render -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet" />
-
-  <!-- Supabase -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Sans+3:wght@300;400;600&display=swap" /></noscript>
 
   <style>
     /* ─────────────────────────────────────────
@@ -2346,6 +2344,9 @@
       });
     })();
   </script>
+
+  <!-- Supabase — loaded here (end of body) so it never blocks initial render -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- ── Supabase dynamic project loader ──────────────────────────────────── -->
   <script>
