@@ -1809,15 +1809,45 @@
     body { background-color: var(--bg-work); }
 
     /* ─────────────────────────────────────────
-       MOBILE PERFORMANCE
+       MOBILE PERFORMANCE — zero GPU overhead below 768px
     ───────────────────────────────────────── */
     @media (max-width: 768px) {
+
+      /* ── 1. Kill ALL CSS animations on decorative elements ── */
       .geo-fixed,
-      .geo-fixed * { animation: none !important; }
-      .geo-parallax { display: none !important; }
-      .float-wave, .float-eq, .float-scope,
-      .float-signal, .float-node { display: none !important; }
-      .hero__orb { animation: none !important; opacity: 0.25; }
+      .geo-fixed *,
+      .hero__orb,
+      .float-arc,
+      .float-wave,
+      .float-eq,
+      .float-eq__bar,
+      .float-scope,
+      .float-signal,
+      .float-node { animation: none !important; }
+
+      /* ── 2. Remove will-change — kills compositing layers ── */
+      .geo-fixed,
+      .geo-fixed *,
+      .geo-parallax,
+      .hero__orb,
+      .float-wave,
+      .float-eq,
+      .float-scope,
+      .float-signal,
+      .float-node { will-change: auto !important; }
+
+      /* ── 3. Remove expensive filters from static elements ── */
+      .hero__orb { filter: none !important; opacity: 0.15; }
+
+      /* ── 4. Hide parallax + float shapes entirely ── */
+      .geo-parallax,
+      .float-wave,
+      .float-eq,
+      .float-scope,
+      .float-signal,
+      .float-node { display: none !important; }
+
+      /* ── 5. No backdrop-filter on nav (GPU blur) ── */
       .nav.scrolled {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
