@@ -2623,14 +2623,6 @@
       if (!heroMark || !navMark || !heroEl) return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      // Section accent colours — match design tokens
-      const sectionColors = {
-        hero:     '#C4956A',
-        services: '#5BADA8',
-        about:    '#9B7BB5',
-        contact:  '#C4956A',
-      };
-
       // Nav mark starts invisible; JS drives it from here
       navMark.style.opacity = '0';
 
@@ -2652,32 +2644,54 @@
         // Nav mark: fades in once hero mark is mostly gone
         const navOpacity = Math.max(0, (progress - 0.38) / 0.55);
         navMark.style.opacity = Math.min(1, navOpacity).toFixed(4);
+
+        // Color morph
+        updateColor();
       }
 
       window.addEventListener('scroll', function () {
         if (!ticking) { requestAnimationFrame(updateLogo); ticking = true; }
       }, { passive: true });
 
-      // Run once on load (handles hard-refresh mid-page)
-      updateLogo();
+      // ── Scroll-based colour morph ─────────────────────────────────────────
+      // Colors: hero=amber, then section background colours
+      const colorStops = [
+        { id: 'hero',     rgb: [196, 149, 106] },  // #C4956A amber
+        { id: 'services', rgb: [23,  27,  32]  },  // #171B20
+        { id: 'about',    rgb: [22,  26,  34]  },  // #161A22
+        { id: 'contact',  rgb: [18,  17,  26]  },  // #12111A
+      ].map(function (s) {
+        return { el: document.getElementById(s.id), rgb: s.rgb };
+      }).filter(function (s) { return s.el; });
 
-      // ── Section colour morph via IntersectionObserver ─────────────────────
-      const colorObs = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            const color = sectionColors[entry.target.id] || sectionColors.hero;
-            navMark.style.color = color;
-          }
+      function lerp(a, b, t) { return a + (b - a) * t; }
+
+      function buildWaypoints() {
+        return colorStops.map(function (s) {
+          return { y: s.el.offsetTop, rgb: s.rgb };
         });
-      }, {
-        threshold:  0,
-        rootMargin: '-20% 0px -55% 0px',
-      });
+      }
 
-      ['hero', 'services', 'about', 'contact'].forEach(function (id) {
-        const el = document.getElementById(id);
-        if (el) colorObs.observe(el);
-      });
+      let waypoints = buildWaypoints();
+      window.addEventListener('resize', function () { waypoints = buildWaypoints(); });
+
+      function updateColor() {
+        const scrollY = window.scrollY + window.innerHeight * 0.15;
+        let fromIdx = 0;
+        for (let i = 0; i < waypoints.length - 1; i++) {
+          if (scrollY >= waypoints[i].y) fromIdx = i;
+        }
+        const from = waypoints[fromIdx];
+        const to   = waypoints[Math.min(fromIdx + 1, waypoints.length - 1)];
+        const t    = from.y === to.y ? 1 : Math.min(1, Math.max(0, (scrollY - from.y) / (to.y - from.y)));
+        const r = Math.round(lerp(from.rgb[0], to.rgb[0], t));
+        const g = Math.round(lerp(from.rgb[1], to.rgb[1], t));
+        const b = Math.round(lerp(from.rgb[2], to.rgb[2], t));
+        navMark.style.color = 'rgb(' + r + ',' + g + ',' + b + ')';
+      }
+
+      // Run once on load
+      updateLogo();
     })();
   </script>
 
