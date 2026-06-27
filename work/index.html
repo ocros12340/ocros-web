@@ -287,11 +287,10 @@
       .nav__links.open .lang-toggle { opacity: 1; transform: translateY(0); }
     }
 
-    /* iOS scroll lock when mobile menu is open — uses position:fixed to prevent scroll jump */
+    /* iOS scroll lock when mobile menu is open */
     body.menu-open {
-      position: fixed;
-      width: 100%;
-      overflow-y: scroll;
+      overflow: hidden;
+      touch-action: none;
     }
 
     /* ─────────────────────────────────────────
@@ -2207,20 +2206,19 @@
     // ── Mobile hamburger ───────────────────────────────────────────────────────
     const hamburger = document.getElementById('hamburger');
     const navLinks  = document.getElementById('nav-links');
-    let menuScrollY = 0;
+
+    function preventScroll(e) { e.preventDefault(); }
 
     function openMenu() {
-      menuScrollY = window.scrollY;
-      document.body.style.top = `-${menuScrollY}px`;
       document.body.classList.add('menu-open');
+      document.addEventListener('touchmove', preventScroll, { passive: false });
       navLinks.classList.add('open');
       hamburger.setAttribute('aria-expanded', 'true');
     }
 
     function closeMenu() {
       document.body.classList.remove('menu-open');
-      document.body.style.top = '';
-      window.scrollTo(0, menuScrollY);
+      document.removeEventListener('touchmove', preventScroll);
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
     }
