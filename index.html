@@ -141,7 +141,8 @@
       align-items: center;
       gap: 0.55rem;
       text-decoration: none;
-      transition: opacity 0.3s;
+      transition: opacity 0.3s, transform 0.6s var(--ease-out);
+      will-change: transform;
     }
     .nav__logo:hover { opacity: 0.75; }
 
@@ -2426,11 +2427,26 @@
     document.getElementById('lang-hu').addEventListener('click', () => setLang('hu'));
     setLang(localStorage.getItem('ocros-lang') || 'en');
 
-    // ── Nav scroll effect ──────────────────────────────────────────────────────
+    // ── Nav scroll effect + logo slide-in ─────────────────────────────────────
     const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 40);
-    }, { passive: true });
+    const navLogo = document.querySelector('.nav__logo');
+
+    // Measure logo's natural left offset once (before any transform)
+    let logoOffset = navLogo.getBoundingClientRect().left;
+    window.addEventListener('resize', () => {
+      navLogo.style.transform = '';
+      logoOffset = navLogo.getBoundingClientRect().left;
+      updateLogoPos();
+    });
+
+    function updateLogoPos() {
+      const atTop = window.scrollY <= 40;
+      nav.classList.toggle('scrolled', !atTop);
+      navLogo.style.transform = atTop ? `translateX(-${logoOffset}px)` : '';
+    }
+
+    updateLogoPos();
+    window.addEventListener('scroll', updateLogoPos, { passive: true });
 
     // ── Mobile hamburger ───────────────────────────────────────────────────────
     const hamburger = document.getElementById('hamburger');
