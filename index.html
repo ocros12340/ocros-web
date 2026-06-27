@@ -2656,10 +2656,10 @@
       // ── Scroll-based colour morph ─────────────────────────────────────────
       // Colors: hero=amber, then section background colours
       const colorStops = [
-        { id: 'hero',     rgb: [196, 149, 106] },  // #C4956A amber
-        { id: 'services', rgb: [23,  27,  32]  },  // #171B20
-        { id: 'about',    rgb: [22,  26,  34]  },  // #161A22
-        { id: 'contact',  rgb: [18,  17,  26]  },  // #12111A
+        { id: 'hero',     rgb: [196, 149, 106] },  // #C4956A film / amber
+        { id: 'services', rgb: [91,  173, 168] },  // #5BADA8 commercial / teal
+        { id: 'about',    rgb: [155, 123, 181] },  // #9B7BB5 film score / violet
+        { id: 'contact',  rgb: [196, 112, 96]  },  // #C47060 podcast / terracotta
       ].map(function (s) {
         return { el: document.getElementById(s.id), rgb: s.rgb };
       }).filter(function (s) { return s.el; });
