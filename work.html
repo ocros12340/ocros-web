@@ -1810,6 +1810,14 @@
     /* ── Work page overrides ───────────────────── */
     body { background-color: var(--bg-work); }
 
+    /* No translateY on work page reveals — prevents wave/content mismatch */
+    .reveal { transform: none; }
+    .reveal.visible { transform: none; }
+
+    /* Show track content immediately — don't wait for Supabase */
+    .work__track { opacity: 1; }
+    .work__track.is-loaded { opacity: 1; }
+
     /* ─────────────────────────────────────────
        MOBILE PERFORMANCE — zero GPU overhead below 768px
     ───────────────────────────────────────── */
