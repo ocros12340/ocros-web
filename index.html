@@ -1734,32 +1734,51 @@
     .reveal-delay-3 { transition-delay: 0.36s; }
 
     /* ─────────────────────────────────────────
-       MOBILE PERFORMANCE — kill expensive GPU layers
-       All decorative animations off below 768px.
-       Content animations (reveal, hero text) preserved.
+       MOBILE PERFORMANCE — zero GPU overhead below 768px
+       Rule: every background element is static or hidden.
+       Only interactive UI animations remain (menu, reveal).
     ───────────────────────────────────────── */
     @media (max-width: 768px) {
-      /* Stop all rotating/drifting geo rings */
+
+      /* ── 1. Kill ALL CSS animations on decorative elements ── */
       .geo-fixed,
-      .geo-fixed * { animation: none !important; }
+      .geo-fixed *,
+      .hero__orb,
+      .ticker__track,
+      .scroll-indicator,
+      .float-wave,
+      .float-eq,
+      .float-eq__bar,
+      .float-scope,
+      .float-signal,
+      .float-node { animation: none !important; }
 
-      /* Hide scroll-parallax shapes entirely — saves layout & JS cost */
-      .geo-parallax { display: none !important; }
+      /* ── 2. Remove will-change — kills compositing layers ── */
+      .geo-fixed,
+      .geo-fixed *,
+      .geo-parallax,
+      .hero__orb,
+      .float-wave,
+      .float-eq,
+      .float-scope,
+      .float-signal,
+      .float-node { will-change: auto !important; }
 
-      /* Hide float decorations — wave, EQ bars, scope, signal, nodes */
+      /* ── 3. Remove expensive filters from static elements ── */
+      .hero__orb { filter: none !important; opacity: 0.15; }
+
+      /* ── 4. Hide parallax + float shapes entirely ── */
+      .geo-parallax,
       .float-wave,
       .float-eq,
       .float-scope,
       .float-signal,
       .float-node { display: none !important; }
 
-      /* Kill orb drift animations, keep subtle opacity */
-      .hero__orb { animation: none !important; opacity: 0.25; }
+      /* ── 5. Ticker: stop moving, show first set only ── */
+      .ticker__track { animation: none !important; transform: translateX(0) !important; }
 
-      /* Kill scroll indicator pulse */
-      .scroll-indicator { animation: none !important; }
-
-      /* Replace backdrop-filter on scrolled nav with solid bg (no GPU blur) */
+      /* ── 6. No backdrop-filter on nav (GPU blur) ── */
       .nav.scrolled {
         backdrop-filter: none !important;
         -webkit-backdrop-filter: none !important;
