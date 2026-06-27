@@ -141,7 +141,7 @@
       align-items: center;
       gap: 0.55rem;
       text-decoration: none;
-      transition: opacity 0.3s;
+      transition: opacity 0.3s, transform 0.6s var(--ease-out);
       will-change: transform;
     }
     .nav__logo:hover { opacity: 0.75; }
@@ -2440,11 +2440,9 @@
     });
 
     function updateLogoPos() {
-      const scrollY = window.scrollY;
-      const threshold = 140;
-      const progress = Math.min(1, scrollY / threshold);
-      nav.classList.toggle('scrolled', scrollY > 40);
-      navLogo.style.transform = `translateX(${-logoOffset * (1 - progress)}px)`;
+      const atTop = window.scrollY <= 40;
+      nav.classList.toggle('scrolled', !atTop);
+      navLogo.style.transform = atTop ? `translateX(-${logoOffset}px)` : '';
     }
 
     updateLogoPos();
