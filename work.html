@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Must run before any paint: prevents browser scroll-restoration jump -->
+  <script>history.scrollRestoration = 'manual'; window.scrollTo(0, 0);</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Work — Okros</title>
@@ -1967,7 +1969,7 @@
     <!-- ── WORK floating elements ── -->
     <!-- Large waveform across the top -->
     <div class="mp-wrap float-wave" data-mpx="-16" data-mpy="10"
-         style="top:6%; left:-5%; width:70%; opacity:0.8;" aria-hidden="true">
+         style="top:6vh; left:-5%; width:70%; opacity:0.8;" aria-hidden="true">
       <svg viewBox="0 0 800 160" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M0,80 C50,80 70,25 120,25 C170,25 190,135 240,135
                  C290,135 310,35 360,35 C410,35 430,125 480,125
@@ -1984,12 +1986,12 @@
 
     <!-- Arc — right side -->
     <div class="mp-wrap float-arc" data-mpx="20" data-mpy="-12"
-         style="width:clamp(200px,30vw,440px);height:clamp(200px,30vw,440px);top:20%;right:-8%;
+         style="width:clamp(200px,30vw,440px);height:clamp(200px,30vw,440px);top:20vh;right:-8%;
                 --arc-c:rgba(196,149,106,0.4);--ar:55s;" aria-hidden="true"></div>
 
     <!-- EQ bars — amber, bottom left -->
     <div class="mp-wrap float-eq float-eq--amber" data-mpx="-18" data-mpy="14"
-         style="bottom:10%; left:2%; align-items:flex-end;" aria-hidden="true">
+         style="bottom:10vh; left:2%; align-items:flex-end;" aria-hidden="true">
       <div class="float-eq__bar" style="width:4px;height:50px; --d:2.2s;--dl:0.1s;--peak:2.3;"></div>
       <div class="float-eq__bar" style="width:4px;height:90px; --d:1.9s;--dl:0.3s;--peak:1.8;"></div>
       <div class="float-eq__bar" style="width:4px;height:70px; --d:2.4s;--dl:0s;  --peak:2.1;"></div>
@@ -1998,7 +2000,7 @@
     </div>
 
     <!-- Nodes -->
-    <div class="mp-wrap" data-mpx="30" data-mpy="20" aria-hidden="true" style="top:50%;right:12%;">
+    <div class="mp-wrap" data-mpx="30" data-mpy="20" aria-hidden="true" style="top:50vh;right:12%;">
       <div class="float-node" style="width:11px;height:11px;--nc:rgba(196,149,106,1);--nd:4.8s;--ndl:-0.5s;--nop:0.75;"></div>
     </div>
     <div class="container">
