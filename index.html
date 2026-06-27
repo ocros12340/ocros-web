@@ -2727,15 +2727,31 @@
 
     // Touch: auto-highlight when in view + single tap navigate
     if (window.matchMedia('(hover: none)').matches) {
+      // Auto-highlight when card is sufficiently in view
       const svcObs = new IntersectionObserver(function(entries) {
         entries.forEach(function(entry) {
           entry.target.classList.toggle('is-visible', entry.isIntersecting);
         });
-      }, { threshold: 0.5 });
+      }, { threshold: 0.35 });
 
       document.querySelectorAll('.service-card').forEach(function(card) {
         svcObs.observe(card);
+
+        // Distinguish tap from scroll
+        var touchStartY = 0;
+        var touchMoved  = false;
+
+        card.addEventListener('touchstart', function(e) {
+          touchStartY = e.touches[0].clientY;
+          touchMoved  = false;
+        }, { passive: true });
+
+        card.addEventListener('touchmove', function(e) {
+          if (Math.abs(e.touches[0].clientY - touchStartY) > 8) touchMoved = true;
+        }, { passive: true });
+
         card.addEventListener('touchend', function(e) {
+          if (touchMoved) return;
           const link = card.querySelector('.service-card__link');
           if (link) { e.preventDefault(); window.location.href = link.href; }
         }, { passive: false });
