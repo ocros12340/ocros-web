@@ -909,19 +909,7 @@
       pointer-events: none;
     }
 
-    /* Slide-in color bar on hover */
-    .work-item__media::before {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--wi, var(--accent));
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s var(--ease-out);
-      z-index: 2;
-    }
-    .work-item:hover .work-item__media::before { transform: scaleX(1); }
+    /* Slide-in color bar on hover — removed */
 
     .work-item:hover .work-item__media {
       box-shadow: 0 12px 48px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06);
