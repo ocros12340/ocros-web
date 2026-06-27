@@ -1872,9 +1872,13 @@
     /* Work section fills the full viewport */
     .work { min-height: 100vh; }
 
-    /* Page entry animation — header fades in on load */
+    /* Page entry animation — fade in only, no translateY (prevents wave/content misalign) */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
     .work > .container {
-      animation: fadeUp 0.8s var(--ease-out) 0.1s both;
+      animation: fadeIn 0.7s var(--ease-out) 0.05s both;
     }
   </style>
 </head>
