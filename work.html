@@ -2014,6 +2014,7 @@
       </div>
       <div class="work__scroll-wrap" role="region" aria-label="Film Sound Design projects">
         <div class="work__track" style="padding-left:var(--gutter)">
+          <div class="work-coming-soon" data-i18n="work.coming_soon">Coming soon</div>
         </div>
       </div>
     </div>
@@ -2028,6 +2029,7 @@
       </div>
       <div class="work__scroll-wrap" role="region" aria-label="Commercial projects">
         <div class="work__track" style="padding-left:var(--gutter)">
+          <div class="work-coming-soon" data-i18n="work.coming_soon">Coming soon</div>
         </div>
       </div>
     </div>
@@ -2042,6 +2044,7 @@
       </div>
       <div class="work__scroll-wrap" role="region" aria-label="Film score projects">
         <div class="work__track" style="padding-left:var(--gutter)">
+          <div class="work-coming-soon" data-i18n="work.coming_soon">Coming soon</div>
         </div>
       </div>
     </div>
@@ -2056,6 +2059,7 @@
       </div>
       <div class="work__scroll-wrap" role="region" aria-label="Podcast projects">
         <div class="work__track" style="padding-left:var(--gutter)">
+          <div class="work-coming-soon" data-i18n="work.coming_soon">Coming soon</div>
         </div>
       </div>
     </div>
@@ -2783,10 +2787,8 @@
           track.innerHTML = html;
           applyCldMedia(track);
           initAlbumCards(track);
-        } else {
-          var label = (i18n[lang] && i18n[lang]['work.coming_soon']) || 'Coming soon';
-          track.innerHTML = '<div class="work-coming-soon" data-i18n="work.coming_soon">' + label + '</div>';
         }
+        // else: placeholder "Coming soon" is already in the HTML — leave it as-is
       });
 
       // Re-apply language after dynamic content is injected
