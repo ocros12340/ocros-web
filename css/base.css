@@ -141,8 +141,8 @@ section + section::before {
 
 /* Light mode ticker */
 [data-theme="light"] .ticker {
-  background: #D6D2C8;
-  border-block-color: rgba(0,71,65,0.14);
+  background: #DDD9CC;
+  border-block-color: rgba(124,85,53,0.12);
 }
 [data-theme="light"] .ticker__item { color: var(--text-dim); }
 [data-theme="light"] .ticker__dot  { background: var(--c-comm); }
@@ -181,25 +181,18 @@ section + section::before {
 .js-page-hidden .float-wave,
 .js-page-hidden .float-signal { animation-play-state: paused !important; }
 
-/* ── Light mode — global text shadow + section divider ─── */
-[data-theme="light"] body {
-  text-shadow: 0 1px 4px rgba(0,71,65,0.14);
-}
-[data-theme="light"] button,
-[data-theme="light"] input,
-[data-theme="light"] textarea {
-  text-shadow: none;
-}
+/* ── Light mode — global overrides + section divider ─── */
+/* No body text-shadow — the old green haze was too visible */
 [data-theme="light"] .section-title,
 [data-theme="light"] .contact__title,
 [data-theme="light"] .footer__wordmark {
-  text-shadow: 0 2px 8px rgba(0,71,65,0.20);
+  text-shadow: 0 2px 8px rgba(92,68,40,0.10);  /* warm walnut, barely perceptible */
 }
 [data-theme="light"] .section-label {
   opacity: 1;
 }
 [data-theme="light"] section + section::before {
-  background: linear-gradient(90deg, transparent 0%, rgba(0,71,65,0.12) 30%, rgba(0,71,65,0.12) 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(124,85,53,0.10) 30%, rgba(124,85,53,0.10) 70%, transparent 100%);
 }
 
 /* ── Reduced motion — global kill ──────────────────────── */

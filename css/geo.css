@@ -444,98 +444,98 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   LIGHT MODE — replace dark tints with Cyprus palette
+   LIGHT MODE — Stúdió Lenvászon: warm earth tones
    ══════════════════════════════════════════════════════ */
 
-/* Boost overall opacity — sandy bg needs more contrast */
-[data-theme="light"] .geo-fixed { opacity: 0.65; }
+/* Reduced opacity — sandy bg needs less visual noise */
+[data-theme="light"] .geo-fixed { opacity: 0.35; }
 
-/* Rings → Cyprus green borders */
+/* Rings → warm walnut/amber borders */
 [data-theme="light"] .gf-ring-1 {
-  border-color: rgba(0,71,65,0.22);
-  filter: drop-shadow(0 0 8px rgba(0,71,65,0.10));
+  border-color: rgba(124,85,53,0.20);
+  filter: drop-shadow(0 0 8px rgba(124,85,53,0.08));
 }
-[data-theme="light"] .gf-ring-1-inner { border-color: rgba(0,71,65,0.13); }
+[data-theme="light"] .gf-ring-1-inner { border-color: rgba(124,85,53,0.12); }
 [data-theme="light"] .gf-ring-2 {
-  border-color: rgba(93,62,128,0.20);
-  filter: drop-shadow(0 0 8px rgba(93,62,128,0.09));
+  border-color: rgba(93,62,128,0.18);
+  filter: drop-shadow(0 0 8px rgba(93,62,128,0.07));
 }
-[data-theme="light"] .gf-ring-3 { border-color: rgba(0,71,65,0.25); }
+[data-theme="light"] .gf-ring-3 { border-color: rgba(124,85,53,0.22); }
 [data-theme="light"] .gf-ring-3::before,
-[data-theme="light"] .gf-ring-3::after { background: rgba(0,71,65,0.16); }
+[data-theme="light"] .gf-ring-3::after { background: rgba(124,85,53,0.14); }
 
 /* Diamond → warm amber */
 [data-theme="light"] .gf-diamond {
-  border-color: rgba(140,100,64,0.35);
-  filter: drop-shadow(0 0 6px rgba(140,100,64,0.14));
+  border-color: rgba(140,100,64,0.32);
+  filter: drop-shadow(0 0 6px rgba(140,100,64,0.12));
 }
 
-/* Dots → Cyprus/amber/violet */
-[data-theme="light"] .gf-dot                { background: rgba(0,71,65,0.50); }
-[data-theme="light"] .gf-dot:nth-child(3)   { background: rgba(93,62,128,0.45); }
-[data-theme="light"] .gf-dot:nth-child(4)   { background: rgba(140,100,64,0.50); }
-[data-theme="light"] .gf-dot:nth-child(6)   { background: rgba(140,69,53,0.45); }
+/* Dots → warm earth palette */
+[data-theme="light"] .gf-dot                { background: rgba(124,85,53,0.45); }
+[data-theme="light"] .gf-dot:nth-child(3)   { background: rgba(93,62,128,0.40); }
+[data-theme="light"] .gf-dot:nth-child(4)   { background: rgba(140,100,64,0.45); }
+[data-theme="light"] .gf-dot:nth-child(6)   { background: rgba(140,69,53,0.42); }
 
-/* Lines → Cyprus */
+/* Lines → warm walnut */
 [data-theme="light"] .gf-line-1 {
-  background: linear-gradient(90deg, transparent, rgba(0,71,65,0.38), transparent);
+  background: linear-gradient(90deg, transparent, rgba(124,85,53,0.32), transparent);
 }
 [data-theme="light"] .gf-line-2 {
-  background: linear-gradient(90deg, transparent, rgba(93,62,128,0.30), transparent);
+  background: linear-gradient(90deg, transparent, rgba(93,62,128,0.26), transparent);
 }
 
 /* Parallax shapes */
-[data-theme="light"] .gp-hero-ring-lg   { border-color: rgba(0,71,65,0.22); }
-[data-theme="light"] .gp-hero-diamond   { border-color: rgba(0,71,65,0.25); }
+[data-theme="light"] .gp-hero-ring-lg   { border-color: rgba(124,85,53,0.18); }
+[data-theme="light"] .gp-hero-diamond   { border-color: rgba(124,85,53,0.22); }
 [data-theme="light"] .gp-hero-line-v {
-  background: linear-gradient(to bottom, transparent, rgba(93,62,128,0.35), transparent);
+  background: linear-gradient(to bottom, transparent, rgba(93,62,128,0.28), transparent);
 }
-[data-theme="light"] .gp-services-ring { border-color: rgba(0,71,65,0.22); }
-[data-theme="light"] .gp-work-ring     { border-color: rgba(140,100,64,0.32); }
-[data-theme="light"] .gp-work-diamond  { border-color: rgba(140,69,53,0.40); }
-[data-theme="light"] .gp-about-ring    { border-color: rgba(93,62,128,0.22); }
-[data-theme="light"] .gp-contact-ring  { border-color: rgba(93,62,128,0.20); }
+[data-theme="light"] .gp-services-ring { border-color: rgba(124,85,53,0.18); }
+[data-theme="light"] .gp-work-ring     { border-color: rgba(140,100,64,0.28); }
+[data-theme="light"] .gp-work-diamond  { border-color: rgba(140,69,53,0.36); }
+[data-theme="light"] .gp-about-ring    { border-color: rgba(93,62,128,0.20); }
+[data-theme="light"] .gp-contact-ring  { border-color: rgba(93,62,128,0.18); }
 [data-theme="light"] .gp-contact-line-h {
-  background: linear-gradient(90deg, transparent, rgba(93,62,128,0.40), transparent);
+  background: linear-gradient(90deg, transparent, rgba(93,62,128,0.34), transparent);
 }
 
-/* Floating elements — boost opacity, tint to Cyprus palette */
+/* Floating elements — muted warmth */
 [data-theme="light"] .float-wave,
 [data-theme="light"] .float-eq,
 [data-theme="light"] .float-scope,
 [data-theme="light"] .float-signal,
-[data-theme="light"] .float-node { opacity: 0.55; }
+[data-theme="light"] .float-node { opacity: 0.40; }
 
 [data-theme="light"] .float-eq__bar {
   background: linear-gradient(to top,
-    rgba(0,71,65,0.65) 0%,
-    rgba(0,71,65,0.25) 50%,
-    rgba(0,71,65,0.05) 100%);
+    rgba(124,85,53,0.60) 0%,
+    rgba(124,85,53,0.22) 50%,
+    rgba(124,85,53,0.04) 100%);
 }
 [data-theme="light"] .float-eq--amber .float-eq__bar {
   background: linear-gradient(to top,
-    rgba(140,100,64,0.65) 0%,
-    rgba(140,100,64,0.25) 50%,
-    rgba(140,100,64,0.05) 100%);
+    rgba(140,100,64,0.60) 0%,
+    rgba(140,100,64,0.22) 50%,
+    rgba(140,100,64,0.04) 100%);
 }
 [data-theme="light"] .float-eq--violet .float-eq__bar {
   background: linear-gradient(to top,
-    rgba(93,62,128,0.60) 0%,
-    rgba(93,62,128,0.22) 50%,
-    rgba(93,62,128,0.04) 100%);
+    rgba(93,62,128,0.55) 0%,
+    rgba(93,62,128,0.20) 50%,
+    rgba(93,62,128,0.03) 100%);
 }
 [data-theme="light"] .float-scope {
-  border-color: rgba(0,71,65,0.32);
-  filter: drop-shadow(0 0 10px rgba(0,71,65,0.12));
+  border-color: rgba(124,85,53,0.28);
+  filter: drop-shadow(0 0 10px rgba(124,85,53,0.10));
 }
 [data-theme="light"] .float-scope::before,
-[data-theme="light"] .float-scope::after { background: rgba(0,71,65,0.20); }
+[data-theme="light"] .float-scope::after { background: rgba(124,85,53,0.18); }
 
 [data-theme="light"] .float-signal {
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(140,100,64,0.55) 20%,
-    rgba(140,100,64,0.55) 80%,
+    rgba(140,100,64,0.50) 20%,
+    rgba(140,100,64,0.50) 80%,
     transparent 100%);
 }
 

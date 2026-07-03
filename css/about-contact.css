@@ -432,22 +432,22 @@
 }
 .footer__back:hover { color: var(--accent); }
 
-/* ── Light mode overrides ──────────────────────────────── */
+/* ── Light mode overrides — Stúdió Lenvászon ──────────── */
 [data-theme="light"] .work-item__media {
-  border: 1px solid rgba(0,71,65,0.1);
-  box-shadow: 0 4px 32px rgba(0,71,65,0.08);
+  border: 1px solid rgba(124,85,53,0.10);
+  box-shadow: 0 4px 32px rgba(124,85,53,0.07);
 }
 [data-theme="light"] .work-item:hover .work-item__media {
-  box-shadow: 0 12px 48px rgba(0,71,65,0.12), 0 0 0 1px rgba(0,71,65,0.1);
+  box-shadow: 0 12px 48px rgba(124,85,53,0.10), 0 0 0 1px rgba(124,85,53,0.10);
 }
 [data-theme="light"] .tools-list li {
-  border-color: rgba(0,71,65,0.18);
-  background: rgba(0,71,65,0.04);
+  border-color: rgba(124,85,53,0.16);
+  background: rgba(124,85,53,0.04);
 }
 [data-theme="light"] .tools-list li:hover {
-  border-color: rgba(0,71,65,0.4);
-  background: rgba(0,71,65,0.08);
+  border-color: rgba(124,85,53,0.36);
+  background: rgba(124,85,53,0.07);
 }
 [data-theme="light"] .footer__bottom {
-  border-top-color: rgba(0,71,65,0.1);
+  border-top-color: rgba(124,85,53,0.10);
 }

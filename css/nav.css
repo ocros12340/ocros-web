@@ -272,7 +272,7 @@
 /* ── Light mode nav overrides ──────────────────────────── */
 [data-theme="light"] .nav.scrolled {
   background: rgba(240, 237, 228, 0.90);
-  box-shadow: 0 1px 40px rgba(0, 71, 65, 0.10);
+  box-shadow: 0 1px 40px rgba(124, 85, 53, 0.09);
 }
 @media (max-width: 768px) {
   [data-theme="light"] .nav__links {
