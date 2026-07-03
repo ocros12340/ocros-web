@@ -139,6 +139,14 @@ section + section::before {
 /* Ticker pause handled by JS initTicker() — Safari resets animation via CSS hover */
 /* .ticker:hover .ticker__track { animation-play-state: paused; } */
 
+/* Light mode ticker */
+[data-theme="light"] .ticker {
+  background: #D6D2C8;
+  border-block-color: rgba(0,71,65,0.14);
+}
+[data-theme="light"] .ticker__item { color: var(--text-dim); }
+[data-theme="light"] .ticker__dot  { background: var(--c-comm); }
+
 .ticker__item {
   display: flex;
   align-items: center;

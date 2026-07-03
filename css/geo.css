@@ -443,6 +443,102 @@
   .ticker__track { animation: none !important; transform: translateX(0) !important; }
 }
 
+/* ══════════════════════════════════════════════════════
+   LIGHT MODE — replace dark tints with Cyprus palette
+   ══════════════════════════════════════════════════════ */
+
+/* Boost overall opacity — sandy bg needs more contrast */
+[data-theme="light"] .geo-fixed { opacity: 0.65; }
+
+/* Rings → Cyprus green borders */
+[data-theme="light"] .gf-ring-1 {
+  border-color: rgba(0,71,65,0.22);
+  filter: drop-shadow(0 0 8px rgba(0,71,65,0.10));
+}
+[data-theme="light"] .gf-ring-1-inner { border-color: rgba(0,71,65,0.13); }
+[data-theme="light"] .gf-ring-2 {
+  border-color: rgba(93,62,128,0.20);
+  filter: drop-shadow(0 0 8px rgba(93,62,128,0.09));
+}
+[data-theme="light"] .gf-ring-3 { border-color: rgba(0,71,65,0.25); }
+[data-theme="light"] .gf-ring-3::before,
+[data-theme="light"] .gf-ring-3::after { background: rgba(0,71,65,0.16); }
+
+/* Diamond → warm amber */
+[data-theme="light"] .gf-diamond {
+  border-color: rgba(140,100,64,0.35);
+  filter: drop-shadow(0 0 6px rgba(140,100,64,0.14));
+}
+
+/* Dots → Cyprus/amber/violet */
+[data-theme="light"] .gf-dot                { background: rgba(0,71,65,0.50); }
+[data-theme="light"] .gf-dot:nth-child(3)   { background: rgba(93,62,128,0.45); }
+[data-theme="light"] .gf-dot:nth-child(4)   { background: rgba(140,100,64,0.50); }
+[data-theme="light"] .gf-dot:nth-child(6)   { background: rgba(140,69,53,0.45); }
+
+/* Lines → Cyprus */
+[data-theme="light"] .gf-line-1 {
+  background: linear-gradient(90deg, transparent, rgba(0,71,65,0.38), transparent);
+}
+[data-theme="light"] .gf-line-2 {
+  background: linear-gradient(90deg, transparent, rgba(93,62,128,0.30), transparent);
+}
+
+/* Parallax shapes */
+[data-theme="light"] .gp-hero-ring-lg   { border-color: rgba(0,71,65,0.22); }
+[data-theme="light"] .gp-hero-diamond   { border-color: rgba(0,71,65,0.25); }
+[data-theme="light"] .gp-hero-line-v {
+  background: linear-gradient(to bottom, transparent, rgba(93,62,128,0.35), transparent);
+}
+[data-theme="light"] .gp-services-ring { border-color: rgba(0,71,65,0.22); }
+[data-theme="light"] .gp-work-ring     { border-color: rgba(140,100,64,0.32); }
+[data-theme="light"] .gp-work-diamond  { border-color: rgba(140,69,53,0.40); }
+[data-theme="light"] .gp-about-ring    { border-color: rgba(93,62,128,0.22); }
+[data-theme="light"] .gp-contact-ring  { border-color: rgba(93,62,128,0.20); }
+[data-theme="light"] .gp-contact-line-h {
+  background: linear-gradient(90deg, transparent, rgba(93,62,128,0.40), transparent);
+}
+
+/* Floating elements — boost opacity, tint to Cyprus palette */
+[data-theme="light"] .float-wave,
+[data-theme="light"] .float-eq,
+[data-theme="light"] .float-scope,
+[data-theme="light"] .float-signal,
+[data-theme="light"] .float-node { opacity: 0.55; }
+
+[data-theme="light"] .float-eq__bar {
+  background: linear-gradient(to top,
+    rgba(0,71,65,0.65) 0%,
+    rgba(0,71,65,0.25) 50%,
+    rgba(0,71,65,0.05) 100%);
+}
+[data-theme="light"] .float-eq--amber .float-eq__bar {
+  background: linear-gradient(to top,
+    rgba(140,100,64,0.65) 0%,
+    rgba(140,100,64,0.25) 50%,
+    rgba(140,100,64,0.05) 100%);
+}
+[data-theme="light"] .float-eq--violet .float-eq__bar {
+  background: linear-gradient(to top,
+    rgba(93,62,128,0.60) 0%,
+    rgba(93,62,128,0.22) 50%,
+    rgba(93,62,128,0.04) 100%);
+}
+[data-theme="light"] .float-scope {
+  border-color: rgba(0,71,65,0.32);
+  filter: drop-shadow(0 0 10px rgba(0,71,65,0.12));
+}
+[data-theme="light"] .float-scope::before,
+[data-theme="light"] .float-scope::after { background: rgba(0,71,65,0.20); }
+
+[data-theme="light"] .float-signal {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(140,100,64,0.55) 20%,
+    rgba(140,100,64,0.55) 80%,
+    transparent 100%);
+}
+
 /* Reduced motion: kill all decorative animation */
 @media (prefers-reduced-motion: reduce) {
   .geo-fixed, .geo-fixed *, .geo-parallax,
