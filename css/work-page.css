@@ -531,7 +531,7 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
   line-height: 1;
   padding-left: 2px; /* optical alignment for ▶ icon */
 }
-.album-player__playpause.is-playing { padding-left: 0; }
+.album-player__playpause.is-playing { padding-left: 0; letter-spacing: -1px; }
 .album-player__playpause:hover { background: #d9aa80; transform: scale(1.07); }
 
 /* ═══════════════════════════════════════════════════════
@@ -783,7 +783,7 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
   padding-left: 3px; /* optical alignment for ▶ glyph */
   transition: background 0.2s;
 }
-.album-sheet__player-playpause.is-playing { padding-left: 0; }
+.album-sheet__player-playpause.is-playing { padding-left: 0; letter-spacing: -1px; }
 .album-sheet__player-playpause:active { background: #d9aa80; }
 
 /* ── Mobile: always show overlay hint on album cards ── */

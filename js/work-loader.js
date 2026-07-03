@@ -267,11 +267,11 @@ function initAlbumCards(container) {
       pDur.textContent = fmtTime(audio.duration);
     });
     audio.addEventListener('play', () => {
-      pPlay.textContent = '⏸';
+      pPlay.textContent = '▮▮';
       pPlay.classList.add('is-playing');
       if (currentAlbumAudio?.trackEl) {
         currentAlbumAudio.trackEl.classList.add('is-playing');
-        currentAlbumAudio.trackEl.querySelector('.album-track__icon').textContent = '⏸';
+        currentAlbumAudio.trackEl.querySelector('.album-track__icon').textContent = '▮▮';
       }
     });
     audio.addEventListener('pause', () => {
@@ -549,11 +549,11 @@ function initSheetPlayer() {
     pDur.textContent = fmtTime(sheetAudio.duration);
   });
   sheetAudio.addEventListener('play', () => {
-    pPlay.textContent = '⏸';
+    pPlay.textContent = '▮▮';
     pPlay.classList.add('is-playing');
     if (sheetCurrentTrackEl) {
       sheetCurrentTrackEl.classList.add('is-playing');
-      sheetCurrentTrackEl.querySelector('.album-track__icon').textContent = '⏸';
+      sheetCurrentTrackEl.querySelector('.album-track__icon').textContent = '▮▮';
     }
   });
   sheetAudio.addEventListener('pause', () => {
@@ -610,10 +610,11 @@ function initSheetSwipe() {
 
   handleWrap.addEventListener('touchmove', e => {
     if (!isDragging) return;
+    e.preventDefault(); // block iOS pull-to-refresh during downward swipe
     currentY = e.touches[0].clientY;
     const delta = Math.max(0, currentY - startY); // downward only
     sheetEl.style.transform = `translateY(${delta}px)`;
-  }, { passive: true });
+  }, { passive: false });
 
   handleWrap.addEventListener('touchend', () => {
     if (!isDragging) return;
