@@ -498,7 +498,12 @@ function closeAlbumSheet() {
   document.body.style.top                  = '';
   document.body.style.width                = '';
   delete document.body.dataset.sheetScrollY;
+  // Suppress smooth scroll so position restores instantly (base.css has scroll-behavior: smooth)
+  document.documentElement.style.scrollBehavior = 'auto';
   window.scrollTo(0, savedY);
+  requestAnimationFrame(() => {
+    document.documentElement.style.scrollBehavior = '';
+  });
   if (sheetAudio && !sheetAudio.paused) sheetAudio.pause();
   sheetCurrentTrackEl = null;
 }
