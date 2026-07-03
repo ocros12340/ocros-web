@@ -361,6 +361,8 @@ function createAlbumSheet() {
   sheetBackdropEl = document.createElement('div');
   sheetBackdropEl.className = 'album-sheet-backdrop';
   sheetBackdropEl.addEventListener('click', closeAlbumSheet);
+  // Prevent background scroll on iOS when touching the backdrop
+  sheetBackdropEl.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
 
   sheetEl = document.createElement('div');
   sheetEl.className = 'album-sheet';
@@ -474,13 +476,13 @@ function openAlbumSheet(flipEl) {
   if (pCur)   pCur.textContent   = '0:00';
   if (pDur)   pDur.textContent   = '0:00';
 
-  // Open — fix body position to prevent iOS background scroll
+  // Open — lock scroll on both <html> and <body> (iOS Safari needs both)
   const scrollY = window.scrollY;
-  document.body.dataset.sheetScrollY = String(scrollY);
-  document.body.style.position  = 'fixed';
-  document.body.style.top       = `-${scrollY}px`;
-  document.body.style.width     = '100%';
-  document.body.style.overflowY = 'hidden';
+  document.body.dataset.sheetScrollY        = String(scrollY);
+  document.documentElement.style.overflowY  = 'hidden';
+  document.body.style.position              = 'fixed';
+  document.body.style.top                   = `-${scrollY}px`;
+  document.body.style.width                 = '100%';
   sheetBackdropEl.classList.add('is-open');
   sheetEl.classList.add('is-open');
 }
@@ -489,12 +491,12 @@ function closeAlbumSheet() {
   if (!sheetEl) return;
   sheetEl.classList.remove('is-open');
   sheetBackdropEl.classList.remove('is-open');
-  // Restore body scroll position (iOS-safe)
+  // Restore scroll on both <html> and <body>
   const savedY = parseInt(document.body.dataset.sheetScrollY || '0', 10);
-  document.body.style.position  = '';
-  document.body.style.top       = '';
-  document.body.style.width     = '';
-  document.body.style.overflowY = '';
+  document.documentElement.style.overflowY = '';
+  document.body.style.position             = '';
+  document.body.style.top                  = '';
+  document.body.style.width                = '';
   delete document.body.dataset.sheetScrollY;
   window.scrollTo(0, savedY);
   if (sheetAudio && !sheetAudio.paused) sheetAudio.pause();
