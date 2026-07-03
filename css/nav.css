@@ -248,10 +248,18 @@
     opacity: 0;
     transform: translateY(12px);
     transition: opacity 0.4s 0.30s var(--ease-out), transform 0.4s 0.30s var(--ease-out);
+    padding: 5px;
+  }
+  .theme-toggle__opt {
+    font-size: 1.25rem;
+    padding: 8px 18px;
+  }
+  .theme-toggle__thumb {
+    transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+    left: 5px; top: 5px; bottom: 5px;
+    width: calc(50% - 5px);
   }
   .nav__links.open .theme-toggle { opacity: 1; transform: translateY(0); }
-  /* Thumb slide transition unaffected by menu open/close transform */
-  .theme-toggle__thumb { transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1); }
 
   /* No GPU blur on mobile nav */
   .nav.scrolled {
