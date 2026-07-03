@@ -791,6 +791,26 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
 .album-sheet__player-playpause.is-playing { padding-left: 0; letter-spacing: -1px; }
 .album-sheet__player-playpause:active { background: #d9aa80; }
 
+/* ── Sheet tracklist: larger items for touch ── */
+.album-sheet__tracklist {
+  padding: 4px 14px;
+}
+.album-sheet__tracklist .album-track {
+  grid-template-columns: 34px 1fr 34px;
+  gap: 12px;
+  padding: 13px 12px;
+  border-radius: 8px;
+}
+.album-sheet__tracklist .album-track__num {
+  font-size: 0.78rem;
+}
+.album-sheet__tracklist .album-track__title {
+  font-size: 0.95rem;
+}
+.album-sheet__tracklist .album-track__icon {
+  font-size: 0.8rem;
+}
+
 /* ── Mobile: always show overlay hint on album cards ── */
 @media (hover: none) {
   .album-flip__front-overlay {
