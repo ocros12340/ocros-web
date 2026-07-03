@@ -1267,6 +1267,16 @@
     let albums   = [];
     let deleteTarget = null; // { type: 'project'|'album'|'track', id }
 
+    // ── HTML escaping helper (prevents stored XSS in admin templates) ──
+    function escHtml(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
     // ── Toast ──────────────────────────────────────────────────────
     function toast(msg, type = '') {
       const el = document.getElementById('toast');
@@ -1282,12 +1292,23 @@
     }
     function isHash(str) { return /^[0-9a-f]{64}$/.test(str); }
 
-    // ── Login ──────────────────────────────────────────────────────
+    // ── Login (brute-force protection: 5 attempts → 30s lockout) ──────
+    let _loginAttempts = 0;
+    let _loginLockedUntil = 0;
+
     async function login() {
       const pw = document.getElementById('pw-input').value.trim();
       const errEl = document.getElementById('login-error');
       errEl.textContent = '';
       if (!pw) return;
+
+      // Brute-force lockout check
+      const now = Date.now();
+      if (now < _loginLockedUntil) {
+        const secs = Math.ceil((_loginLockedUntil - now) / 1000);
+        errEl.textContent = `Too many attempts. Try again in ${secs}s.`;
+        return;
+      }
 
       const { data, error } = await sb
         .from('settings')
@@ -1316,11 +1337,20 @@
       }
 
       if (!match) {
-        errEl.textContent = 'Incorrect password.';
+        _loginAttempts++;
+        if (_loginAttempts >= 5) {
+          _loginLockedUntil = Date.now() + 30_000;
+          _loginAttempts = 0;
+          errEl.textContent = 'Too many attempts. Locked for 30 seconds.';
+        } else {
+          errEl.textContent = `Incorrect password. (${5 - _loginAttempts} attempt${5 - _loginAttempts === 1 ? '' : 's'} left)`;
+        }
         document.getElementById('pw-input').value = '';
         return;
       }
 
+      _loginAttempts = 0;
+      _loginLockedUntil = 0;
       sessionStorage.setItem('okros_admin', '1');
       showDashboard();
     }
@@ -1402,20 +1432,25 @@
 
     function projectCardHTML(p) {
       const isEmpty = !p.title;
+      const eId    = escHtml(p.id);
+      const eTitle = escHtml(p.title || '(no title)');
+      const eType  = escHtml(p.media_type);
+      const eUrl   = escHtml(p.cloudinary_url || '— no URL yet');
+      const eDesc  = escHtml(p.description);
       return `
-        <div class="project-card ${p.visible ? '' : 'hidden-project'}" data-id="${p.id}">
+        <div class="project-card ${p.visible ? '' : 'hidden-project'}" data-id="${eId}">
           <div class="project-card__info">
-            <div class="project-card__title ${isEmpty ? 'empty' : ''}">${p.title || '(no title)'}</div>
+            <div class="project-card__title ${isEmpty ? 'empty' : ''}">${eTitle}</div>
             <div class="project-card__meta">
-              <span class="tag tag-${p.media_type}">${p.media_type}</span>
+              <span class="tag tag-${eType}">${eType}</span>
               ${!p.visible ? '<span class="tag tag-hidden">hidden</span>' : ''}
-              <span class="project-card__url">${p.cloudinary_url || '— no URL yet'}</span>
+              <span class="project-card__url">${eUrl}</span>
             </div>
-            ${p.description ? `<div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px">${p.description}</div>` : ''}
+            ${p.description ? `<div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px">${eDesc}</div>` : ''}
           </div>
           <div class="project-card__actions">
-            <button class="btn btn-edit" onclick="openEditModal('${p.id}')">Edit</button>
-            <button class="btn btn-danger" onclick="confirmDelete('project','${p.id}','${(p.title || 'this project').replace(/'/g, "\\'")}')">Delete</button>
+            <button class="btn btn-edit" onclick="openEditModal('${eId}')">Edit</button>
+            <button class="btn btn-danger" onclick="confirmDelete('project','${eId}','${escHtml(p.title || 'this project')}')">Delete</button>
           </div>
         </div>
       `;
@@ -1486,24 +1521,27 @@
 
     // ── Album card HTML ────────────────────────────────────────────
     function albumCardHTML(a) {
+      const eId   = escHtml(a.id);
+      const eTitle = escHtml(a.title || '(no title)');
+      const eDesc  = escHtml(a.description);
       return `
-        <div class="album-admin-card ${a.visible ? '' : 'hidden-album'}" id="album-card-${a.id}">
+        <div class="album-admin-card ${a.visible ? '' : 'hidden-album'}" id="album-card-${eId}">
           <div class="album-admin-header">
             <div class="album-admin-info">
               <div class="album-admin-title">
-                <span class="tag tag-album" style="margin-right:8px;font-size:0.6rem">Album</span>${a.title || '(no title)'}
+                <span class="tag tag-album" style="margin-right:8px;font-size:0.6rem">Album</span>${eTitle}
               </div>
               <div class="album-admin-meta">
                 ${!a.visible ? '<span class="tag tag-hidden">hidden</span>' : ''}
-                ${a.description ? `<span>${a.description}</span>` : ''}
+                ${a.description ? `<span>${eDesc}</span>` : ''}
               </div>
             </div>
             <div class="album-admin-actions">
-              <button class="btn btn-edit" onclick="openEditAlbumModal('${a.id}')">Edit</button>
-              <button class="btn btn-danger" onclick="confirmDelete('album','${a.id}','${(a.title||'this album').replace(/'/g,"\\'")}')">Delete</button>
+              <button class="btn btn-edit" onclick="openEditAlbumModal('${eId}')">Edit</button>
+              <button class="btn btn-danger" onclick="confirmDelete('album','${eId}','${escHtml(a.title||'this album')}')">Delete</button>
             </div>
           </div>
-          <div class="album-tracks-list" id="tracks-${a.id}">
+          <div class="album-tracks-list" id="tracks-${eId}">
             <div style="color:var(--text-muted);font-size:0.8rem;padding:4px 0">Loading tracks…</div>
           </div>
         </div>
@@ -1515,17 +1553,22 @@
         const tracks = await loadAlbumTracks(a.id);
         const container = document.getElementById('tracks-' + a.id);
         if (!container) continue;
-        const trackHTML = tracks.map((t, i) => `
+        const eAlbumId  = escHtml(a.id);
+        const eCategory = escHtml(a.category);
+        const trackHTML = tracks.map((t, i) => {
+          const eTId    = escHtml(t.id);
+          const eTitle  = escHtml(t.title || '(no title)');
+          return `
           <div class="track-admin-item">
             <div class="track-num">${i + 1}</div>
-            <div class="track-title-cell">${t.title || '(no title)'}</div>
+            <div class="track-title-cell">${eTitle}</div>
             <div class="track-actions">
-              <button class="btn btn-edit" onclick="openEditTrackModal('${t.id}','${a.id}')">Edit</button>
-              <button class="btn btn-danger" onclick="confirmDelete('track','${t.id}','${(t.title||'this track').replace(/'/g,"\\'")}')">Delete</button>
+              <button class="btn btn-edit" onclick="openEditTrackModal('${eTId}','${eAlbumId}')">Edit</button>
+              <button class="btn btn-danger" onclick="confirmDelete('track','${eTId}','${escHtml(t.title||'this track')}')">Delete</button>
             </div>
           </div>
-        `).join('');
-        container.innerHTML = trackHTML + `<button class="add-track-btn" onclick="openAddTrackModal('${a.id}','${a.category}')">+ Add track</button>`;
+        `;}).join('');
+        container.innerHTML = trackHTML + `<button class="add-track-btn" onclick="openAddTrackModal('${eAlbumId}','${eCategory}')">+ Add track</button>`;
       }
     }
 

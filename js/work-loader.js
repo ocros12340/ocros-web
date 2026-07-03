@@ -669,7 +669,7 @@ function initYouTubeFacade() {
     const facade = e.target.closest('.yt-facade');
     if (!facade) return;
     const id = facade.dataset.ytId;
-    if (!id) return;
+    if (!id || !/^[A-Za-z0-9_-]{11}$/.test(id)) return;
     const wrapper = facade.parentElement;
     const iframe  = document.createElement('iframe');
     iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
