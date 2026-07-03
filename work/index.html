@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <!-- Anti-FOUC: apply saved theme before first paint -->
-  <script>(function(){var t=localStorage.getItem('ocros-theme');if(t==='light')document.documentElement.dataset.theme='light';})();</script>
+  <script>(function(){var t=localStorage.getItem('ocros-theme')||'dark';document.documentElement.dataset.theme=t;})();</script>
   <!-- Scroll restoration must run before any paint to prevent jump -->
   <script>history.scrollRestoration = 'manual'; window.scrollTo(0, 0);</script>
   <meta charset="UTF-8" />
@@ -87,8 +87,8 @@
         <li>
           <div class="theme-toggle" role="group" aria-label="Color scheme">
             <span class="theme-toggle__thumb" aria-hidden="true"></span>
-            <button class="theme-toggle__opt" data-value="dark" aria-pressed="true" aria-label="Dark mode">☀</button>
-            <button class="theme-toggle__opt" data-value="light" aria-pressed="false" aria-label="Light mode">☾</button>
+            <button class="theme-toggle__opt" data-value="dark" aria-pressed="true" aria-label="Dark mode">☾</button>
+            <button class="theme-toggle__opt" data-value="light" aria-pressed="false" aria-label="Light mode">☀</button>
           </div>
         </li>
       </ul>

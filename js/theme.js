@@ -13,8 +13,7 @@ function getCurrent() {
 }
 
 function applyTheme(theme) {
-  if (theme === 'light') document.documentElement.dataset.theme = 'light';
-  else delete document.documentElement.dataset.theme;
+  document.documentElement.dataset.theme = theme; // always set: 'dark' | 'light'
 
   // Update aria-pressed on all pill options
   document.querySelectorAll('.theme-toggle__opt').forEach(btn => {

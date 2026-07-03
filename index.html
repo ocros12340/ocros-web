@@ -3,7 +3,7 @@
 <head>
   <script>if(location.pathname==='/index.html')history.replaceState(null,'','/');</script>
   <!-- Anti-FOUC: apply saved theme before first paint -->
-  <script>(function(){var t=localStorage.getItem('ocros-theme');if(t==='light')document.documentElement.dataset.theme='light';})();</script>
+  <script>(function(){var t=localStorage.getItem('ocros-theme')||'dark';document.documentElement.dataset.theme=t;})();</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Okros — Sound Designer</title>
@@ -86,8 +86,8 @@
         <li>
           <div class="theme-toggle" role="group" aria-label="Color scheme">
             <span class="theme-toggle__thumb" aria-hidden="true"></span>
-            <button class="theme-toggle__opt" data-value="dark" aria-pressed="true" aria-label="Dark mode">☀</button>
-            <button class="theme-toggle__opt" data-value="light" aria-pressed="false" aria-label="Light mode">☾</button>
+            <button class="theme-toggle__opt" data-value="dark" aria-pressed="true" aria-label="Dark mode">☾</button>
+            <button class="theme-toggle__opt" data-value="light" aria-pressed="false" aria-label="Light mode">☀</button>
           </div>
         </li>
       </ul>
