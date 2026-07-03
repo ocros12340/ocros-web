@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <script>if(location.pathname==='/index.html')history.replaceState(null,'','/');</script>
+  <!-- Anti-FOUC: apply saved theme before first paint -->
+  <script>(function(){var t=localStorage.getItem('ocros-theme');if(t==='light')document.documentElement.dataset.theme='light';})();</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Okros — Sound Designer</title>
@@ -80,6 +82,9 @@
           <button class="lang-btn active" id="lang-en" data-lang="en">EN</button>
           <span class="lang-sep" aria-hidden="true">/</span>
           <button class="lang-btn" id="lang-hu" data-lang="hu">HU</button>
+        </li>
+        <li>
+          <button class="theme-btn" aria-label="Switch to light mode">☀</button>
         </li>
       </ul>
     </div>

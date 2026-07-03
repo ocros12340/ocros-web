@@ -819,3 +819,80 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
     background: linear-gradient(to bottom, transparent 30%, rgba(10,12,20,0.6) 100%);
   }
 }
+
+/* ══════════════════════════════════════════════════════
+   LIGHT MODE OVERRIDES — work-page
+   ══════════════════════════════════════════════════════ */
+
+/* Flip card back face */
+[data-theme="light"] .album-back {
+  background: #E8E5DC;
+  border: 1px solid rgba(0,71,65,0.10);
+  box-shadow: 0 4px 32px rgba(0,71,65,0.08);
+}
+[data-theme="light"] .album-flip__front-overlay {
+  background: linear-gradient(to bottom, transparent 30%, rgba(230,226,216,0.75) 100%);
+}
+[data-theme="light"] .album-back__title { color: #1A2820; }
+[data-theme="light"] .album-back__desc  { color: #3D6060; }
+
+/* Track list (flip card back) */
+[data-theme="light"] .album-back__tracklist {
+  border-top: 1px solid rgba(0,71,65,0.08);
+}
+[data-theme="light"] .album-track:hover       { background: rgba(0,71,65,0.06); }
+[data-theme="light"] .album-track.is-playing  { background: rgba(0,71,65,0.10); }
+[data-theme="light"] .album-track__num        { color: #5A7A78; }
+[data-theme="light"] .album-track__title      { color: rgba(26,40,32,0.82); }
+[data-theme="light"] .album-track__icon       { color: #5A7A78; }
+
+/* Mini player (flip card) */
+[data-theme="light"] .album-player {
+  background: #E2DFD6;
+  border: 1px solid rgba(0,71,65,0.08);
+  box-shadow: 0 4px 24px rgba(0,71,65,0.06);
+}
+[data-theme="light"] .album-player__title { color: rgba(26,40,32,0.5); }
+[data-theme="light"] .album-player__time  { color: rgba(26,40,32,0.35); }
+[data-theme="light"] .album-player__bar::before {
+  background: rgba(0,71,65,0.12);
+}
+[data-theme="light"] .album-player__thumb { background: #004741; }
+[data-theme="light"] .album-player__skip  { color: rgba(26,40,32,0.5); }
+[data-theme="light"] .album-player__skip:hover { color: #004741; background: rgba(0,71,65,0.06); }
+
+/* Scroll ticker bar */
+[data-theme="light"] .album-ticker {
+  background: linear-gradient(to right, #E2DFD6, #E8E5DC 40%, #E8E5DC 60%, #E2DFD6);
+  border-bottom: 1px solid rgba(0,71,65,0.08);
+}
+
+/* Album sheet (mobile) */
+[data-theme="light"] .album-sheet-backdrop { background: rgba(0,71,65,0.25); }
+[data-theme="light"] .album-sheet          { background: #ECEADF; }
+[data-theme="light"] .album-sheet__handle  { background: rgba(0,71,65,0.2); }
+[data-theme="light"] .album-sheet__header  {
+  border-bottom: 1px solid rgba(0,71,65,0.08);
+}
+[data-theme="light"] .album-sheet__title   { color: #1A2820; }
+[data-theme="light"] .album-sheet__desc    { color: #3D6060; }
+[data-theme="light"] .album-sheet__close   {
+  color: #3D6060;
+  background: rgba(0,71,65,0.06);
+}
+[data-theme="light"] .album-sheet__tracklist {
+  border-top: 1px solid rgba(0,71,65,0.06);
+}
+
+/* Sheet player */
+[data-theme="light"] .album-sheet__player  {
+  border-top: 1px solid rgba(0,71,65,0.08);
+}
+[data-theme="light"] .album-sheet__player-title { color: rgba(26,40,32,0.5); }
+[data-theme="light"] .album-sheet__player-time  { color: rgba(26,40,32,0.35); }
+[data-theme="light"] .album-sheet__player-bar::before {
+  background: rgba(0,71,65,0.12);
+}
+[data-theme="light"] .album-sheet__player-thumb { background: #004741; }
+[data-theme="light"] .album-sheet__player-skip  { color: rgba(26,40,32,0.5); }
+[data-theme="light"] .album-sheet__player-skip:active { color: #004741; background: rgba(0,71,65,0.08); }

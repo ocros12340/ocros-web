@@ -9,6 +9,7 @@ import { init as initNav }  from './nav.js';
 import { init as initAnims } from './animations.js';
 import { init as initLogo }  from './logo-home.js';
 import { init as initServices } from './services.js';
+import { initTheme } from './theme.js';
 
 // ── Hero name letter animation ───────────────────────────────────────────────
 function initLetterAnimation() {
@@ -97,6 +98,7 @@ function initContactEmail() {
 }
 
 // ── Boot ─────────────────────────────────────────────────────────────────────
+initTheme();
 initI18n();
 initNav();
 initAnims();

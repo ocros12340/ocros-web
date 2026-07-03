@@ -54,3 +54,38 @@
   --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
   --ease-soft:  cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ── Light mode — Cyprus (#004741) + Sand (#F0EDE4) ── */
+[data-theme="light"] {
+  --bg:          #F0EDE4;
+  --bg-surface:  #E8E4DA;
+  --bg-services: #EAE6DC;
+  --bg-work:     #E6E2D8;
+  --bg-about:    #ECEADF;
+  --bg-contact:  #E4E0D6;
+
+  --accent:      #004741;
+  --accent-dim:  #00332F;
+
+  --c-film:      #8C6440;
+  --c-film-bg:   rgba(140,100,64,0.09);
+  --c-film-glow: rgba(140,100,64,0.16);
+
+  --c-comm:      #2D7A76;
+  --c-comm-bg:   rgba(45,122,118,0.09);
+  --c-comm-glow: rgba(45,122,118,0.16);
+
+  --c-pod:       #8C4535;
+  --c-pod-bg:    rgba(140,69,53,0.09);
+  --c-pod-glow:  rgba(140,69,53,0.16);
+
+  --c-music:     #5D3E80;
+  --c-music-bg:  rgba(93,62,128,0.09);
+  --c-music-glow:rgba(93,62,128,0.16);
+
+  --text:        #1A2820;
+  --text-muted:  #3D6060;
+  --text-dim:    #5A7A78;
+  --text-bright: #0D1A18;
+  --muted:       #5A7A78;
+}

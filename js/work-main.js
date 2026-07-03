@@ -9,7 +9,9 @@ import { init as initNav }    from './nav.js';
 import { init as initAnims }  from './animations.js';
 import { init as initWorkUi } from './work-ui.js';
 import { init as initLoader } from './work-loader.js';
+import { initTheme }          from './theme.js';
 
+initTheme();
 initI18n();
 initNav();
 initAnims();

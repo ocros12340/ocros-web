@@ -24,6 +24,17 @@
   );
 }
 
+/* ── Light mode hero ───────────────────────────────────── */
+[data-theme="light"] .hero {
+  background: linear-gradient(
+    to bottom,
+    #E4E1D8 0%,
+    #E8E5DC 35%,
+    #EBE8DF 65%,
+    #F0EDE4 100%
+  );
+}
+
 /* ── Video background slot ─────────────────────────────── */
 .hero__bg-video {
   position: absolute;

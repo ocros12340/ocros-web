@@ -103,6 +103,25 @@
 .lang-btn:hover  { color: var(--text-muted); }
 .lang-sep        { color: var(--text-dim); font-size: 0.7rem; }
 
+/* ── Theme toggle ──────────────────────────────────────── */
+.theme-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  line-height: 1;
+  color: var(--text-dim);
+  padding: 4px 6px;
+  margin-left: 0.75rem;
+  border-radius: 4px;
+  transition: color 0.3s, background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.theme-btn:hover { color: var(--text-muted); background: rgba(128,128,128,0.08); }
+
 /* ── Hamburger ─────────────────────────────────────────── */
 .nav__hamburger {
   display: none;
@@ -193,11 +212,34 @@
   }
   .nav__links.open .lang-toggle { opacity: 1; transform: translateY(0); }
 
+  .theme-btn {
+    margin-left: 0;
+    margin-top: 1rem;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.4s 0.30s var(--ease-out), transform 0.4s 0.30s var(--ease-out);
+  }
+  .nav__links.open .theme-btn { opacity: 1; transform: translateY(0); }
+
   /* No GPU blur on mobile nav */
   .nav.scrolled {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     background: rgba(13, 17, 28, 0.96) !important;
+  }
+}
+
+/* ── Light mode nav overrides ──────────────────────────── */
+[data-theme="light"] .nav.scrolled {
+  background: rgba(240, 237, 228, 0.90);
+  box-shadow: 0 1px 40px rgba(0, 71, 65, 0.10);
+}
+@media (max-width: 768px) {
+  [data-theme="light"] .nav__links {
+    background: rgba(240, 237, 228, 0.97);
+  }
+  [data-theme="light"] .nav.scrolled {
+    background: rgba(240, 237, 228, 0.96) !important;
   }
 }
 

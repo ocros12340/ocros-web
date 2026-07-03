@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Anti-FOUC: apply saved theme before first paint -->
+  <script>(function(){var t=localStorage.getItem('ocros-theme');if(t==='light')document.documentElement.dataset.theme='light';})();</script>
   <!-- Scroll restoration must run before any paint to prevent jump -->
   <script>history.scrollRestoration = 'manual'; window.scrollTo(0, 0);</script>
   <meta charset="UTF-8" />
@@ -81,6 +83,9 @@
           <button class="lang-btn active" id="lang-en" data-lang="en">EN</button>
           <span class="lang-sep" aria-hidden="true">/</span>
           <button class="lang-btn" id="lang-hu" data-lang="hu">HU</button>
+        </li>
+        <li>
+          <button class="theme-btn" aria-label="Switch to light mode">☀</button>
         </li>
       </ul>
     </div>
