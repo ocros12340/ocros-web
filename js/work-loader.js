@@ -599,29 +599,36 @@ function initSheetPlayer() {
 
 function initSheetSwipe() {
   let startY = 0, currentY = 0, isDragging = false;
-  const handleWrap = sheetEl.querySelector('.album-sheet__handle-wrap');
 
-  handleWrap.addEventListener('touchstart', e => {
-    startY     = e.touches[0].clientY;
-    currentY   = startY;
-    isDragging = true;
-    sheetEl.style.transition = 'none';
-  }, { passive: true });
+  // Drag zones: handle bar + entire header row
+  const dragZones = [
+    sheetEl.querySelector('.album-sheet__handle-wrap'),
+    sheetEl.querySelector('.album-sheet__header'),
+  ];
 
-  handleWrap.addEventListener('touchmove', e => {
-    if (!isDragging) return;
-    e.preventDefault(); // block iOS pull-to-refresh during downward swipe
-    currentY = e.touches[0].clientY;
-    const delta = Math.max(0, currentY - startY); // downward only
-    sheetEl.style.transform = `translateY(${delta}px)`;
-  }, { passive: false });
+  dragZones.forEach(zone => {
+    zone.addEventListener('touchstart', e => {
+      startY     = e.touches[0].clientY;
+      currentY   = startY;
+      isDragging = true;
+      sheetEl.style.transition = 'none';
+    }, { passive: true });
 
-  handleWrap.addEventListener('touchend', () => {
-    if (!isDragging) return;
-    isDragging = false;
-    sheetEl.style.transition = '';
-    sheetEl.style.transform  = '';
-    if (currentY - startY > 80) closeAlbumSheet();
+    zone.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      e.preventDefault(); // block iOS pull-to-refresh
+      currentY = e.touches[0].clientY;
+      const delta = Math.max(0, currentY - startY); // downward only
+      sheetEl.style.transform = `translateY(${delta}px)`;
+    }, { passive: false });
+
+    zone.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      sheetEl.style.transition = '';
+      sheetEl.style.transform  = '';
+      if (currentY - startY > 80) closeAlbumSheet();
+    });
   });
 }
 
