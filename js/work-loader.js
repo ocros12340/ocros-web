@@ -257,7 +257,7 @@ function initAlbumCards(container) {
 
     // Audio events
     audio.addEventListener('timeupdate', () => {
-      if (!audio.duration) return;
+      if (!audio.duration || pBar._scrubbing) return;
       const pct = (audio.currentTime / audio.duration) * 100;
       pFill.style.width  = pct + '%';
       pThumb.style.left  = pct + '%';
@@ -546,6 +546,7 @@ function makeScrubBar(barEl, audioEl, fillEl, thumbEl) {
     e.preventDefault();
     e.stopPropagation();
     scrubbing = true;
+    barEl._scrubbing = true;
     barEl.setPointerCapture(e.pointerId);
     applyVisual(pctFrom(e));
   });
@@ -556,9 +557,13 @@ function makeScrubBar(barEl, audioEl, fillEl, thumbEl) {
   barEl.addEventListener('pointerup', e => {
     if (!scrubbing) return;
     scrubbing = false;
+    barEl._scrubbing = false;
     if (audioEl.duration) audioEl.currentTime = pctFrom(e) * audioEl.duration;
   });
-  barEl.addEventListener('pointercancel', () => { scrubbing = false; });
+  barEl.addEventListener('pointercancel', () => {
+    scrubbing = false;
+    barEl._scrubbing = false;
+  });
 }
 
 function initSheetPlayer() {
@@ -571,7 +576,7 @@ function initSheetPlayer() {
   const pSkips = sheetEl.querySelectorAll('.album-sheet__player-skip');
 
   sheetAudio.addEventListener('timeupdate', () => {
-    if (!sheetAudio.duration) return;
+    if (!sheetAudio.duration || pBar._scrubbing) return;
     const pct = (sheetAudio.currentTime / sheetAudio.duration) * 100;
     pFill.style.width = pct + '%';
     pThumb.style.left = pct + '%';
