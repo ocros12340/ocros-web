@@ -136,9 +136,8 @@ section + section::before {
   animation: tickerScroll 28s linear infinite;
 }
 
-.ticker:hover .ticker__track {
-  animation-play-state: paused;
-}
+/* Ticker pause handled by JS initTicker() — Safari resets animation via CSS hover */
+/* .ticker:hover .ticker__track { animation-play-state: paused; } */
 
 .ticker__item {
   display: flex;

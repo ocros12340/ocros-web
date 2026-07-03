@@ -87,6 +87,19 @@ function initWaveform() {
   draw();
 }
 
+// ── Ticker pause (Safari fix — CSS hover resets animation position) ──────────
+function initTicker() {
+  const ticker = document.querySelector('.ticker');
+  const track  = document.querySelector('.ticker__track');
+  if (!ticker || !track) return;
+  ticker.addEventListener('mouseenter', () => {
+    track.style.animationPlayState = 'paused';
+  });
+  ticker.addEventListener('mouseleave', () => {
+    track.style.animationPlayState = 'running';
+  });
+}
+
 // ── Contact email ────────────────────────────────────────────────────────────
 function initContactEmail() {
   const CONTACT_EMAIL = 'okros.sound@gmail.com';
@@ -106,4 +119,5 @@ initLogo();
 initServices();
 initLetterAnimation();
 initWaveform();
+initTicker();
 initContactEmail();
