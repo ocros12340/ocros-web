@@ -76,6 +76,24 @@
 /* Never show dark overlay in light mode */
 [data-theme="light"] .hero__bg-overlay { display: none !important; }
 
+/* Top vignette — nav legibility in dark mode */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 28%;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 15, 28, 0.45) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+[data-theme="light"] .hero::after { display: none; }
+
 /* Film grain overlay */
 .hero::before {
   content: '';
