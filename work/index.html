@@ -85,7 +85,11 @@
           <button class="lang-btn" id="lang-hu" data-lang="hu">HU</button>
         </li>
         <li>
-          <button class="theme-btn" aria-label="Switch to light mode">☀</button>
+          <div class="theme-toggle" role="group" aria-label="Color scheme">
+            <span class="theme-toggle__thumb" aria-hidden="true"></span>
+            <button class="theme-toggle__opt" data-value="dark" aria-pressed="true" aria-label="Dark mode">☀</button>
+            <button class="theme-toggle__opt" data-value="light" aria-pressed="false" aria-label="Light mode">☾</button>
+          </div>
         </li>
       </ul>
     </div>

@@ -103,24 +103,54 @@
 .lang-btn:hover  { color: var(--text-muted); }
 .lang-sep        { color: var(--text-dim); font-size: 0.7rem; }
 
-/* ── Theme toggle ──────────────────────────────────────── */
-.theme-btn {
+/* ── Theme toggle pill ──────────────────────────────────── */
+.theme-toggle {
+  position: relative;
+  display: inline-flex;
+  align-items: stretch;
+  background: rgba(128,128,128,0.10);
+  border: 1px solid rgba(128,128,128,0.08);
+  border-radius: 99px;
+  padding: 3px;
+  margin-left: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Sliding highlight — covers active icon */
+.theme-toggle__thumb {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  bottom: 3px;
+  width: calc(50% - 3px);
+  background: var(--accent);
+  border-radius: 99px;
+  transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.38s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Slide to the right (☾) in light mode */
+[data-theme="light"] .theme-toggle__thumb { transform: translateX(100%); }
+
+.theme-toggle__opt {
+  position: relative;
+  z-index: 1;
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   line-height: 1;
+  padding: 4px 10px;
+  border-radius: 99px;
   color: var(--text-dim);
-  padding: 4px 6px;
-  margin-left: 0.75rem;
-  border-radius: 4px;
-  transition: color 0.3s, background 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  transition: color 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
 }
-.theme-btn:hover { color: var(--text-muted); background: rgba(128,128,128,0.08); }
+/* Active icon gets bg-contrast colour */
+[data-theme="dark"]  .theme-toggle__opt[data-value="dark"],
+[data-theme="light"] .theme-toggle__opt[data-value="light"] { color: var(--bg); }
+.theme-toggle__opt:hover { opacity: 0.8; }
 
 /* ── Hamburger ─────────────────────────────────────────── */
 .nav__hamburger {
@@ -212,14 +242,16 @@
   }
   .nav__links.open .lang-toggle { opacity: 1; transform: translateY(0); }
 
-  .theme-btn {
+  .theme-toggle {
     margin-left: 0;
     margin-top: 1rem;
     opacity: 0;
     transform: translateY(12px);
     transition: opacity 0.4s 0.30s var(--ease-out), transform 0.4s 0.30s var(--ease-out);
   }
-  .nav__links.open .theme-btn { opacity: 1; transform: translateY(0); }
+  .nav__links.open .theme-toggle { opacity: 1; transform: translateY(0); }
+  /* Thumb slide transition unaffected by menu open/close transform */
+  .theme-toggle__thumb { transition: transform 0.38s cubic-bezier(0.16, 1, 0.3, 1); }
 
   /* No GPU blur on mobile nav */
   .nav.scrolled {
