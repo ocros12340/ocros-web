@@ -587,6 +587,7 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
   cursor: grab;
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
+  touch-action: none; /* tell iOS not to scroll from this element */
 }
 .album-sheet__handle {
   width: 40px;
@@ -602,6 +603,8 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
   gap: 14px;
   padding: 0 18px 16px;
   flex-shrink: 0;
+  touch-action: none; /* tell iOS not to scroll from this element */
+  user-select: none;
 }
 
 .album-sheet__cover {
