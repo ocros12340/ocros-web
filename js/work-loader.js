@@ -297,13 +297,7 @@ function initAlbumCards(container) {
       e.stopPropagation();
       audio.paused ? audio.play().catch(() => {}) : audio.pause();
     });
-    pBar.addEventListener('click', e => {
-      e.stopPropagation();
-      if (!audio.duration) return;
-      const rect = pBar.getBoundingClientRect();
-      const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      audio.currentTime = pct * audio.duration;
-    });
+    makeScrubBar(pBar, audio, pFill, pThumb);
     pSkips.forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
@@ -534,6 +528,39 @@ function sheetPlayTrack(trackEl) {
   sheetAudio.play().catch(() => {});
 }
 
+// Shared scrub helper — handles both mouse and touch via Pointer Events
+function makeScrubBar(barEl, audioEl, fillEl, thumbEl) {
+  let scrubbing = false;
+
+  function pctFrom(e) {
+    const rect = barEl.getBoundingClientRect();
+    return Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+  }
+  function applyVisual(pct) {
+    if (fillEl)  fillEl.style.width = (pct * 100) + '%';
+    if (thumbEl) thumbEl.style.left = (pct * 100) + '%';
+  }
+
+  barEl.addEventListener('pointerdown', e => {
+    if (!audioEl.duration) return;
+    e.preventDefault();
+    e.stopPropagation();
+    scrubbing = true;
+    barEl.setPointerCapture(e.pointerId);
+    applyVisual(pctFrom(e));
+  });
+  barEl.addEventListener('pointermove', e => {
+    if (!scrubbing) return;
+    applyVisual(pctFrom(e));
+  });
+  barEl.addEventListener('pointerup', e => {
+    if (!scrubbing) return;
+    scrubbing = false;
+    if (audioEl.duration) audioEl.currentTime = pctFrom(e) * audioEl.duration;
+  });
+  barEl.addEventListener('pointercancel', () => { scrubbing = false; });
+}
+
 function initSheetPlayer() {
   const pPlay  = sheetEl.querySelector('.album-sheet__player-playpause');
   const pBar   = sheetEl.querySelector('.album-sheet__player-bar');
@@ -586,13 +613,7 @@ function initSheetPlayer() {
     e.stopPropagation();
     sheetAudio.paused ? sheetAudio.play().catch(() => {}) : sheetAudio.pause();
   });
-  pBar.addEventListener('click', e => {
-    e.stopPropagation();
-    if (!sheetAudio.duration) return;
-    const rect = pBar.getBoundingClientRect();
-    const pct  = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    sheetAudio.currentTime = pct * sheetAudio.duration;
-  });
+  makeScrubBar(pBar, sheetAudio, pFill, pThumb);
   pSkips.forEach(btn => {
     btn.addEventListener('click', e => {
       e.stopPropagation();

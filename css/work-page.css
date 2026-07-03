@@ -462,6 +462,7 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
   align-items: center;
   cursor: pointer;
   position: relative;
+  touch-action: none;
 }
 .album-player__bar::before {
   content: '';
@@ -715,6 +716,7 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
   align-items: center;
   cursor: pointer;
   position: relative;
+  touch-action: none;
 }
 .album-sheet__player-bar::before {
   content: '';
