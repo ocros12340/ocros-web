@@ -83,9 +83,9 @@
   --c-music-bg:  rgba(93,62,128,0.09);
   --c-music-glow:rgba(93,62,128,0.16);
 
-  --text:        #1A2820;
-  --text-muted:  #3D6060;
-  --text-dim:    #5A7A78;
-  --text-bright: #0D1A18;
-  --muted:       #5A7A78;
+  --text:        #0A1A14;
+  --text-muted:  #1E4A46;
+  --text-dim:    #3A6460;
+  --text-bright: #060F0D;
+  --muted:       #3A6460;
 }

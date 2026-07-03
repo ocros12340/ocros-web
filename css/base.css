@@ -174,6 +174,19 @@ section + section::before {
 .js-page-hidden .float-wave,
 .js-page-hidden .float-signal { animation-play-state: paused !important; }
 
+/* ── Light mode — global text shadow + section divider ─── */
+[data-theme="light"] .section-title,
+[data-theme="light"] .contact__title,
+[data-theme="light"] .footer__wordmark {
+  text-shadow: 0 1px 4px rgba(0,71,65,0.10);
+}
+[data-theme="light"] .section-label {
+  opacity: 1;
+}
+[data-theme="light"] section + section::before {
+  background: linear-gradient(90deg, transparent 0%, rgba(0,71,65,0.12) 30%, rgba(0,71,65,0.12) 70%, transparent 100%);
+}
+
 /* ── Reduced motion — global kill ──────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

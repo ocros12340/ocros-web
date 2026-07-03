@@ -34,6 +34,15 @@
     #F0EDE4 100%
   );
 }
+/* Orbs use dark-tinted colours that darken a sandy bg — hide them */
+[data-theme="light"] .hero__orb { display: none; }
+
+/* Text shadow — depth without dominance */
+[data-theme="light"] .hero__name,
+[data-theme="light"] .hero__statement,
+[data-theme="light"] .hero__label {
+  text-shadow: 0 1px 4px rgba(0,71,65,0.10);
+}
 
 /* ── Video background slot ─────────────────────────────── */
 .hero__bg-video {
