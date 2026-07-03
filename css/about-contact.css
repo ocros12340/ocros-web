@@ -192,6 +192,19 @@
   .about__inner { grid-template-columns: 1fr; }
 }
 
+/* Subtle frosted backing — softens geo shapes behind the bio text */
+.about__text {
+  background: rgba(22, 26, 34, 0.52);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 4px;
+  padding: 2.5rem;
+  margin: -2.5rem;
+}
+[data-theme="light"] .about__text {
+  background: rgba(236, 234, 223, 0.78);
+}
+
 .about__text p {
   color: var(--text-muted);
   font-size: 1.025rem;
