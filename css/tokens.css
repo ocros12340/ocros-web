@@ -1,0 +1,56 @@
+/* ═══════════════════════════════════════════════════════
+   DESIGN TOKENS — single source of truth for all pages
+   ═══════════════════════════════════════════════════════ */
+:root {
+  /* Base backgrounds */
+  --bg:          #1A2030;
+  --bg-surface:  #1F2840;
+
+  /* Section-specific backgrounds */
+  --bg-services: #171B20;
+  --bg-work:     #141820;
+  --bg-about:    #161A22;
+  --bg-contact:  #12111A;
+
+  /* Primary accent — amber */
+  --accent:      #C4956A;
+  --accent-dim:  #8C6440;
+
+  /* Service accent colors */
+  --c-film:      #C4956A;
+  --c-film-bg:   rgba(196,149,106,0.08);
+  --c-film-glow: rgba(196,149,106,0.18);
+
+  --c-comm:      #5BADA8;
+  --c-comm-bg:   rgba(91,173,168,0.07);
+  --c-comm-glow: rgba(91,173,168,0.16);
+
+  --c-pod:       #C47060;
+  --c-pod-bg:    rgba(196,112,96,0.07);
+  --c-pod-glow:  rgba(196,112,96,0.16);
+
+  --c-music:     #9B7BB5;
+  --c-music-bg:  rgba(155,123,181,0.07);
+  --c-music-glow:rgba(155,123,181,0.16);
+
+  /* Text */
+  --text:        #F2EDE6;
+  --text-muted:  #9A9088;
+  --text-dim:    #6B6258;
+  --text-bright: #F2EDE6;  /* alias — album flip card */
+  --muted:       #6B6258;  /* alias — album flip card */
+
+  /* Fonts */
+  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-body:    'Source Sans 3', system-ui, sans-serif;
+
+  /* Layout */
+  --nav-h:       72px;
+  --section-pad: clamp(96px, 14vw, 180px);
+  --content-w:   1120px;
+  --gutter:      clamp(24px, 5vw, 64px);
+
+  /* Easing */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft:  cubic-bezier(0.4, 0, 0.2, 1);
+}
