@@ -69,10 +69,12 @@
   z-index: 1;
   display: none;
 }
-.hero__bg-video:not([style*="display: none"]) ~ .hero__bg-overlay,
+.hero__bg-video:not([style*="display:none"]):not([style*="display: none"]) ~ .hero__bg-overlay,
 .hero__bg-video.active ~ .hero__bg-overlay {
   display: block;
 }
+/* Never show dark overlay in light mode */
+[data-theme="light"] .hero__bg-overlay { display: none !important; }
 
 /* Film grain overlay */
 .hero::before {
