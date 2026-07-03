@@ -165,9 +165,9 @@ function buildAlbumCard(album, tracks) {
               + '<span class="album-player__time album-player__time--dur">0:00</span>'
             + '</div>'
             + '<div class="album-player__controls">'
-              + '<button class="album-player__skip" data-skip="-10">↩ 10s</button>'
+              + '<button class="album-player__skip" data-skip="-10" aria-label="Back 10 seconds">↩︎</button>'
               + '<button class="album-player__playpause">▶</button>'
-              + '<button class="album-player__skip" data-skip="10">10s ↪</button>'
+              + '<button class="album-player__skip" data-skip="10" aria-label="Forward 10 seconds">↪︎</button>'
             + '</div>'
           + '</div>'
           + '<audio class="album-audio" preload="none"></audio>'
@@ -390,9 +390,9 @@ function createAlbumSheet() {
         + '<span class="album-sheet__player-time album-sheet__player-time--dur">0:00</span>'
       + '</div>'
       + '<div class="album-sheet__player-controls">'
-        + '<button class="album-sheet__player-skip" data-skip="-10">↩ 10s</button>'
+        + '<button class="album-sheet__player-skip" data-skip="-10" aria-label="Back 10 seconds">↩︎</button>'
         + '<button class="album-sheet__player-playpause">▶</button>'
-        + '<button class="album-sheet__player-skip" data-skip="10">10s ↪</button>'
+        + '<button class="album-sheet__player-skip" data-skip="10" aria-label="Forward 10 seconds">↪︎</button>'
       + '</div>'
     + '</div>'
     + '<audio class="album-sheet__audio" preload="none"></audio>';
@@ -474,8 +474,13 @@ function openAlbumSheet(flipEl) {
   if (pCur)   pCur.textContent   = '0:00';
   if (pDur)   pDur.textContent   = '0:00';
 
-  // Open
-  document.body.style.overflow = 'hidden';
+  // Open — fix body position to prevent iOS background scroll
+  const scrollY = window.scrollY;
+  document.body.dataset.sheetScrollY = String(scrollY);
+  document.body.style.position  = 'fixed';
+  document.body.style.top       = `-${scrollY}px`;
+  document.body.style.width     = '100%';
+  document.body.style.overflowY = 'hidden';
   sheetBackdropEl.classList.add('is-open');
   sheetEl.classList.add('is-open');
 }
@@ -484,7 +489,14 @@ function closeAlbumSheet() {
   if (!sheetEl) return;
   sheetEl.classList.remove('is-open');
   sheetBackdropEl.classList.remove('is-open');
-  document.body.style.overflow = '';
+  // Restore body scroll position (iOS-safe)
+  const savedY = parseInt(document.body.dataset.sheetScrollY || '0', 10);
+  document.body.style.position  = '';
+  document.body.style.top       = '';
+  document.body.style.width     = '';
+  document.body.style.overflowY = '';
+  delete document.body.dataset.sheetScrollY;
+  window.scrollTo(0, savedY);
   if (sheetAudio && !sheetAudio.paused) sheetAudio.pause();
   sheetCurrentTrackEl = null;
 }

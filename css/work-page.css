@@ -506,12 +506,11 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
   border: none;
   cursor: pointer;
   color: rgba(255,255,255,0.5);
-  font-size: 0.68rem;
+  font-size: 1rem;
   padding: 4px 8px;
   border-radius: 4px;
   transition: color 0.2s, background 0.2s;
   user-select: none;
-  letter-spacing: 0.02em;
 }
 .album-player__skip:hover { color: #fff; background: rgba(255,255,255,0.06); }
 
@@ -755,12 +754,11 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
   border: none;
   cursor: pointer;
   color: rgba(255, 255, 255, 0.5);
-  font-size: 0.78rem;
+  font-size: 1.2rem;
   padding: 0 12px;
   border-radius: 6px;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
-  letter-spacing: 0.02em;
   min-height: 44px; /* iOS tap target minimum */
   display: flex;
   align-items: center;
