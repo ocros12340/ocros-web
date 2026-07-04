@@ -117,6 +117,127 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
   --wi-glow: var(--grp-glow, rgba(196,149,106,0.18));
 }
 
+/* ── Work item card base ────────────────────────────────
+   Source of truth for ALL .work-item styles.
+   Do NOT add work-item rules elsewhere — they will be
+   silently overridden or forgotten on future edits.
+   ──────────────────────────────────────────────────── */
+
+/* nth-child fallback accent colors (no parent .work-group) */
+.work-item:nth-child(1) { --wi: var(--c-film);  --wi-glow: var(--c-film-glow);  }
+.work-item:nth-child(2) { --wi: var(--c-comm);  --wi-glow: var(--c-comm-glow);  }
+.work-item:nth-child(3) { --wi: var(--c-music); --wi-glow: var(--c-music-glow); }
+.work-item:nth-child(4) { --wi: var(--c-pod);   --wi-glow: var(--c-pod-glow);   }
+
+.work-item {
+  width: clamp(280px, 36vw, 480px);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.work-item__media {
+  background: var(--bg-surface);
+  aspect-ratio: 4/3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+  /* No transform in transition — lift on hover was removed intentionally */
+  transition: box-shadow 0.5s var(--ease-soft);
+}
+
+/* Colored bottom vignette (always visible, subtle glow) */
+.work-item__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 110%, var(--wi-glow, rgba(196,149,106,0.18)) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Hover: deepen shadow only — no translateY lift, no bottom bar */
+.work-item:hover .work-item__media {
+  box-shadow: 0 12px 48px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.06);
+}
+
+.work-item__media video,
+.work-item__media audio {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.work-item__media audio {
+  height: auto;
+  position: relative;
+  inset: auto;
+  width: 90%;
+}
+
+.work-item__tag {
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--wi, var(--accent));
+  opacity: 0.85;
+  margin-bottom: 0.45rem;
+}
+
+.work-item__footer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.35rem;
+}
+
+.work-item__arrow {
+  font-size: 1.1rem;
+  color: var(--wi, var(--accent));
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.3s, transform 0.3s var(--ease-out);
+  flex-shrink: 0;
+  line-height: 1;
+}
+.work-item:hover .work-item__arrow { opacity: 1; transform: translateX(0); }
+
+.work-item__placeholder-icon {
+  width: 36px; height: 36px;
+  opacity: 0.2;
+  color: var(--wi, var(--accent));
+}
+
+.work-item__placeholder-text {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.work-item__title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+.work-item__desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-top: 0.4rem;
+}
+
 /* ── Video embed (Vimeo / YouTube) ────────────────────── */
 .work-item__media--vimeo {
   padding: 0;
@@ -823,6 +944,15 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
 /* ══════════════════════════════════════════════════════
    LIGHT MODE OVERRIDES — work-page
    ══════════════════════════════════════════════════════ */
+
+/* Work item cards */
+[data-theme="light"] .work-item__media {
+  border: 1px solid rgba(124,85,53,0.10);
+  box-shadow: 0 4px 32px rgba(124,85,53,0.07);
+}
+[data-theme="light"] .work-item:hover .work-item__media {
+  box-shadow: 0 12px 48px rgba(124,85,53,0.10), 0 0 0 1px rgba(124,85,53,0.10);
+}
 
 /* Flip card — front and back faces */
 [data-theme="light"] .album-flip__front {
