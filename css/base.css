@@ -195,6 +195,45 @@ section + section::before {
   background: linear-gradient(90deg, transparent 0%, rgba(124,85,53,0.10) 30%, rgba(124,85,53,0.10) 70%, transparent 100%);
 }
 
+/* ── Paper grain texture overlay ───────────────────────
+   SVG feTurbulence noise at 4% opacity + multiply blend
+   Transforms the flat sand bg into a matte paper surface
+   ──────────────────────────────────────────────────── */
+[data-theme="light"] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.80' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 250px 250px;
+  mix-blend-mode: multiply;
+}
+
+/* ── Organic atmosphere blobs on section backgrounds ───
+   Multi-layer radial gradients layered on top of the
+   section's base color. No pseudo-element z-index issues.
+   ──────────────────────────────────────────────────── */
+[data-theme="light"] .services {
+  background:
+    radial-gradient(ellipse 55% 70% at 3% 65%, rgba(198,123,92,0.11) 0%, transparent 60%),
+    radial-gradient(ellipse 42% 55% at 97% 12%, rgba(92,122,90,0.09) 0%, transparent 55%),
+    var(--bg-services);
+}
+[data-theme="light"] .work {
+  background:
+    radial-gradient(ellipse 50% 60% at 92% 88%, rgba(198,123,92,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 38% 50% at 6% 15%, rgba(212,196,168,0.18) 0%, transparent 55%),
+    var(--bg-work);
+}
+[data-theme="light"] .about {
+  background:
+    radial-gradient(ellipse 62% 80% at 96% 50%, rgba(92,122,90,0.09) 0%, transparent 60%),
+    radial-gradient(ellipse 44% 55% at 3% 85%, rgba(198,123,92,0.08) 0%, transparent 52%),
+    var(--bg-about);
+}
+
 /* ── Reduced motion — global kill ──────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

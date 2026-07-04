@@ -444,98 +444,227 @@
 }
 
 /* ══════════════════════════════════════════════════════
-   LIGHT MODE — Stúdió Lenvászon: warm earth tones
+   LIGHT MODE 3D KEYFRAMES
+   Perspective-tilted clay disc animations replace the
+   flat wireframe rotations used in dark mode.
+   ══════════════════════════════════════════════════════ */
+@keyframes clayDisc {
+  from { transform: perspective(520px) rotateX(42deg) rotateZ(0deg); }
+  to   { transform: perspective(520px) rotateX(42deg) rotateZ(360deg); }
+}
+@keyframes clayDiscRev {
+  from { transform: perspective(520px) rotateX(42deg) rotateZ(360deg); }
+  to   { transform: perspective(520px) rotateX(42deg) rotateZ(0deg); }
+}
+@keyframes clayBlob {
+  0%,100% { transform: perspective(500px) rotateX(32deg) rotateY(10deg) scale(1)    translateY(0px); }
+  33%     { transform: perspective(500px) rotateX(44deg) rotateY(-6deg) scale(1.04) translateY(-16px); }
+  66%     { transform: perspective(500px) rotateX(26deg) rotateY(14deg) scale(0.97) translateY(10px); }
+}
+@keyframes clayBob {
+  0%,100% { transform: perspective(400px) rotateX(22deg) rotateZ(0deg) scale(1); }
+  50%     { transform: perspective(400px) rotateX(34deg) rotateZ(4deg) scale(1.10); }
+}
+
+/* ══════════════════════════════════════════════════════
+   LIGHT MODE — Terracotta Studio
+   Completely different from dark mode:
+   · Filled clay discs with 3D perspective tilt
+   · Soft organic moss blob (blurred)
+   · Warm enlarged dot accents
+   · Parallax shapes: filled radial fills, no wireframe
    ══════════════════════════════════════════════════════ */
 
-/* Reduced opacity — sandy bg needs less visual noise */
-[data-theme="light"] .geo-fixed { opacity: 0.35; }
+/* Raise geo-fixed opacity — filled shapes need more presence */
+[data-theme="light"] .geo-fixed { opacity: 0.65; }
 
-/* Rings → warm walnut/amber borders */
+/* ── Fixed bg — RING 1 → large 3D clay disc, top-right ── */
 [data-theme="light"] .gf-ring-1 {
-  border-color: rgba(124,85,53,0.20);
-  filter: drop-shadow(0 0 8px rgba(124,85,53,0.08));
+  border: none;
+  width: clamp(520px, 72vw, 1000px);
+  height: clamp(520px, 72vw, 1000px);
+  background: radial-gradient(ellipse 95% 60%,
+    rgba(198,123,92,0.24) 0%,
+    rgba(198,123,92,0.12) 38%,
+    rgba(212,196,168,0.06) 62%,
+    transparent 82%);
+  filter: none;
+  animation: clayDisc 40s linear infinite !important;
 }
-[data-theme="light"] .gf-ring-1-inner { border-color: rgba(124,85,53,0.12); }
+
+/* Ring-1-inner → smaller companion clay disc */
+[data-theme="light"] .gf-ring-1-inner {
+  border: none;
+  background: radial-gradient(ellipse 90% 55%,
+    rgba(212,196,168,0.30) 0%,
+    rgba(212,196,168,0.14) 42%,
+    transparent 72%);
+  animation: clayDiscRev 28s linear infinite !important;
+}
+
+/* Ring 2 → organic moss blob, soft-blurred, left side */
 [data-theme="light"] .gf-ring-2 {
-  border-color: rgba(93,62,128,0.18);
-  filter: drop-shadow(0 0 8px rgba(93,62,128,0.07));
+  border: none;
+  width: clamp(360px, 48vw, 680px);
+  height: clamp(290px, 38vw, 550px);
+  top: 33%;
+  left: -20%;
+  background: radial-gradient(ellipse 78% 100%,
+    rgba(92,122,90,0.20) 0%,
+    rgba(92,122,90,0.09) 52%,
+    transparent 82%);
+  filter: blur(22px);
+  border-radius: 60% 40% 70% 30% / 40% 60% 40% 60%;
+  animation: clayBlob 22s ease-in-out infinite !important;
 }
-[data-theme="light"] .gf-ring-3 { border-color: rgba(124,85,53,0.22); }
+
+/* Ring 3 → warm clay ring, crosshair removed */
+[data-theme="light"] .gf-ring-3 {
+  border-color: rgba(198,123,92,0.35);
+  background: radial-gradient(circle, rgba(198,123,92,0.10) 30%, transparent 72%);
+  filter: none;
+  animation: clayBob 16s ease-in-out infinite !important;
+}
 [data-theme="light"] .gf-ring-3::before,
-[data-theme="light"] .gf-ring-3::after { background: rgba(124,85,53,0.14); }
+[data-theme="light"] .gf-ring-3::after { display: none; }
 
-/* Diamond → warm amber */
+/* Diamond → filled clay tile */
 [data-theme="light"] .gf-diamond {
-  border-color: rgba(140,100,64,0.32);
-  filter: drop-shadow(0 0 6px rgba(140,100,64,0.12));
+  background: linear-gradient(135deg, rgba(198,123,92,0.22) 0%, rgba(212,196,168,0.12) 100%);
+  border-color: rgba(198,123,92,0.32);
+  filter: drop-shadow(0 4px 14px rgba(198,123,92,0.18));
 }
 
-/* Dots → warm earth palette */
-[data-theme="light"] .gf-dot                { background: rgba(124,85,53,0.45); }
-[data-theme="light"] .gf-dot:nth-child(3)   { background: rgba(93,62,128,0.40); }
-[data-theme="light"] .gf-dot:nth-child(4)   { background: rgba(140,100,64,0.45); }
-[data-theme="light"] .gf-dot:nth-child(6)   { background: rgba(140,69,53,0.42); }
+/* Dots → enlarged clay/moss blobs with radial glow */
+[data-theme="light"] .gf-dot {
+  width: 10px; height: 10px;
+  background: radial-gradient(circle, rgba(198,123,92,0.80) 0%, rgba(198,123,92,0.28) 65%, transparent 100%);
+  box-shadow: 0 0 10px rgba(198,123,92,0.28);
+}
+[data-theme="light"] .gf-dot:nth-child(2) { width: 7px; height: 7px; }
+[data-theme="light"] .gf-dot:nth-child(3) {
+  width: 18px; height: 18px;
+  background: radial-gradient(circle, rgba(92,122,90,0.72) 0%, rgba(92,122,90,0.24) 65%, transparent 100%);
+  box-shadow: 0 0 14px rgba(92,122,90,0.22);
+}
+[data-theme="light"] .gf-dot:nth-child(4) {
+  width: 13px; height: 13px;
+  background: radial-gradient(circle, rgba(212,196,168,0.92) 0%, rgba(212,196,168,0.38) 65%, transparent 100%);
+  box-shadow: none;
+}
+[data-theme="light"] .gf-dot:nth-child(5) { width: 8px; height: 8px; }
+[data-theme="light"] .gf-dot:nth-child(6) {
+  width: 12px; height: 12px;
+  background: radial-gradient(circle, rgba(140,69,53,0.78) 0%, rgba(140,69,53,0.28) 65%, transparent 100%);
+  box-shadow: 0 0 10px rgba(140,69,53,0.22);
+}
 
-/* Lines → warm walnut */
+/* Lines → warm wheat tones */
 [data-theme="light"] .gf-line-1 {
-  background: linear-gradient(90deg, transparent, rgba(124,85,53,0.32), transparent);
+  background: linear-gradient(90deg, transparent, rgba(198,123,92,0.45), transparent);
 }
 [data-theme="light"] .gf-line-2 {
-  background: linear-gradient(90deg, transparent, rgba(93,62,128,0.26), transparent);
+  background: linear-gradient(90deg, transparent, rgba(92,122,90,0.36), transparent);
 }
 
-/* Parallax shapes */
-[data-theme="light"] .gp-hero-ring-lg   { border-color: rgba(124,85,53,0.18); }
-[data-theme="light"] .gp-hero-diamond   { border-color: rgba(124,85,53,0.22); }
+/* ── Parallax shapes → filled radial fills, no wireframe ── */
+[data-theme="light"] .gp-hero-ring-lg {
+  border: none;
+  background: radial-gradient(ellipse 100% 65%,
+    rgba(198,123,92,0.16) 0%, rgba(198,123,92,0.06) 52%, transparent 82%);
+}
+[data-theme="light"] .gp-hero-diamond {
+  background: linear-gradient(135deg, rgba(198,123,92,0.20) 0%, rgba(212,196,168,0.12) 100%);
+  border-color: rgba(198,123,92,0.30);
+}
 [data-theme="light"] .gp-hero-line-v {
-  background: linear-gradient(to bottom, transparent, rgba(93,62,128,0.28), transparent);
+  background: linear-gradient(to bottom, transparent, rgba(92,122,90,0.38), transparent);
 }
-[data-theme="light"] .gp-services-ring { border-color: rgba(124,85,53,0.18); }
-[data-theme="light"] .gp-work-ring     { border-color: rgba(140,100,64,0.28); }
-[data-theme="light"] .gp-work-diamond  { border-color: rgba(140,69,53,0.36); }
-[data-theme="light"] .gp-about-ring    { border-color: rgba(93,62,128,0.20); }
-[data-theme="light"] .gp-contact-ring  { border-color: rgba(93,62,128,0.18); }
+[data-theme="light"] .gp-services-ring {
+  border: none;
+  background: radial-gradient(ellipse 90% 62%,
+    rgba(92,122,90,0.15) 0%, rgba(92,122,90,0.05) 52%, transparent 82%);
+}
+[data-theme="light"] .gp-work-ring {
+  border: none;
+  background: radial-gradient(ellipse 95% 68%,
+    rgba(198,123,92,0.16) 0%, rgba(198,123,92,0.06) 55%, transparent 82%);
+}
+[data-theme="light"] .gp-work-diamond {
+  background: linear-gradient(135deg, rgba(140,69,53,0.22) 0%, rgba(198,123,92,0.12) 100%);
+  border-color: rgba(140,69,53,0.34);
+}
+[data-theme="light"] .gp-about-ring {
+  border: none;
+  background: radial-gradient(ellipse 90% 62%,
+    rgba(92,122,90,0.14) 0%, rgba(92,122,90,0.04) 52%, transparent 82%);
+}
+[data-theme="light"] .gp-contact-ring {
+  border: none;
+  background: radial-gradient(ellipse 90% 62%,
+    rgba(93,62,128,0.12) 0%, rgba(93,62,128,0.04) 52%, transparent 82%);
+}
 [data-theme="light"] .gp-contact-line-h {
-  background: linear-gradient(90deg, transparent, rgba(93,62,128,0.34), transparent);
+  background: linear-gradient(90deg, transparent, rgba(93,62,128,0.36), transparent);
 }
 
-/* Floating elements — muted warmth */
+/* ── Floating elements — warmer opacity ── */
 [data-theme="light"] .float-wave,
 [data-theme="light"] .float-eq,
 [data-theme="light"] .float-scope,
 [data-theme="light"] .float-signal,
-[data-theme="light"] .float-node { opacity: 0.40; }
+[data-theme="light"] .float-node { opacity: 0.50; }
 
+/* Vinyl disc → warm clay palette */
+[data-theme="light"] .float-vinyl {
+  border-color: rgba(198,123,92,0.48);
+  background: radial-gradient(circle, rgba(198,123,92,0.07) 0%, rgba(212,196,168,0.03) 35%, transparent 60%);
+  box-shadow:
+    inset 0 0 0 clamp(30px,4.5vw,65px)  rgba(198,123,92,0.09),
+    inset 0 0 0 clamp(60px,9vw,130px)   rgba(212,196,168,0.07),
+    inset 0 0 0 clamp(90px,14vw,200px)  rgba(198,123,92,0.05),
+    inset 0 0 0 clamp(120px,18vw,265px) rgba(212,196,168,0.03),
+    0 0 60px rgba(198,123,92,0.07);
+  filter: drop-shadow(0 0 18px rgba(198,123,92,0.16));
+}
+[data-theme="light"] .float-vinyl::before {
+  border-color: rgba(140,100,64,0.62);
+  box-shadow: 0 0 12px rgba(140,100,64,0.20);
+}
+[data-theme="light"] .float-vinyl::after {
+  background: linear-gradient(90deg, transparent 0%, rgba(140,100,64,0.58) 40%, rgba(140,100,64,0.58) 60%, transparent 100%);
+}
+
+/* EQ bars → clay tones */
 [data-theme="light"] .float-eq__bar {
   background: linear-gradient(to top,
-    rgba(124,85,53,0.60) 0%,
-    rgba(124,85,53,0.22) 50%,
-    rgba(124,85,53,0.04) 100%);
+    rgba(198,123,92,0.65) 0%,
+    rgba(198,123,92,0.26) 50%,
+    rgba(198,123,92,0.05) 100%);
 }
 [data-theme="light"] .float-eq--amber .float-eq__bar {
   background: linear-gradient(to top,
-    rgba(140,100,64,0.60) 0%,
-    rgba(140,100,64,0.22) 50%,
-    rgba(140,100,64,0.04) 100%);
+    rgba(140,100,64,0.65) 0%,
+    rgba(140,100,64,0.26) 50%,
+    rgba(140,100,64,0.05) 100%);
 }
 [data-theme="light"] .float-eq--violet .float-eq__bar {
   background: linear-gradient(to top,
-    rgba(93,62,128,0.55) 0%,
-    rgba(93,62,128,0.20) 50%,
-    rgba(93,62,128,0.03) 100%);
+    rgba(93,62,128,0.58) 0%,
+    rgba(93,62,128,0.22) 50%,
+    rgba(93,62,128,0.04) 100%);
 }
 [data-theme="light"] .float-scope {
-  border-color: rgba(124,85,53,0.28);
-  filter: drop-shadow(0 0 10px rgba(124,85,53,0.10));
+  border-color: rgba(198,123,92,0.32);
+  filter: drop-shadow(0 0 10px rgba(198,123,92,0.12));
 }
 [data-theme="light"] .float-scope::before,
-[data-theme="light"] .float-scope::after { background: rgba(124,85,53,0.18); }
-
+[data-theme="light"] .float-scope::after { background: rgba(198,123,92,0.22); }
 [data-theme="light"] .float-signal {
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(140,100,64,0.50) 20%,
-    rgba(140,100,64,0.50) 80%,
+    rgba(140,100,64,0.55) 20%,
+    rgba(140,100,64,0.55) 80%,
     transparent 100%);
 }
 

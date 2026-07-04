@@ -301,8 +301,17 @@
 }
 .footer__back:hover { color: var(--accent); }
 
-/* ── Light mode overrides — Stúdió Lenvászon ──────────── */
+/* ── Light mode overrides — Terracotta Studio ─────────── */
 /* work-item light mode is in work-page.css */
+
+/* Contact blob → warm clay instead of dark violet */
+[data-theme="light"] .contact::before {
+  background: radial-gradient(circle,
+    rgba(198,123,92,0.08) 0%,
+    rgba(140,69,53,0.04) 40%,
+    transparent 70%);
+}
+
 [data-theme="light"] .tools-list li {
   border-color: rgba(124,85,53,0.16);
   background: rgba(124,85,53,0.04);
