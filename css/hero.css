@@ -283,9 +283,9 @@
   /* Frosted feathered backing — same principle as .about__text.
      padding+margin expands the panel 40px beyond the text on all
      sides; the mask fades ONLY within that 40px zone. */
-  background: rgba(22, 26, 34, 0.42);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(22, 26, 34, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-radius: 40px;
   padding: 2.5rem;
   margin: -2.5rem;
@@ -299,7 +299,7 @@
   -webkit-mask-composite: source-in;
 }
 [data-theme="light"] .hero__statement {
-  background: rgba(240, 237, 228, 0.78);
+  background: rgba(240, 237, 228, 0.40);
 }
 
 /* ── Scroll indicator ──────────────────────────────────── */
