@@ -21,7 +21,7 @@ export const strings = {
     // Services (homepage)
     'services.label':            'What I do',
     'services.title':            'Sound, shaped\nwith intention.',
-    'services.film.title':       'Film Sound Design',
+    'services.film.title':       'Film / Video Sound Design',
     'services.film.desc':        'Post-production audio for short and feature-length film — dialogue cleaning, atmosphere, sound effects, foley, mixing, and mastering. Every layer built to serve the story.',
     'services.commercial.title': 'Commercial & Brand',
     'services.commercial.desc':  'Sound design and audio finishing for ads, brand films, and digital content. Built for impact within tight timelines.',
