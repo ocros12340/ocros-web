@@ -62,27 +62,24 @@
 }
 
 /* Subtle frosted backing — softens geo shapes behind the bio text.
-   mask-image fades the background + blur to transparent at the edges
-   so there is no hard rectangular cutoff — works in dark and light mode */
+   Two intersecting linear gradients create a 4-sided feathered edge
+   that fades ONLY within the 40px padding zone — text stays fully opaque.
+   mask-composite: intersect (standard) / source-in (WebKit) = per-axis multiply */
 .about__text {
   background: rgba(22, 26, 34, 0.52);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-radius: 0;          /* mask handles edge softening now */
+  border-radius: 40px;
   padding: 2.5rem;
   margin: -2.5rem;
-  mask-image: radial-gradient(ellipse at 50% 50%,
-    black 52%,
-    rgba(0,0,0,0.72) 68%,
-    rgba(0,0,0,0.20) 84%,
-    transparent 96%
-  );
-  -webkit-mask-image: radial-gradient(ellipse at 50% 50%,
-    black 52%,
-    rgba(0,0,0,0.72) 68%,
-    rgba(0,0,0,0.20) 84%,
-    transparent 96%
-  );
+  mask-image:
+    linear-gradient(to right,  transparent 0px, black 40px, black calc(100% - 40px), transparent 100%),
+    linear-gradient(to bottom, transparent 0px, black 40px, black calc(100% - 40px), transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(to right,  transparent 0px, black 40px, black calc(100% - 40px), transparent 100%),
+    linear-gradient(to bottom, transparent 0px, black 40px, black calc(100% - 40px), transparent 100%);
+  -webkit-mask-composite: source-in;
 }
 [data-theme="light"] .about__text {
   background: rgba(236, 234, 223, 0.78);
