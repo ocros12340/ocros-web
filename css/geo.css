@@ -668,6 +668,29 @@
     transparent 100%);
 }
 
+/* ── Hero wave stripe colours — Fűszerespolc palette ───────
+   SVG presentation attributes have specificity 0, so any CSS
+   selector overrides them. :has(line) targets the first wave
+   SVG (which has flatline + tick <line> elements); the second
+   SVG has only a single <path>.
+   ─────────────────────────────────────────────────────── */
+/* Top stripe: main wave teal → Füst */
+[data-theme="light"] .float-wave svg:has(line) path:first-child {
+  stroke: rgba(112,128,144,0.55);
+}
+/* Middle stripe: violet echo → Sáfrány */
+[data-theme="light"] .float-wave svg:has(line) path:nth-child(2) {
+  stroke: rgba(192,136,48,0.28);
+}
+/* Flatline tails + tick marks → Füst */
+[data-theme="light"] .float-wave svg:has(line) line {
+  stroke: rgba(112,128,144,0.28);
+}
+/* Bottom stripe: amber wave → Kardamom */
+[data-theme="light"] .float-wave svg:not(:has(line)) path {
+  stroke: rgba(106,128,96,0.45);
+}
+
 /* Reduced motion: kill all decorative animation */
 @media (prefers-reduced-motion: reduce) {
   .geo-fixed, .geo-fixed *, .geo-parallax,
