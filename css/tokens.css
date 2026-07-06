@@ -67,21 +67,21 @@
   --accent:      #7C5535;   /* walnut brown — warm, matte, natural */
   --accent-dim:  #5A3A20;   /* deep walnut */
 
-  --c-film:      #8C6440;
-  --c-film-bg:   rgba(140,100,64,0.11);
-  --c-film-glow: rgba(140,100,64,0.38);  /* ochre pigment wash — multiply */
+  --c-film:      #708090;             /* Füst — smoke blue-grey */
+  --c-film-bg:   rgba(112,128,144,0.11);
+  --c-film-glow: rgba(112,128,144,0.38);  /* smoke pigment wash — multiply */
 
-  --c-comm:      #2D7A76;
-  --c-comm-bg:   rgba(45,122,118,0.10);
-  --c-comm-glow: rgba(45,122,118,0.32);  /* forest teal wash — multiply */
+  --c-comm:      #C08830;             /* Sáfrány — warm saffron */
+  --c-comm-bg:   rgba(192,136,48,0.10);
+  --c-comm-glow: rgba(192,136,48,0.38);   /* saffron pigment wash — multiply */
 
-  --c-pod:       #8C4535;
-  --c-pod-bg:    rgba(140,69,53,0.10);
-  --c-pod-glow:  rgba(140,69,53,0.35);   /* brick rust wash — multiply */
+  --c-pod:       #6A8060;             /* Kardamom — muted sage green */
+  --c-pod-bg:    rgba(106,128,96,0.10);
+  --c-pod-glow:  rgba(106,128,96,0.38);   /* cardamom pigment wash — multiply */
 
-  --c-music:     #5D3E80;
-  --c-music-bg:  rgba(93,62,128,0.10);
-  --c-music-glow:rgba(93,62,128,0.30);   /* earthy plum wash — multiply */
+  --c-music:     #6A4568;             /* Boróka — dusky juniper plum */
+  --c-music-bg:  rgba(106,69,104,0.10);
+  --c-music-glow:rgba(106,69,104,0.38);   /* juniper pigment wash — multiply */
 
   --text:        #1A120A;   /* warm dark brown — was green-tinted #0A1A14 */
   --text-muted:  #4A3828;   /* warm mid brown — was Cyprus #1E4A46 */
