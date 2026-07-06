@@ -281,21 +281,6 @@
   transform: translateY(14px);
   animation: fadeUp 1s var(--ease-out) 0.95s forwards;
 }
-/* Backing follows the text shape — inline span with box-decoration-break: clone
-   gives a per-line highlight instead of a full rectangular box.            */
-.hero__statement span {
-  display: inline;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  background: rgba(22, 26, 34, 0.18);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  padding: 0.3em 0.6em;
-  border-radius: 8px;
-}
-[data-theme="light"] .hero__statement span {
-  background: rgba(240, 237, 228, 0.55);
-}
 
 /* ── Scroll indicator ──────────────────────────────────── */
 .hero__scroll {
