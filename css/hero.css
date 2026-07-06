@@ -280,6 +280,26 @@
   opacity: 0;
   transform: translateY(14px);
   animation: fadeUp 1s var(--ease-out) 0.95s forwards;
+  /* Frosted feathered backing — same principle as .about__text.
+     padding+margin expands the panel 40px beyond the text on all
+     sides; the mask fades ONLY within that 40px zone. */
+  background: rgba(22, 26, 34, 0.42);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 40px;
+  padding: 2.5rem;
+  margin: -2.5rem;
+  mask-image:
+    linear-gradient(to right,  transparent 0px, black 40px, black calc(100% - 40px), transparent 100%),
+    linear-gradient(to bottom, transparent 0px, black 40px, black calc(100% - 40px), transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(to right,  transparent 0px, black 40px, black calc(100% - 40px), transparent 100%),
+    linear-gradient(to bottom, transparent 0px, black 40px, black calc(100% - 40px), transparent 100%);
+  -webkit-mask-composite: source-in;
+}
+[data-theme="light"] .hero__statement {
+  background: rgba(240, 237, 228, 0.78);
 }
 
 /* ── Scroll indicator ──────────────────────────────────── */
