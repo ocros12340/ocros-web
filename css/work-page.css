@@ -28,8 +28,7 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
 }
 
 /* Track always visible (content loaded from Supabase, no flash) */
-.work__track          { opacity: 1; }
-.work__track.is-loaded { opacity: 1; }
+.work__track { opacity: 1; }
 
 /* ── Floating CTA ──────────────────────────────────────── */
 .work__float-cta {

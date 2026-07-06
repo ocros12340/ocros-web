@@ -1,1 +1,22 @@
+# Admin & internal docs
 ADMIN_PASSWORD_RESET.md
+ADMIN_SECURITY.md
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Claude session files
+compact-summary-*.md
+
+# Audio/video source files (use Cloudinary for media)
+Music/
+*.wav
+*.mp3
+*.aiff
+*.aac
+*.mp4
+*.mov
+
+# Node (if added later)
+node_modules/

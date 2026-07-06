@@ -100,16 +100,6 @@ function initTicker() {
   });
 }
 
-// ── Contact email ────────────────────────────────────────────────────────────
-function initContactEmail() {
-  const CONTACT_EMAIL = 'okros.sound@gmail.com';
-  const emailLink = document.getElementById('contact-email-link');
-  if (emailLink) {
-    emailLink.href        = 'mailto:' + CONTACT_EMAIL;
-    emailLink.textContent = CONTACT_EMAIL;
-  }
-}
-
 // ── Boot ─────────────────────────────────────────────────────────────────────
 initTheme();
 initI18n();
@@ -120,4 +110,3 @@ initServices();
 initLetterAnimation();
 initWaveform();
 initTicker();
-initContactEmail();

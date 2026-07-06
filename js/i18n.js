@@ -39,7 +39,7 @@ export const strings = {
 
     // Contact (homepage)
     'contact.label':             'Get in touch',
-    'contact.title':             "Let's make something worth hearing.",
+    'contact.title':             "Let's make something<br><em>worth hearing.</em>",
     'contact.sub':               'Available for film sound design, commercial, film score, and podcast editing projects.\nResponse within 24 hours.',
     'contact.social.linkedin':   'LinkedIn',
 
@@ -54,6 +54,7 @@ export const strings = {
     'footer.tagline':            'Sound that stays.',
     'footer.rights':             'All rights reserved.',
     'footer.back':               'Back to top',
+    'footer.home':               '← Home',
   },
   hu: {
     // Navigáció
@@ -104,6 +105,7 @@ export const strings = {
     'footer.tagline':            'Hang, ami marad.',
     'footer.rights':             'Minden jog fenntartva.',
     'footer.back':               'Vissza a tetejére',
+    'footer.home':               '← Főoldal',
   }
 };
 

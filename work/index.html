@@ -10,6 +10,20 @@
   <title>Okros — Work</title>
   <meta name="description" content="Selected work by Okros — sound design, film score, commercial audio, and podcast production." />
 
+  <!-- Favicon -->
+  <link rel="icon" href="/okros_logo_youtube.png" type="image/png" />
+
+  <!-- Open Graph / Social sharing -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://okros.net/work/" />
+  <meta property="og:title"       content="Work — Okros Sound Designer" />
+  <meta property="og:description" content="Selected sound design projects: film, commercial, podcast, and film score." />
+  <meta property="og:image"       content="https://okros.net/okros_logo_youtube.png" />
+  <meta name="twitter:card"       content="summary_large_image" />
+  <meta name="twitter:title"      content="Work — Okros Sound Designer" />
+  <meta name="twitter:description" content="Selected sound design projects: film, commercial, podcast, and film score." />
+  <meta name="twitter:image"      content="https://okros.net/okros_logo_youtube.png" />
+
   <!-- Fonts — Playfair Display sync (critical for headings, prevents layout shift);
        Source Sans 3 async; Cormorant Garamond for album back face -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,13 +33,12 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&display=swap" /></noscript>
 
   <!-- External CSS — tokens first, then shared, then work-page overrides last -->
-  <link rel="stylesheet" href="/css/tokens.css" />
-  <link rel="stylesheet" href="/css/base.css" />
+  <link rel="stylesheet" href="/css/tokens.css?v=1" />
+  <link rel="stylesheet" href="/css/base.css?v=1" />
   <link rel="stylesheet" href="/css/nav.css?v=2" />
-  <link rel="stylesheet" href="/css/hero.css" />
-  <link rel="stylesheet" href="/css/about-contact.css" />
-  <link rel="stylesheet" href="/css/geo.css" />
-  <link rel="stylesheet" href="/css/work-page.css" />
+  <link rel="stylesheet" href="/css/about-contact.css?v=1" />
+  <link rel="stylesheet" href="/css/geo.css?v=1" />
+  <link rel="stylesheet" href="/css/work-page.css?v=1" />
 </head>
 <body>
 
@@ -234,9 +247,7 @@
         <p class="footer__copy">
           &copy; <span id="year"></span> Okros. <span data-i18n="footer.rights">All rights reserved.</span>
         </p>
-        <a href="/" class="footer__back">
-          ← Home
-        </a>
+        <a href="/" class="footer__back" data-i18n="footer.home">← Home</a>
       </div>
 
     </div>
@@ -247,7 +258,9 @@
   ───────────────────────────────────────── -->
 
   <!-- Supabase — loaded after body so it never blocks render -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="/js/work-main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"
+          integrity="sha256-LbKRLxaTmjshtHKYCnradGszpqQHCLxVXLC+JVxutbE="
+          crossorigin="anonymous"></script>
+  <script type="module" src="/js/work-main.js?v=1"></script>
 </body>
 </html>
