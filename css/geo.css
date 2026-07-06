@@ -667,27 +667,27 @@
     transparent 100%);
 }
 
-/* ── Hero wave stripe colours — Fűszerespolc palette ───────
-   SVG presentation attributes have specificity 0, so any CSS
-   selector overrides them. :has(line) targets the first wave
-   SVG (which has flatline + tick <line> elements); the second
-   SVG has only a single <path>.
+/* ── Hero wave stripe colours — light mode circle palette ──
+   Same logic as dark mode: each stripe picks a different part
+   of the large right-side hero circle (gf-ring-1).
+   Main circle: rgba(126,85,47) walnut brown
+   Companion inner ring: rgba(212,196,168) warm sand
    ─────────────────────────────────────────────────────── */
-/* Top stripe: main wave teal → Füst */
+/* Top stripe: main wave → walnut (circle center, dense) */
 [data-theme="light"] .float-wave svg:has(line) path:first-child {
-  stroke: rgba(112,128,144,0.55);
+  stroke: rgba(126,85,47,0.55);
 }
-/* Middle stripe: violet echo → Sáfrány */
+/* Middle stripe: echo → warm sand (companion inner ring) */
 [data-theme="light"] .float-wave svg:has(line) path:nth-child(2) {
-  stroke: rgba(192,136,48,0.28);
+  stroke: rgba(212,196,168,0.40);
 }
-/* Flatline tails + tick marks → Füst */
+/* Flatline tails + tick marks → walnut subtle */
 [data-theme="light"] .float-wave svg:has(line) line {
-  stroke: rgba(112,128,144,0.28);
+  stroke: rgba(126,85,47,0.25);
 }
-/* Bottom stripe: amber wave → Kardamom */
+/* Bottom stripe → walnut mid opacity (circle mid-zone) */
 [data-theme="light"] .float-wave svg:not(:has(line)) path {
-  stroke: rgba(106,128,96,0.45);
+  stroke: rgba(126,85,47,0.38);
 }
 
 /* Reduced motion: kill all decorative animation */
