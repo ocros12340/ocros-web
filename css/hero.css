@@ -280,26 +280,21 @@
   opacity: 0;
   transform: translateY(14px);
   animation: fadeUp 1s var(--ease-out) 0.95s forwards;
-  /* Frosted feathered backing — same principle as .about__text.
-     padding+margin expands the panel 40px beyond the text on all
-     sides; the mask fades ONLY within that 40px zone. */
+}
+/* Backing follows the text shape — inline span with box-decoration-break: clone
+   gives a per-line highlight instead of a full rectangular box.            */
+.hero__statement span {
+  display: inline;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
   background: rgba(22, 26, 34, 0.18);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border-radius: 40px;
-  padding: 2.5rem;
-  margin: -2.5rem;
-  mask-image:
-    linear-gradient(to right,  transparent 0px, black 40px, black calc(100% - 40px), transparent 100%),
-    linear-gradient(to bottom, transparent 0px, black 40px, black calc(100% - 40px), transparent 100%);
-  mask-composite: intersect;
-  -webkit-mask-image:
-    linear-gradient(to right,  transparent 0px, black 40px, black calc(100% - 40px), transparent 100%),
-    linear-gradient(to bottom, transparent 0px, black 40px, black calc(100% - 40px), transparent 100%);
-  -webkit-mask-composite: source-in;
+  padding: 0.3em 0.6em;
+  border-radius: 8px;
 }
-[data-theme="light"] .hero__statement {
-  background: rgba(240, 237, 228, 0.40);
+[data-theme="light"] .hero__statement span {
+  background: rgba(240, 237, 228, 0.55);
 }
 
 /* ── Scroll indicator ──────────────────────────────────── */
