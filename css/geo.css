@@ -484,10 +484,9 @@
   width: clamp(520px, 72vw, 1000px);
   height: clamp(520px, 72vw, 1000px);
   background: radial-gradient(ellipse 95% 60%,
-    rgba(198,123,92,0.24) 0%,
-    rgba(198,123,92,0.12) 38%,
-    rgba(212,196,168,0.06) 62%,
-    transparent 82%);
+    rgba(126,85,47,0.22) 0%,
+    rgba(126,85,47,0.10) 45%,
+    transparent 80%);
   filter: none;
   animation: clayDisc 40s linear infinite !important;
 }
