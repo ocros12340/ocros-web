@@ -1,12 +1,12 @@
 /* ════════════════════════════════════════════════════════
    THEME — dark (default) ↔ light toggle
-   Persists to localStorage under 'ocros-theme'.
+   Persists to localStorage under 'okros-theme'.
    The anti-FOUC inline script in <head> pre-applies the
    saved theme before first paint; this module wires the
    toggle button and keeps everything in sync.
    ════════════════════════════════════════════════════════ */
 
-const STORAGE_KEY = 'ocros-theme';
+const STORAGE_KEY = 'okros-theme';
 
 function getCurrent() {
   return document.documentElement.dataset.theme === 'light' ? 'light' : 'dark';

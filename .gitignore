@@ -9,6 +9,10 @@ ADMIN_SECURITY.md
 # Claude session files
 compact-summary-*.md
 
+# Cowork tool directories (not part of the website)
+agents/
+skills/
+
 # Audio/video source files (use Cloudinary for media)
 Music/
 *.wav

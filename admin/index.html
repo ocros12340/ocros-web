@@ -7,9 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"
-          integrity="sha256-LbKRLxaTmjshtHKYCnradGszpqQHCLxVXLC+JVxutbE="
-          crossorigin="anonymous"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -896,6 +893,10 @@
   <!-- ── Toast ── -->
   <div class="toast" id="toast"></div>
 
+  <!-- Supabase — loaded here (body end) so inline script below can reference it synchronously -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"
+          integrity="sha256-LbKRLxaTmjshtHKYCnradGszpqQHCLxVXLC+JVxutbE="
+          crossorigin="anonymous"></script>
   <script>
     const CLD_CLOUD  = 'dlbardl1q';
     const CLD_PRESET = 'fkr8z3st';
@@ -920,6 +921,10 @@
     }
 
     async function uploadFile(file) {
+      if (!file.type.startsWith('video/') && !file.type.startsWith('audio/')) {
+        toast('Only video and audio files are supported.', 'error');
+        return;
+      }
       uploadIdle.style.display = 'none';
       uploadProgress.style.display = '';
       uploadDone.style.display = 'none';
@@ -1000,7 +1005,7 @@
       uploadInput.click();
     });
     uploadZone.addEventListener('click', () => {
-      if (uploadDone.style.display !== '') return; // already uploaded
+      if (uploadDone.style.display === '') return; // already uploaded — display='' means visible
       uploadInput.click();
     });
     uploadInput.addEventListener('change', () => {
@@ -1058,6 +1063,10 @@
     }
 
     async function uploadCover(file) {
+      if (!file.type.startsWith('image/')) {
+        toast('Only image files are supported for cover art.', 'error');
+        return;
+      }
       coverIdle.style.display = 'none';
       coverProgress.style.display = '';
       coverDone.style.display = 'none';
@@ -1118,7 +1127,7 @@
       if (file) uploadCover(file).catch(err => toast(err.message, 'error'));
     });
     document.getElementById('cover-browse').addEventListener('click', e => { e.stopPropagation(); coverInput.click(); });
-    coverZone.addEventListener('click', () => { if (coverDone.style.display !== '') return; coverInput.click(); });
+    coverZone.addEventListener('click', () => { if (coverDone.style.display === '') return; coverInput.click(); });
     coverInput.addEventListener('change', () => {
       const file = coverInput.files[0];
       if (file) uploadCover(file).catch(err => toast(err.message, 'error'));
@@ -1162,6 +1171,10 @@
       albumCoverFilename.textContent = 'Current cover';
     }
     async function uploadAlbumCover(file) {
+      if (!file.type.startsWith('image/')) {
+        toast('Only image files are supported for album cover.', 'error');
+        return;
+      }
       albumCoverIdle.style.display = 'none'; albumCoverProgress.style.display = '';
       albumCoverDone.style.display = 'none'; albumCoverBar.style.width = '0%';
       albumCoverStatus.textContent = 'Compressing…';
@@ -1218,6 +1231,10 @@
       trackAudioInput.value = ''; trackAudioUrlInput.value = '';
     }
     async function uploadTrackAudio(file) {
+      if (!file.type.startsWith('audio/') && !file.type.startsWith('video/')) {
+        toast('Only audio files are supported for track uploads.', 'error');
+        return;
+      }
       trackAudioIdle.style.display = 'none'; trackAudioProgress.style.display = '';
       trackAudioDone.style.display = 'none'; trackAudioBar.style.width = '0%';
       trackAudioStatus.textContent = 'Uploading…';

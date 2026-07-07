@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <!-- Anti-FOUC: apply saved theme before first paint -->
-  <script>(function(){var t=localStorage.getItem('ocros-theme')||'dark';document.documentElement.dataset.theme=t;})();</script>
+  <script>(function(){var t=localStorage.getItem('okros-theme')||'dark';document.documentElement.dataset.theme=t;})();</script>
   <!-- Scroll restoration must run before any paint to prevent jump -->
   <script>history.scrollRestoration = 'manual'; window.scrollTo(0, 0);</script>
   <meta charset="UTF-8" />
@@ -24,11 +24,18 @@
   <meta name="twitter:description" content="Selected sound design projects: film, commercial, podcast, and film score." />
   <meta name="twitter:image"      content="https://okros.net/okros_logo_youtube.png" />
 
-  <!-- Fonts — Playfair Display sync (critical for headings, prevents layout shift);
-       Source Sans 3 async; Cormorant Garamond for album back face -->
+  <!-- Canonical -->
+  <link rel="canonical" href="https://okros.net/work/" />
+
+  <!-- Theme colour (browser chrome) -->
+  <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#141820" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F5F2ED" />
+
+  <!-- Fonts — all async; font-display:swap prevents invisible text -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" /></noscript>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&display=swap" /></noscript>
 
@@ -64,7 +71,7 @@
   <!-- ─────────────────────────────────────────
        NAVIGATION
   ───────────────────────────────────────── -->
-  <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+  <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="nav__inner">
       <a href="/" class="nav__logo" aria-label="Okros — Sound Designer">
         <svg class="nav__logomark" viewBox="38 134 204 116" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -165,7 +172,7 @@
         <div class="work__header">
           <p class="section-label reveal" data-i18n="work.label">Selected Work</p>
           <h2 class="section-title reveal reveal-delay-1" id="work-title" data-i18n="work.title">
-            Recent&nbsp;<em>work.</em>
+            Recent&nbsp;<em>projects.</em>
           </h2>
         </div>
       </div>

@@ -7,6 +7,10 @@
   publish = "."
 
 # ── Security headers (all routes) ───────────────────────
+# NOTE: These headers are INACTIVE on GitHub Pages — GitHub Pages ignores netlify.toml entirely.
+# Kept here for reference only (documents intended CSP, cache strategy, etc.).
+# To make these active: either (a) migrate deployment to Netlify, or
+# (b) implement equivalent headers via a <meta http-equiv="Content-Security-Policy"> tag in each HTML file.
 [[headers]]
   for = "/*"
   [headers.values]

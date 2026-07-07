@@ -117,7 +117,7 @@ export function getLang() {
 
 export function setLang(lang) {
   _currentLang = lang;
-  localStorage.setItem('ocros-lang', lang);
+  localStorage.setItem('okros-lang', lang);
   document.documentElement.lang = lang;
 
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -137,5 +137,5 @@ export function init() {
   const huBtn = document.getElementById('lang-hu');
   if (enBtn) enBtn.addEventListener('click', () => setLang('en'));
   if (huBtn) huBtn.addEventListener('click', () => setLang('hu'));
-  setLang(localStorage.getItem('ocros-lang') || 'en');
+  setLang(localStorage.getItem('okros-lang') || 'en');
 }
