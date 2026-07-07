@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Okros — Admin</title>
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com; connect-src https://zspmnnrmcfcxdudmiegc.supabase.co https://api.cloudinary.com; object-src 'none'; base-uri 'self'" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -1312,8 +1314,11 @@
     function isHash(str) { return /^[0-9a-f]{64}$/.test(str); }
 
     // ── Login (brute-force protection: 5 attempts → 30s lockout) ──────
-    let _loginAttempts = 0;
-    let _loginLockedUntil = 0;
+    // Stored in sessionStorage — page reload does NOT reset the lockout counter
+    function _getAttempts()  { return parseInt(sessionStorage.getItem('_okros_attempts') || '0', 10); }
+    function _getLocked()    { return parseInt(sessionStorage.getItem('_okros_locked')   || '0', 10); }
+    function _setAttempts(n) { sessionStorage.setItem('_okros_attempts', n); }
+    function _setLocked(t)   { sessionStorage.setItem('_okros_locked', t);   }
 
     async function login() {
       const pw = document.getElementById('pw-input').value.trim();
@@ -1323,8 +1328,9 @@
 
       // Brute-force lockout check
       const now = Date.now();
-      if (now < _loginLockedUntil) {
-        const secs = Math.ceil((_loginLockedUntil - now) / 1000);
+      const _lockedUntil = _getLocked();
+      if (now < _lockedUntil) {
+        const secs = Math.ceil((_lockedUntil - now) / 1000);
         errEl.textContent = `Too many attempts. Try again in ${secs}s.`;
         return;
       }
@@ -1356,20 +1362,21 @@
       }
 
       if (!match) {
-        _loginAttempts++;
-        if (_loginAttempts >= 5) {
-          _loginLockedUntil = Date.now() + 30_000;
-          _loginAttempts = 0;
+        const att = _getAttempts() + 1;
+        _setAttempts(att);
+        if (att >= 5) {
+          _setLocked(Date.now() + 30_000);
+          _setAttempts(0);
           errEl.textContent = 'Too many attempts. Locked for 30 seconds.';
         } else {
-          errEl.textContent = `Incorrect password. (${5 - _loginAttempts} attempt${5 - _loginAttempts === 1 ? '' : 's'} left)`;
+          errEl.textContent = `Incorrect password. (${5 - att} attempt${5 - att === 1 ? '' : 's'} left)`;
         }
         document.getElementById('pw-input').value = '';
         return;
       }
 
-      _loginAttempts = 0;
-      _loginLockedUntil = 0;
+      _setAttempts(0);
+      _setLocked(0);
       sessionStorage.setItem('okros_admin', '1');
       showDashboard();
     }

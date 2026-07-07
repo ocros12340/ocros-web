@@ -684,6 +684,7 @@ function initYouTubeFacade() {
 
 // ── Main data fetch ──────────────────────────────────────────────────────────
 async function loadAll() {
+  try {
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   // Standalone projects (no album)
@@ -701,14 +702,19 @@ async function loadAll() {
   const projects = pRes.data || [];
   const albums   = aRes.data || [];
 
-  // Fetch tracks per album
+  // Fetch ALL tracks for ALL albums in a single query (no N+1)
   const albumTrackMap = {};
-  for (const album of albums) {
+  albums.forEach(a => { albumTrackMap[a.id] = []; });
+  if (albums.length > 0) {
     const tRes = await sb.from('projects').select('*')
-      .eq('album_id', album.id)
+      .in('album_id', albums.map(a => a.id))
       .order('display_order', { ascending: true })
       .order('created_at',    { ascending: true });
-    albumTrackMap[album.id] = tRes.data || [];
+    (tRes.data || []).forEach(t => {
+      if (t.album_id && albumTrackMap[t.album_id]) {
+        albumTrackMap[t.album_id].push(t);
+      }
+    });
   }
 
   // Group by category
@@ -752,6 +758,9 @@ async function loadAll() {
 
   // Scroll to hash now that layout is settled
   if (typeof window.__scrollToHash === 'function') window.__scrollToHash();
+  } catch (err) {
+    console.error('[work-loader] loadAll failed:', err);
+  }
 }
 
 export function init() {
