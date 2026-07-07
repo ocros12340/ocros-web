@@ -1306,12 +1306,8 @@
       setTimeout(() => { el.className = 'toast'; }, 3000);
     }
 
-    // ── Password hashing (SHA-256 via Web Crypto API) ──────────────
-    async function sha256(str) {
-      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
-    function isHash(str) { return /^[0-9a-f]{64}$/.test(str); }
+    // ── Admin identity (hardcoded — single-user panel) ─────────────
+    const ADMIN_EMAIL = 'okros.sound@gmail.com';
 
     // ── Login (brute-force protection: 5 attempts → 30s lockout) ──────
     // Stored in sessionStorage — page reload does NOT reset the lockout counter
@@ -1335,33 +1331,13 @@
         return;
       }
 
-      const { data, error } = await sb
-        .from('settings')
-        .select('value')
-        .eq('key', 'admin_password')
-        .single();
+      // Supabase Auth — replaces client-side SHA-256 comparison
+      const { error } = await sb.auth.signInWithPassword({
+        email: ADMIN_EMAIL,
+        password: pw
+      });
 
-      if (error || !data) {
-        errEl.textContent = 'Could not connect to database.';
-        return;
-      }
-
-      const stored = data.value;
-      let match = false;
-
-      if (isHash(stored)) {
-        // Already hashed — compare hash
-        match = (await sha256(pw)) === stored;
-      } else {
-        // Plaintext (legacy) — compare directly, then auto-migrate to hash
-        match = pw === stored;
-        if (match) {
-          const hashed = await sha256(pw);
-          await sb.from('settings').update({ value: hashed }).eq('key', 'admin_password');
-        }
-      }
-
-      if (!match) {
+      if (error) {
         const att = _getAttempts() + 1;
         _setAttempts(att);
         if (att >= 5) {
@@ -1377,12 +1353,11 @@
 
       _setAttempts(0);
       _setLocked(0);
-      sessionStorage.setItem('okros_admin', '1');
       showDashboard();
     }
 
-    function logout() {
-      sessionStorage.removeItem('okros_admin');
+    async function logout() {
+      await sb.auth.signOut();
       document.getElementById('dashboard').style.display = 'none';
       document.getElementById('login-screen').style.display = 'flex';
       document.getElementById('pw-input').value = '';
@@ -1742,9 +1717,9 @@
       if (np !== cp) { errEl.textContent = 'Passwords do not match.'; return; }
       if (np.length < 6) { errEl.textContent = 'Minimum 6 characters.'; return; }
 
-      const hashed = await sha256(np);
-      const { error } = await sb.from('settings').update({ value: hashed }).eq('key', 'admin_password');
-      if (error) { errEl.textContent = 'Save failed.'; return; }
+      // Updates the Supabase Auth user password (replaces settings-table hash)
+      const { error } = await sb.auth.updateUser({ password: np });
+      if (error) { errEl.textContent = 'Save failed: ' + error.message; return; }
       closeModal('pw-modal');
       document.getElementById('new-pw').value = '';
       document.getElementById('confirm-pw').value = '';
@@ -1792,8 +1767,11 @@
       });
     });
 
-    // ── Auto-login if session exists ───────────────────────────────
-    if (sessionStorage.getItem('okros_admin')) showDashboard();
+    // ── Auto-login if Supabase session exists (persists across reloads) ──
+    (async () => {
+      const { data: { session } } = await sb.auth.getSession();
+      if (session) showDashboard();
+    })();
   </script>
 </body>
 </html>
