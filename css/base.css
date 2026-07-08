@@ -9,6 +9,7 @@
 html {
   scroll-behavior: smooth;
   font-size: 16px;
+  overflow-x: hidden; /* iOS Safari: body alone is not enough */
 }
 
 body {
@@ -19,6 +20,7 @@ body {
   line-height: 1.8;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  overscroll-behavior-x: none; /* prevents touch-drag bounce beyond viewport */
 }
 
 img, video, audio { max-width: 100%; display: block; }

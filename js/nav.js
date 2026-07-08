@@ -38,7 +38,8 @@ export function init() {
       navLinks.classList.contains('open') ? closeMenu() : openMenu();
     });
 
-    navLinks.querySelectorAll('a, button').forEach(el => el.addEventListener('click', closeMenu));
+    // Close on nav link clicks, but NOT on theme/lang toggles inside the menu
+    navLinks.querySelectorAll('a, button:not(.theme-toggle__opt):not(.lang-btn)').forEach(el => el.addEventListener('click', closeMenu));
   }
 
   // ── Scroll reveal ───────────────────────────────────────────────────────────
