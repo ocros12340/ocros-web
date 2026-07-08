@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 — Okros</title>
   <meta name="robots" content="noindex">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet">
@@ -78,7 +80,7 @@
 <body>
   <div class="wrap">
     <a href="/" class="wordmark" aria-label="Okros — back to home">Okros</a>
-    <div class="code" aria-hidden="true">404</div>
+    <h1 class="code" aria-hidden="true">404</h1>
     <p class="message">This page doesn't exist — or it used to, and it's gone now.</p>
     <a href="/" class="home-link">Back to home</a>
   </div>

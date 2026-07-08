@@ -1,3 +1,6 @@
+# Netlify config (site deploys via GitHub Pages, not Netlify)
+netlify.toml
+
 # Admin & internal docs
 ADMIN_PASSWORD_RESET.md
 ADMIN_SECURITY.md

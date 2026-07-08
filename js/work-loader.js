@@ -152,7 +152,7 @@ function buildAlbumCard(album, tracks) {
         + '</div>'
         + '<div class="album-flip__back">'
           + '<div class="album-back__header">'
-            + `<button class="album-back__close" data-flip="${flipId}" aria-label="Close tracklist">✕</button>`
+            + `<button class="album-back__close" aria-label="Close tracklist">✕</button>`
             + `<div class="album-back__title">${title}</div>`
             + (desc ? `<div class="album-back__desc">${desc}</div>` : '')
           + '</div>'
@@ -391,7 +391,7 @@ function createAlbumSheet() {
       + '</div>'
       + '<div class="album-sheet__player-controls">'
         + '<button class="album-sheet__player-skip" data-skip="-10" aria-label="Back 10 seconds">↩︎</button>'
-        + '<button class="album-sheet__player-playpause">▶</button>'
+        + '<button class="album-sheet__player-playpause" aria-label="Play / Pause">▶</button>'
         + '<button class="album-sheet__player-skip" data-skip="10" aria-label="Forward 10 seconds">↪︎</button>'
       + '</div>'
     + '</div>'
@@ -765,6 +765,9 @@ async function loadAll() {
   if (typeof window.__scrollToHash === 'function') window.__scrollToHash();
   } catch (err) {
     console.error('[work-loader] loadAll failed:', err);
+    document.querySelectorAll('.work-group .work__track').forEach(track => {
+      track.innerHTML = '<p class="work-load-error" style="color:var(--text-muted);font-size:0.85rem;padding:1rem 0">Content temporarily unavailable — please try again later.</p>';
+    });
   }
 }
 

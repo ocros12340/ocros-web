@@ -694,5 +694,6 @@
 @media (prefers-reduced-motion: reduce) {
   .geo-fixed, .geo-fixed *, .geo-parallax,
   .float-wave, .float-eq, .float-scope, .float-signal, .float-node,
+  .float-arc,
   .hero__orb { animation: none !important; }
 }

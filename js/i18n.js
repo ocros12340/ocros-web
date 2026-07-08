@@ -137,5 +137,6 @@ export function init() {
   const huBtn = document.getElementById('lang-hu');
   if (enBtn) enBtn.addEventListener('click', () => setLang('en'));
   if (huBtn) huBtn.addEventListener('click', () => setLang('hu'));
-  setLang(localStorage.getItem('okros-lang') || 'en');
+  const raw = localStorage.getItem('okros-lang');
+  setLang(raw === 'hu' ? 'hu' : 'en');
 }

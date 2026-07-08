@@ -7,6 +7,7 @@
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com; connect-src https://zspmnnrmcfcxdudmiegc.supabase.co https://api.cloudinary.com; object-src 'none'; base-uri 'self'" />
   <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="robots" content="noindex, nofollow">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -898,8 +899,8 @@
   <div class="toast" id="toast"></div>
 
   <!-- Supabase — loaded here (body end) so inline script below can reference it synchronously -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.js"
-          integrity="sha256-LbKRLxaTmjshtHKYCnradGszpqQHCLxVXLC+JVxutbE="
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.1/dist/umd/supabase.min.js"
+          integrity="sha256-e8r2pElMb5qnByeHhLpJVDA2Z4F/qvWBbp+cggSXPjE="
           crossorigin="anonymous"></script>
   <script>
     const CLD_CLOUD  = 'dlbardl1q';
@@ -984,6 +985,7 @@
             resolve(url);
           } else {
             uploadStatus.textContent = 'Upload failed.';
+            setTimeout(resetUploadZone, 2000);
             reject(new Error('Upload failed: ' + xhr.status));
           }
         });
@@ -1122,6 +1124,7 @@
             let msg = 'Upload failed.';
             try { const d = JSON.parse(xhr.responseText); if (d.error && d.error.message) msg = d.error.message; } catch(e){}
             coverStatus.textContent = msg;
+            setTimeout(resetCoverZone, 2000);
             reject(new Error(msg));
           }
         });
@@ -1217,7 +1220,7 @@
           } else {
             let msg = 'Upload failed.';
             try { const d = JSON.parse(xhr.responseText); if (d.error) msg = d.error.message; } catch(e) {}
-            albumCoverStatus.textContent = msg; reject(new Error(msg));
+            albumCoverStatus.textContent = msg; setTimeout(resetAlbumCoverZone, 2000); reject(new Error(msg));
           }
         });
         xhr.addEventListener('error', () => { albumCoverStatus.textContent = 'Network error.'; setTimeout(resetAlbumCoverZone, 2000); reject(new Error('Network error')); });
@@ -1282,7 +1285,7 @@
           } else {
             let msg = 'Upload failed.';
             try { const d = JSON.parse(xhr.responseText); if (d.error) msg = d.error.message; } catch(e) {}
-            trackAudioStatus.textContent = msg; reject(new Error(msg));
+            trackAudioStatus.textContent = msg; setTimeout(resetTrackAudioZone, 2000); reject(new Error(msg));
           }
         });
         xhr.addEventListener('error', () => { trackAudioStatus.textContent = 'Network error.'; setTimeout(resetTrackAudioZone, 2000); reject(new Error('Network error')); });
@@ -1310,7 +1313,7 @@
 
     const CATEGORIES = [
       { id: 'film',  label: 'Film / Video Sound Design', color: '#5BADA8', defaultType: 'video' },
-      { id: 'comm',  label: 'Commercial & Advertising', color: '#C4956A', defaultType: 'video' },
+      { id: 'comm',  label: 'Commercial & Brand', color: '#C4956A', defaultType: 'video' },
       { id: 'music', label: 'Film Score Composition',   color: '#9B7BB5', defaultType: 'audio' },
       { id: 'pod',   label: 'Podcast Production',       color: '#7BA5C4', defaultType: 'audio' },
     ];
@@ -1319,7 +1322,7 @@
     let albums   = [];
     let deleteTarget = null; // { type: 'project'|'album'|'track', id }
 
-    // ── HTML escaping helper (prevents stored XSS in admin templates) ──
+    // ── HTML escaping helpers ──────────────────────────────────────────
     function escHtml(s) {
       return String(s == null ? '' : s)
         .replace(/&/g, '&amp;')
@@ -1327,6 +1330,12 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+    }
+    // Safe for double-quoted HTML attributes (data-*): escapes & and "
+    function escAttr(s) {
+      return String(s == null ? '' : s)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;');
     }
 
     // ── Toast ──────────────────────────────────────────────────────
@@ -1438,9 +1447,9 @@
             </div>
             <div class="section-btn-group">
               <button class="btn btn-ghost" style="font-size:0.75rem;padding:7px 14px"
-                onclick="openAddModal('${cat.id}')">+ Add project</button>
+                data-action="add-project" data-category="${cat.id}">+ Add project</button>
               <button class="btn btn-ghost" style="font-size:0.75rem;padding:7px 14px"
-                onclick="openAddAlbumModal('${cat.id}')">+ Add album</button>
+                data-action="add-album" data-category="${cat.id}">+ Add album</button>
             </div>
           </div>
           <div class="projects-grid" id="grid-${cat.id}">
@@ -1478,8 +1487,8 @@
             ${p.description ? `<div style="font-size:0.78rem;color:var(--text-muted);margin-top:2px">${eDesc}</div>` : ''}
           </div>
           <div class="project-card__actions">
-            <button class="btn btn-edit" onclick="openEditModal('${eId}')">Edit</button>
-            <button class="btn btn-danger" onclick="confirmDelete('project','${eId}','${escHtml(p.title || 'this project')}')">Delete</button>
+            <button class="btn btn-edit" data-action="edit-project" data-id="${eId}">Edit</button>
+            <button class="btn btn-danger" data-action="delete" data-type="project" data-id="${eId}" data-title="${escAttr(p.title || 'this project')}">Delete</button>
           </div>
         </div>
       `;
@@ -1533,6 +1542,8 @@
       const visible  = document.getElementById('modal-visible').checked;
       const coverUrl = document.getElementById('modal-cover-url').value.trim();
 
+      if (!title) { toast('Title is required', 'error'); return; }
+
       const payload = { category, title, description: desc, cloudinary_url: url,
                         media_type: type, display_order: order, visible,
                         cover_image_url: coverUrl };
@@ -1568,8 +1579,8 @@
               </div>
             </div>
             <div class="album-admin-actions">
-              <button class="btn btn-edit" onclick="openEditAlbumModal('${eId}')">Edit</button>
-              <button class="btn btn-danger" onclick="confirmDelete('album','${eId}','${escHtml(a.title||'this album')}')">Delete</button>
+              <button class="btn btn-edit" data-action="edit-album" data-id="${eId}">Edit</button>
+              <button class="btn btn-danger" data-action="delete" data-type="album" data-id="${eId}" data-title="${escAttr(a.title||'this album')}">Delete</button>
             </div>
           </div>
           <div class="album-tracks-list" id="tracks-${eId}">
@@ -1581,10 +1592,11 @@
 
     async function loadAllAlbumTracks() {
       if (!albums.length) return;
-      const { data: allTracks } = await sb.from('projects').select('*')
+      const { data: allTracks, error: tErr } = await sb.from('projects').select('*')
         .in('album_id', albums.map(a => a.id))
         .order('display_order', { ascending: true })
         .order('created_at',    { ascending: true });
+      if (tErr) { toast('Failed to load tracks: ' + tErr.message, 'error'); return; }
       const trackMap = {};
       (allTracks || []).forEach(t => {
         if (!trackMap[t.album_id]) trackMap[t.album_id] = [];
@@ -1604,12 +1616,12 @@
             <div class="track-num">${i + 1}</div>
             <div class="track-title-cell">${eTitle}</div>
             <div class="track-actions">
-              <button class="btn btn-edit" onclick="openEditTrackModal('${eTId}','${eAlbumId}')">Edit</button>
-              <button class="btn btn-danger" onclick="confirmDelete('track','${eTId}','${escHtml(t.title||'this track')}')">Delete</button>
+              <button class="btn btn-edit" data-action="edit-track" data-id="${eTId}" data-album-id="${eAlbumId}">Edit</button>
+              <button class="btn btn-danger" data-action="delete" data-type="track" data-id="${eTId}" data-title="${escAttr(t.title||'this track')}">Delete</button>
             </div>
           </div>
         `;}).join('');
-        container.innerHTML = trackHTML + `<button class="add-track-btn" onclick="openAddTrackModal('${eAlbumId}','${eCategory}')">+ Add track</button>`;
+        container.innerHTML = trackHTML + `<button class="add-track-btn" data-action="add-track" data-album-id="${eAlbumId}" data-category="${eCategory}">+ Add track</button>`;
       }
     }
 
@@ -1650,6 +1662,8 @@
       const order   = parseInt(document.getElementById('album-modal-order').value) || 0;
       const visible = document.getElementById('album-modal-visible').checked;
       const cover   = document.getElementById('album-modal-cover-url').value.trim();
+
+      if (!title) { toast('Album title is required', 'error'); return; }
 
       const payload = { category: cat, title, description: desc, cover_image_url: cover, display_order: order, visible };
       let error;
@@ -1707,6 +1721,8 @@
       const title   = document.getElementById('track-modal-name').value.trim();
       const url     = document.getElementById('track-modal-url').value.trim();
       const order   = parseInt(document.getElementById('track-modal-order').value) || 0;
+
+      if (!title) { toast('Track title is required', 'error'); return; }
 
       const payload = { album_id: albumId, category: cat, title, description: '',
                         cloudinary_url: url, media_type: 'audio',
@@ -1809,6 +1825,20 @@
       document.getElementById(id).addEventListener('click', e => {
         if (e.target === e.currentTarget) closeModal(id);
       });
+    });
+
+    // ── Event delegation for dynamically rendered admin cards ──────────
+    document.getElementById('admin-main').addEventListener('click', e => {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      if      (action === 'edit-project')  openEditModal(btn.dataset.id);
+      else if (action === 'delete')        confirmDelete(btn.dataset.type, btn.dataset.id, btn.dataset.title);
+      else if (action === 'edit-album')    openEditAlbumModal(btn.dataset.id);
+      else if (action === 'edit-track')    openEditTrackModal(btn.dataset.id, btn.dataset.albumId);
+      else if (action === 'add-track')     openAddTrackModal(btn.dataset.albumId, btn.dataset.category);
+      else if (action === 'add-project')   openAddModal(btn.dataset.category);
+      else if (action === 'add-album')     openAddAlbumModal(btn.dataset.category);
     });
 
     // ── Auto-login if Supabase session exists (persists across reloads) ──
