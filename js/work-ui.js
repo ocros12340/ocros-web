@@ -92,22 +92,18 @@ function initLogoWork() {
   // CSS already forces opacity:1 on work page via !important.
   // Color changes via IntersectionObserver as sections enter view.
   const sectionColors = {
-    hero:     '#C4956A',  // amber
-    services: '#5BADA8',  // teal
-    work:     '#C47060',  // terracotta
-    about:    '#9B7BB5',  // violet
-    contact:  '#C4956A',  // amber
+    work: '#C47060',  // terracotta — only section on work page
   };
 
   const colorObs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        navMark.style.color = sectionColors[entry.target.id] || sectionColors.hero;
+        navMark.style.color = sectionColors[entry.target.id] || '#C4956A';
       }
     });
   }, { threshold: 0, rootMargin: '-20% 0px -55% 0px' });
 
-  ['hero', 'services', 'work', 'about', 'contact'].forEach(id => {
+  ['work'].forEach(id => {
     const el = document.getElementById(id);
     if (el) colorObs.observe(el);
   });

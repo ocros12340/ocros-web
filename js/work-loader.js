@@ -19,7 +19,10 @@ function escHtml(s) {
     .replace(/"/g, '&quot;');
 }
 function escAttr(s) {
-  return String(s || '').replace(/"/g, '&quot;');
+  return String(s || '')
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // ── URL parsers ──────────────────────────────────────────────────────────────
@@ -149,7 +152,7 @@ function buildAlbumCard(album, tracks) {
         + '</div>'
         + '<div class="album-flip__back">'
           + '<div class="album-back__header">'
-            + `<span class="album-back__close" data-flip="${flipId}">✕</span>`
+            + `<button class="album-back__close" data-flip="${flipId}" aria-label="Close tracklist">✕</button>`
             + `<div class="album-back__title">${title}</div>`
             + (desc ? `<div class="album-back__desc">${desc}</div>` : '')
           + '</div>'
@@ -166,7 +169,7 @@ function buildAlbumCard(album, tracks) {
             + '</div>'
             + '<div class="album-player__controls">'
               + '<button class="album-player__skip" data-skip="-10" aria-label="Back 10 seconds">↩︎</button>'
-              + '<button class="album-player__playpause">▶</button>'
+              + '<button class="album-player__playpause" aria-label="Play / Pause">▶</button>'
               + '<button class="album-player__skip" data-skip="10" aria-label="Forward 10 seconds">↪︎</button>'
             + '</div>'
           + '</div>'
@@ -362,6 +365,7 @@ function createAlbumSheet() {
   sheetEl.className = 'album-sheet';
   sheetEl.setAttribute('role', 'dialog');
   sheetEl.setAttribute('aria-modal', 'true');
+  sheetEl.setAttribute('aria-labelledby', 'album-sheet-title');
   sheetEl.innerHTML =
     '<div class="album-sheet__handle-wrap" aria-hidden="true">'
       + '<div class="album-sheet__handle"></div>'
@@ -369,7 +373,7 @@ function createAlbumSheet() {
     + '<div class="album-sheet__header">'
       + '<img class="album-sheet__cover" src="" alt="" aria-hidden="true">'
       + '<div class="album-sheet__info">'
-        + '<div class="album-sheet__title"></div>'
+        + '<div class="album-sheet__title" id="album-sheet-title"></div>'
         + '<div class="album-sheet__desc"></div>'
       + '</div>'
       + '<button class="album-sheet__close" aria-label="Close">✕</button>'
@@ -699,6 +703,9 @@ async function loadAll() {
     .order('display_order', { ascending: true })
     .order('created_at',    { ascending: true });
 
+  if (pRes.error) throw new Error('Projects fetch failed: ' + pRes.error.message);
+  if (aRes.error) throw new Error('Albums fetch failed: ' + aRes.error.message);
+
   const projects = pRes.data || [];
   const albums   = aRes.data || [];
 
@@ -710,6 +717,7 @@ async function loadAll() {
       .in('album_id', albums.map(a => a.id))
       .order('display_order', { ascending: true })
       .order('created_at',    { ascending: true });
+    if (tRes.error) throw new Error('Tracks fetch failed: ' + tRes.error.message);
     (tRes.data || []).forEach(t => {
       if (t.album_id && albumTrackMap[t.album_id]) {
         albumTrackMap[t.album_id].push(t);
@@ -752,9 +760,6 @@ async function loadAll() {
 
   // Re-apply current language to newly injected data-i18n elements
   setLang(getLang());
-
-  // Mark tracks as loaded
-  document.querySelectorAll('.work__track').forEach(t => t.classList.add('is-loaded'));
 
   // Scroll to hash now that layout is settled
   if (typeof window.__scrollToHash === 'function') window.__scrollToHash();

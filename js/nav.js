@@ -38,7 +38,7 @@ export function init() {
       navLinks.classList.contains('open') ? closeMenu() : openMenu();
     });
 
-    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+    navLinks.querySelectorAll('a, button').forEach(el => el.addEventListener('click', closeMenu));
   }
 
   // ── Scroll reveal ───────────────────────────────────────────────────────────

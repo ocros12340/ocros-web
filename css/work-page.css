@@ -758,7 +758,7 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
   flex: 1;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 4px 10px;
+  padding: 4px 14px;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -886,9 +886,6 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
 .album-sheet__player-playpause:active { background: #d9aa80; }
 
 /* ── Sheet tracklist: larger items for touch ── */
-.album-sheet__tracklist {
-  padding: 4px 14px;
-}
 .album-sheet__tracklist .album-track {
   grid-template-columns: 34px 1fr 34px;
   gap: 12px;

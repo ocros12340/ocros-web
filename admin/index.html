@@ -6,6 +6,7 @@
   <title>Okros — Admin</title>
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com; connect-src https://zspmnnrmcfcxdudmiegc.supabase.co https://api.cloudinary.com; object-src 'none'; base-uri 'self'" />
+  <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -643,6 +644,7 @@
         <h1>Okros</h1>
         <span>Admin Panel</span>
       </div>
+      <label for="pw-input" style="position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">Password</label>
       <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password">
       <button class="btn btn-primary" id="login-btn">Enter</button>
       <p class="login-error" id="login-error"></p>
@@ -671,18 +673,18 @@
     <div class="modal">
       <div class="modal__header">
         <span class="modal__title" id="modal-title">Add project</span>
-        <button class="modal__close" id="modal-close">✕</button>
+        <button class="modal__close" id="modal-close" aria-label="Close">✕</button>
       </div>
       <div class="modal__body">
         <input type="hidden" id="modal-id">
         <input type="hidden" id="modal-category">
         <div class="field">
           <label>Project title</label>
-          <input type="text" id="modal-proj-title" placeholder="e.g. Short Film — Aftermath">
+          <input type="text" id="modal-proj-title" placeholder="e.g. Short Film — Aftermath" maxlength="200">
         </div>
         <div class="field">
           <label>Description</label>
-          <input type="text" id="modal-desc" placeholder="e.g. Director: John Doe · Feature film · Sound design">
+          <input type="text" id="modal-desc" placeholder="e.g. Director: John Doe · Feature film · Sound design" maxlength="400">
         </div>
         <div class="field">
           <label>Media file</label>
@@ -736,7 +738,7 @@
               <span id="cover-status">Uploading…</span>
             </div>
             <div class="upload-zone__done" id="cover-done" style="display:none">
-              <img id="cover-preview" style="width:56px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0">
+              <img id="cover-preview" alt="Cover preview" style="width:56px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0">
               <span id="cover-filename" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.82rem;color:var(--text-dim)"></span>
               <button type="button" class="upload-remove-btn" id="cover-remove">✕</button>
             </div>
@@ -756,16 +758,16 @@
     <div class="modal">
       <div class="modal__header">
         <span class="modal__title">Change password</span>
-        <button class="modal__close" id="pw-modal-close">✕</button>
+        <button class="modal__close" id="pw-modal-close" aria-label="Close">✕</button>
       </div>
       <div class="modal__body">
         <div class="field">
           <label>New password</label>
-          <input type="password" id="new-pw" placeholder="New password">
+          <input type="password" id="new-pw" placeholder="New password" autocomplete="new-password">
         </div>
         <div class="field">
           <label>Confirm new password</label>
-          <input type="password" id="confirm-pw" placeholder="Confirm password">
+          <input type="password" id="confirm-pw" placeholder="Confirm password" autocomplete="new-password">
         </div>
         <p class="login-error" id="pw-error"></p>
       </div>
@@ -792,18 +794,18 @@
     <div class="modal">
       <div class="modal__header">
         <span class="modal__title" id="album-modal-title">Add album</span>
-        <button class="modal__close" id="album-modal-close">✕</button>
+        <button class="modal__close" id="album-modal-close" aria-label="Close">✕</button>
       </div>
       <div class="modal__body">
         <input type="hidden" id="album-modal-id">
         <input type="hidden" id="album-modal-category">
         <div class="field">
           <label>Album title</label>
-          <input type="text" id="album-modal-name" placeholder="e.g. Valami Igazi — Original Score">
+          <input type="text" id="album-modal-name" placeholder="e.g. Valami Igazi — Original Score" maxlength="200">
         </div>
         <div class="field">
           <label>Description</label>
-          <input type="text" id="album-modal-desc" placeholder="e.g. Feature film · 2024">
+          <input type="text" id="album-modal-desc" placeholder="e.g. Feature film · 2024" maxlength="400">
         </div>
         <div class="field">
           <label>Cover image <span style="color:var(--text-muted);font-size:0.7rem;text-transform:none;letter-spacing:0">(album art)</span></label>
@@ -819,7 +821,7 @@
               <span id="album-cover-status">Uploading…</span>
             </div>
             <div class="upload-zone__done" id="album-cover-done" style="display:none">
-              <img id="album-cover-preview" style="width:56px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0">
+              <img id="album-cover-preview" alt="Album cover preview" style="width:56px;height:40px;object-fit:cover;border-radius:4px;flex-shrink:0">
               <span id="album-cover-filename" style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.82rem;color:var(--text-dim)"></span>
               <button type="button" class="upload-remove-btn" id="album-cover-remove">✕</button>
             </div>
@@ -849,7 +851,7 @@
     <div class="modal">
       <div class="modal__header">
         <span class="modal__title" id="track-modal-title">Add track</span>
-        <button class="modal__close" id="track-modal-close">✕</button>
+        <button class="modal__close" id="track-modal-close" aria-label="Close">✕</button>
       </div>
       <div class="modal__body">
         <input type="hidden" id="track-modal-id">
@@ -857,7 +859,7 @@
         <input type="hidden" id="track-modal-category">
         <div class="field">
           <label>Track title</label>
-          <input type="text" id="track-modal-name" placeholder="e.g. Take Me Away">
+          <input type="text" id="track-modal-name" placeholder="e.g. Take Me Away" maxlength="200">
         </div>
         <div class="field">
           <label>Audio file</label>
@@ -922,9 +924,16 @@
       uploadInput.value = '';
     }
 
+    const MAX_MEDIA_BYTES = 200 * 1024 * 1024;  // 200 MB
+    const MAX_IMAGE_BYTES =  15 * 1024 * 1024;  //  15 MB
+
     async function uploadFile(file) {
       if (!file.type.startsWith('video/') && !file.type.startsWith('audio/')) {
         toast('Only video and audio files are supported.', 'error');
+        return;
+      }
+      if (file.size > MAX_MEDIA_BYTES) {
+        toast('File too large — maximum 200 MB.', 'error');
         return;
       }
       uploadIdle.style.display = 'none';
@@ -981,6 +990,7 @@
 
         xhr.addEventListener('error', () => {
           uploadStatus.textContent = 'Network error.';
+          setTimeout(resetUploadZone, 2000);
           reject(new Error('Network error'));
         });
 
@@ -1069,6 +1079,10 @@
         toast('Only image files are supported for cover art.', 'error');
         return;
       }
+      if (file.size > MAX_IMAGE_BYTES) {
+        toast('Image too large — maximum 15 MB.', 'error');
+        return;
+      }
       coverIdle.style.display = 'none';
       coverProgress.style.display = '';
       coverDone.style.display = 'none';
@@ -1114,6 +1128,7 @@
 
         xhr.addEventListener('error', () => {
           coverStatus.textContent = 'Network error.';
+          setTimeout(resetCoverZone, 2000);
           reject(new Error('Network error'));
         });
 
@@ -1177,6 +1192,10 @@
         toast('Only image files are supported for album cover.', 'error');
         return;
       }
+      if (file.size > MAX_IMAGE_BYTES) {
+        toast('Image too large — maximum 15 MB.', 'error');
+        return;
+      }
       albumCoverIdle.style.display = 'none'; albumCoverProgress.style.display = '';
       albumCoverDone.style.display = 'none'; albumCoverBar.style.width = '0%';
       albumCoverStatus.textContent = 'Compressing…';
@@ -1201,10 +1220,14 @@
             albumCoverStatus.textContent = msg; reject(new Error(msg));
           }
         });
-        xhr.addEventListener('error', () => { albumCoverStatus.textContent = 'Network error.'; reject(new Error('Network error')); });
+        xhr.addEventListener('error', () => { albumCoverStatus.textContent = 'Network error.'; setTimeout(resetAlbumCoverZone, 2000); reject(new Error('Network error')); });
         xhr.send(fd);
       });
     }
+    albumCoverZone.addEventListener('click', () => {
+      if (albumCoverDone.style.display === '') return;
+      albumCoverInput.click();
+    });
     albumCoverZone.addEventListener('dragover', e => { e.preventDefault(); albumCoverZone.classList.add('drag-over'); });
     albumCoverZone.addEventListener('dragleave', () => albumCoverZone.classList.remove('drag-over'));
     albumCoverZone.addEventListener('drop', e => {
@@ -1237,6 +1260,10 @@
         toast('Only audio files are supported for track uploads.', 'error');
         return;
       }
+      if (file.size > MAX_MEDIA_BYTES) {
+        toast('File too large — maximum 200 MB.', 'error');
+        return;
+      }
       trackAudioIdle.style.display = 'none'; trackAudioProgress.style.display = '';
       trackAudioDone.style.display = 'none'; trackAudioBar.style.width = '0%';
       trackAudioStatus.textContent = 'Uploading…';
@@ -1258,10 +1285,14 @@
             trackAudioStatus.textContent = msg; reject(new Error(msg));
           }
         });
-        xhr.addEventListener('error', () => { trackAudioStatus.textContent = 'Network error.'; reject(new Error('Network error')); });
+        xhr.addEventListener('error', () => { trackAudioStatus.textContent = 'Network error.'; setTimeout(resetTrackAudioZone, 2000); reject(new Error('Network error')); });
         xhr.send(fd);
       });
     }
+    trackAudioZone.addEventListener('click', () => {
+      if (trackAudioDone.style.display === '') return;
+      trackAudioInput.click();
+    });
     trackAudioZone.addEventListener('dragover', e => { e.preventDefault(); trackAudioZone.classList.add('drag-over'); });
     trackAudioZone.addEventListener('dragleave', () => trackAudioZone.classList.remove('drag-over'));
     trackAudioZone.addEventListener('drop', e => {
@@ -1371,24 +1402,21 @@
 
     // ── Load & render ───────────────────────────────────────────────
     async function loadData() {
-      const [pRes, aRes] = await Promise.all([
-        sb.from('projects').select('*').is('album_id', null)
-          .order('display_order', { ascending: true }).order('created_at', { ascending: true }),
-        sb.from('albums').select('*')
-          .order('display_order', { ascending: true }).order('created_at', { ascending: true }),
-      ]);
-      if (pRes.error) { toast('Failed to load projects', 'error'); return; }
-      if (aRes.error) { toast('Failed to load albums', 'error'); return; }
-      projects = pRes.data || [];
-      albums   = aRes.data || [];
-      renderDashboard();
-    }
-
-    async function loadAlbumTracks(albumId) {
-      const { data } = await sb.from('projects').select('*')
-        .eq('album_id', albumId)
-        .order('display_order', { ascending: true }).order('created_at', { ascending: true });
-      return data || [];
+      try {
+        const [pRes, aRes] = await Promise.all([
+          sb.from('projects').select('*').is('album_id', null)
+            .order('display_order', { ascending: true }).order('created_at', { ascending: true }),
+          sb.from('albums').select('*')
+            .order('display_order', { ascending: true }).order('created_at', { ascending: true }),
+        ]);
+        if (pRes.error) { toast('Failed to load projects', 'error'); return; }
+        if (aRes.error) { toast('Failed to load albums', 'error'); return; }
+        projects = pRes.data || [];
+        albums   = aRes.data || [];
+        renderDashboard();
+      } catch (err) {
+        toast('Failed to load data: ' + err.message, 'error');
+      }
     }
 
     function renderDashboard() {
@@ -1467,7 +1495,9 @@
       document.getElementById('modal-desc').value = '';
       document.getElementById('modal-url').value = '';
       document.getElementById('modal-media-type').value = cat.defaultType;
-      document.getElementById('modal-order').value = projects.filter(p => p.category === categoryId).length;
+      document.getElementById('modal-order').value =
+        projects.filter(p => p.category === categoryId).length +
+        albums.filter(a => a.category === categoryId).length;
       document.getElementById('modal-visible').checked = true;
       resetUploadZone();
       resetCoverZone();
@@ -1550,15 +1580,25 @@
     }
 
     async function loadAllAlbumTracks() {
+      if (!albums.length) return;
+      const { data: allTracks } = await sb.from('projects').select('*')
+        .in('album_id', albums.map(a => a.id))
+        .order('display_order', { ascending: true })
+        .order('created_at',    { ascending: true });
+      const trackMap = {};
+      (allTracks || []).forEach(t => {
+        if (!trackMap[t.album_id]) trackMap[t.album_id] = [];
+        trackMap[t.album_id].push(t);
+      });
       for (const a of albums) {
-        const tracks = await loadAlbumTracks(a.id);
         const container = document.getElementById('tracks-' + a.id);
         if (!container) continue;
+        const tracks    = trackMap[a.id] || [];
         const eAlbumId  = escHtml(a.id);
         const eCategory = escHtml(a.category);
         const trackHTML = tracks.map((t, i) => {
-          const eTId    = escHtml(t.id);
-          const eTitle  = escHtml(t.title || '(no title)');
+          const eTId   = escHtml(t.id);
+          const eTitle = escHtml(t.title || '(no title)');
           return `
           <div class="track-admin-item">
             <div class="track-num">${i + 1}</div>
@@ -1580,7 +1620,9 @@
       document.getElementById('album-modal-category').value = catId;
       document.getElementById('album-modal-name').value = '';
       document.getElementById('album-modal-desc').value = '';
-      document.getElementById('album-modal-order').value = albums.filter(a => a.category === catId).length;
+      document.getElementById('album-modal-order').value =
+        projects.filter(p => p.category === catId).length +
+        albums.filter(a => a.category === catId).length;
       document.getElementById('album-modal-visible').checked = true;
       resetAlbumCoverZone();
       openModal('album-modal');
@@ -1638,7 +1680,8 @@
     }
 
     async function openEditTrackModal(trackId, albumId) {
-      const { data: t } = await sb.from('projects').select('*').eq('id', trackId).single();
+      const { data: t, error } = await sb.from('projects').select('*').eq('id', trackId).single();
+      if (error) { toast('Failed to load track: ' + error.message, 'error'); return; }
       if (!t) return;
       document.getElementById('track-modal-title').textContent = 'Edit track — ' + (t.title || 'track');
       document.getElementById('track-modal-id').value = t.id;
@@ -1695,7 +1738,8 @@
 
       let error;
       if (type === 'album') {
-        await sb.from('projects').delete().eq('album_id', id); // delete tracks first
+        const { error: tracksErr } = await sb.from('projects').delete().eq('album_id', id); // delete tracks first
+        if (tracksErr) { toast('Delete failed: ' + tracksErr.message, 'error'); return; }
         ({ error } = await sb.from('albums').delete().eq('id', id));
         if (error) { toast('Delete failed', 'error'); return; }
         toast('Album deleted', 'success');
