@@ -22,7 +22,8 @@ function applyTheme(theme) {
 }
 
 export function initTheme() {
-  const saved = localStorage.getItem(STORAGE_KEY) || 'dark';
+  const raw   = localStorage.getItem(STORAGE_KEY);
+  const saved = raw === 'light' ? 'light' : 'dark'; // whitelist: only accept known values
   applyTheme(saved);
 
   document.querySelectorAll('.theme-toggle__opt').forEach(btn => {

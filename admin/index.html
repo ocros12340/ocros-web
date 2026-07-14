@@ -1335,7 +1335,8 @@
     function escAttr(s) {
       return String(s == null ? '' : s)
         .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;');
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
     }
 
     // ── Toast ──────────────────────────────────────────────────────
@@ -1724,14 +1725,15 @@
 
       if (!title) { toast('Track title is required', 'error'); return; }
 
-      const payload = { album_id: albumId, category: cat, title, description: '',
-                        cloudinary_url: url, media_type: 'audio',
-                        display_order: order, visible: true, cover_image_url: '' };
+      // Base payload — excludes visible/description so edits don't overwrite them
+      const basePayload = { album_id: albumId, category: cat, title,
+                            cloudinary_url: url, media_type: 'audio',
+                            display_order: order, cover_image_url: '' };
       let error;
       if (id) {
-        ({ error } = await sb.from('projects').update(payload).eq('id', id));
+        ({ error } = await sb.from('projects').update(basePayload).eq('id', id));
       } else {
-        ({ error } = await sb.from('projects').insert(payload));
+        ({ error } = await sb.from('projects').insert({ ...basePayload, description: '', visible: true }));
       }
       if (error) { toast('Save failed: ' + error.message, 'error'); return; }
       closeModal('track-modal');
@@ -1846,6 +1848,14 @@
       const { data: { session } } = await sb.auth.getSession();
       if (session) showDashboard();
     })();
+
+    // ── Session expiry guard — redirect to login when token expires ──
+    sb.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        document.getElementById('dashboard').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+      }
+    });
   </script>
 </body>
 </html>

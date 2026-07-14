@@ -100,6 +100,15 @@ function initTicker() {
   });
 }
 
+// ── Footer back-to-top (replaces inline onclick) ─────────────────────────────
+function initBackToTop() {
+  document.addEventListener('click', e => {
+    if (e.target.closest('[data-action="back-to-top"]')) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+}
+
 // ── Boot ─────────────────────────────────────────────────────────────────────
 initTheme();
 initI18n();
@@ -110,3 +119,4 @@ initServices();
 initLetterAnimation();
 initWaveform();
 initTicker();
+initBackToTop();

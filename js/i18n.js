@@ -20,7 +20,8 @@ export const strings = {
 
     // Services (homepage)
     'services.label':            'What I do',
-    'services.title':            'Sound, shaped\nwith intention.',
+    'services.title':            'Sound, shaped\nwith <em>intention.</em>',
+    'services.see_work':         'See work',
     'services.film.title':       'Film / Video Sound Design',
     'services.film.desc':        'Post-production audio for short and feature-length film — dialogue cleaning, atmosphere, sound effects, foley, mixing, and mastering. Every layer built to serve the story.',
     'services.commercial.title': 'Commercial & Brand',
@@ -46,14 +47,14 @@ export const strings = {
     // Work page
     'work.cta':                  "Let's work together",
     'work.label':                'Selected Work',
-    'work.title':                'Recent projects.',
+    'work.title':                'Recent&nbsp;<em>projects.</em>',
     'work.coming_soon':          'Coming soon',
     'work.tracklist':            '↻  Tracklist',
 
     // Footer (both pages)
     'footer.tagline':            'Sound that stays.',
     'footer.rights':             'All rights reserved.',
-    'footer.back':               'Back to top',
+    'footer.back':               'Back to top ↑',
     'footer.home':               '← Home',
   },
   hu: {
@@ -71,7 +72,8 @@ export const strings = {
 
     // Szolgáltatások (főoldal)
     'services.label':            'Amit csinálok',
-    'services.title':            'Hang, szándékkal\nformálva.',
+    'services.title':            'Hang, szándékkal\n<em>formálva.</em>',
+    'services.see_work':         'Megtekintés',
     'services.film.title':       'Filmes hangdesign',
     'services.film.desc':        'Rövid- és nagyjátékfilmek teljes hangutómunkája — dialógustisztítástól a foley-n és hangeffekteken át a keverésig és maszteringig. Minden elem a film hangulatát szolgálja.',
     'services.commercial.title': 'Reklám és Brand',
@@ -97,14 +99,14 @@ export const strings = {
     // Work oldal
     'work.cta':                  'Dolgozzunk együtt',
     'work.label':                'Válogatott munkák',
-    'work.title':                'Legutóbbi projektek.',
+    'work.title':                'Legutóbbi <em>projektek.</em>',
     'work.coming_soon':          'Hamarosan',
     'work.tracklist':            '↻  Tracklista',
 
     // Lábléc (mindkét oldal)
     'footer.tagline':            'Hang, ami marad.',
     'footer.rights':             'Minden jog fenntartva.',
-    'footer.back':               'Vissza a tetejére',
+    'footer.back':               'Vissza a tetejére ↑',
     'footer.home':               '← Főoldal',
   }
 };

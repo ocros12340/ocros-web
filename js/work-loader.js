@@ -25,6 +25,14 @@ function escAttr(s) {
     .replace(/'/g, '&#39;');
 }
 
+// ── CSS url() safe validator ─────────────────────────────────────────────────
+// Validates scheme and strips chars that could break url() even after HTML decoding.
+// Use this for any value that goes into a CSS background-image url(), not escAttr.
+function safeCssUrl(url) {
+  if (!url || !/^https?:\/\//i.test(url)) return '';
+  return url.replace(/['"\\()\s]/g, '');
+}
+
 // ── URL parsers ──────────────────────────────────────────────────────────────
 function getVimeoId(url) {
   if (!url) return null;
@@ -46,7 +54,8 @@ function getYouTubeId(url) {
 function buildItem(p) {
   const isAudio   = p.media_type === 'audio';
   const cover     = p.cover_image_url || '';
-  const hasCover  = cover.length > 0;
+  const safeCover = safeCssUrl(cover);
+  const hasCover  = safeCover.length > 0;
   const title     = p.title       ? escHtml(p.title)       : '[Project Title]';
   const desc      = p.description ? escHtml(p.description) : '';
   const vimeoId   = getVimeoId(p.cloudinary_url);
@@ -56,7 +65,7 @@ function buildItem(p) {
 
   if (isAudio) {
     const coverBg    = hasCover
-      ? ` style="background-image:url('${escAttr(cover)}');background-size:cover;background-position:center;"`
+      ? ` style="background-image:url(${safeCover});background-size:cover;background-position:center;"`
       : '';
     const coverClass = hasCover ? ' has-cover' : '';
     mediaPart = `<div class="work-item__media${coverClass}"${coverBg}`
@@ -124,21 +133,22 @@ function applyCldMedia(container) {
 
 // ── Album card builder ───────────────────────────────────────────────────────
 function buildAlbumCard(album, tracks) {
-  const cover   = album.cover_image_url || '';
-  const title   = album.title       ? escHtml(album.title)       : '[Album]';
-  const desc    = album.description ? escHtml(album.description) : '';
-  const flipId  = 'flip-' + album.id.replace(/-/g, '');
+  const cover      = album.cover_image_url || '';
+  const safeCover  = safeCssUrl(cover);
+  const title      = album.title       ? escHtml(album.title)       : '[Album]';
+  const desc       = album.description ? escHtml(album.description) : '';
+  const flipId     = 'flip-' + album.id.replace(/-/g, '');
 
   const trackItems = tracks.map((t, i) =>
-    `<div class="album-track" data-src="${escAttr(t.cloudinary_url)}">`
+    `<div class="album-track" role="button" tabindex="0" data-src="${escAttr(t.cloudinary_url)}">`
     + `<span class="album-track__num">${i + 1}</span>`
     + `<span class="album-track__title">${escHtml(t.title || '')}</span>`
     + '<span class="album-track__icon">▶</span>'
     + '</div>'
   ).join('');
 
-  const frontStyle = cover
-    ? ` style="background-image:url('${escAttr(cover)}')"`
+  const frontStyle = safeCover
+    ? ` style="background-image:url(${safeCover})"`
     : '';
 
   return `<div class="work-item album-item">`
@@ -323,8 +333,11 @@ function initAlbumCards(container) {
       }
     });
 
-    // Track click
+    // Track click + keyboard
     tracks.forEach(trackEl => {
+      trackEl.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trackEl.click(); }
+      });
       trackEl.addEventListener('click', () => {
         const src = trackEl.dataset.src;
         if (!src) return;
@@ -447,12 +460,16 @@ function openAlbumSheet(flipEl) {
     const div   = document.createElement('div');
     div.className  = 'album-track';
     div.dataset.src = src;
-    div.setAttribute('role', 'listitem');
+    div.setAttribute('role', 'button');
+    div.setAttribute('tabindex', '0');
     div.innerHTML =
       `<span class="album-track__num">${i + 1}</span>`
       + `<span class="album-track__title">${escHtml(label)}</span>`
       + '<span class="album-track__icon">▶</span>';
     div.addEventListener('click', () => sheetPlayTrack(div));
+    div.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sheetPlayTrack(div); }
+    });
     tracklistEl.appendChild(div);
   });
 
@@ -483,6 +500,10 @@ function openAlbumSheet(flipEl) {
   document.body.style.width                 = '100%';
   sheetBackdropEl.classList.add('is-open');
   sheetEl.classList.add('is-open');
+  // Move focus into the sheet so keyboard/screen reader users are oriented
+  requestAnimationFrame(() => {
+    sheetEl.querySelector('.album-sheet__close')?.focus();
+  });
 }
 
 function closeAlbumSheet() {
@@ -688,6 +709,10 @@ function initYouTubeFacade() {
 
 // ── Main data fetch ──────────────────────────────────────────────────────────
 async function loadAll() {
+  if (!window.supabase) {
+    console.error('[work-loader] Supabase SDK not available — CDN may be blocked');
+    return;
+  }
   try {
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -715,6 +740,7 @@ async function loadAll() {
   if (albums.length > 0) {
     const tRes = await sb.from('projects').select('*')
       .in('album_id', albums.map(a => a.id))
+      .eq('visible', true)
       .order('display_order', { ascending: true })
       .order('created_at',    { ascending: true });
     if (tRes.error) throw new Error('Tracks fetch failed: ' + tRes.error.message);

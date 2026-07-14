@@ -32,10 +32,16 @@ export function init() {
       document.removeEventListener('touchmove', preventScroll);
       navLinks.classList.remove('open');
       hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.focus(); // return focus to trigger element
     }
 
     hamburger.addEventListener('click', () => {
       navLinks.classList.contains('open') ? closeMenu() : openMenu();
+    });
+
+    // ESC closes menu and returns focus to hamburger
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && navLinks.classList.contains('open')) closeMenu();
     });
 
     // Close on nav link clicks, but NOT on theme/lang toggles inside the menu
