@@ -73,10 +73,10 @@
   font-weight: 400;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--text-dim);
+  color: var(--text-muted); /* was --text-dim (≈2.8:1); --text-muted passes WCAG AA 4.5:1 */
   transition: color 0.3s;
 }
-.nav__links a:hover    { color: var(--text-muted); }
+.nav__links a:hover    { color: var(--text); }
 .nav__link--active     { color: var(--accent) !important; }
 
 /* ── Language toggle ───────────────────────────────────── */
@@ -97,7 +97,13 @@
   text-transform: uppercase;
   color: var(--text-dim);
   transition: color 0.3s;
-  padding: 2px 4px;
+  /* 44×44px Apple HIG / WCAG 2.5.5 minimum touch target */
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 .lang-btn.active { color: var(--accent); }
 .lang-btn:hover  { color: var(--text-muted); }
@@ -158,8 +164,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   background: none;
   border: none;
   cursor: pointer;
@@ -177,19 +183,19 @@
   border-radius: 2px;
   transition: transform 0.4s var(--ease-out), opacity 0.3s, top 0.4s var(--ease-out);
 }
-.nav__hamburger span:nth-child(1) { top: 11px; }
-.nav__hamburger span:nth-child(2) { top: 17px; }
-.nav__hamburger span:nth-child(3) { top: 23px; }
+.nav__hamburger span:nth-child(1) { top: 16px; }
+.nav__hamburger span:nth-child(2) { top: 22px; }
+.nav__hamburger span:nth-child(3) { top: 28px; }
 
 /* X state when open */
 .nav__hamburger[aria-expanded="true"] span:nth-child(1) {
-  top: 17px; transform: rotate(45deg);
+  top: 22px; transform: rotate(45deg);
 }
 .nav__hamburger[aria-expanded="true"] span:nth-child(2) {
   opacity: 0; transform: scaleX(0);
 }
 .nav__hamburger[aria-expanded="true"] span:nth-child(3) {
-  top: 17px; transform: rotate(-45deg);
+  top: 22px; transform: rotate(-45deg);
 }
 
 /* ── Mobile overlay ────────────────────────────────────── */
@@ -217,7 +223,7 @@
   .nav__links.open {
     opacity: 1;
     transform: translateY(0);
-    pointer-events: all;
+    pointer-events: auto;
   }
   .nav__links a {
     font-size: clamp(1.6rem, 7vw, 2.2rem);

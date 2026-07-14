@@ -35,7 +35,7 @@ export const strings = {
     'about.title':               '<em>About</em>',
     'about.p1':                  'I started playing piano at five. Over the next twenty years I built what is, by any measure, one of the most thorough audio educations available in Hungary — studying sound engineering, studio recording, music theory, and post-production at the Szent István Király Music High School, then completing a two-year audio technician programme, before graduating with a degree in Film Sound from the University of Theatre and Film Arts Budapest.',
     'about.p2':                  'Most recently I worked on Valami Igazi / Homebound, a film directed by Kristóf Lendvai — as both sound designer and composer. My approach: I listen carefully to what a project needs, then bring something more to it.',
-    'about.p3':                  'Available for film sound design, commercial, film score, and podcast editing projects.',
+    'about.p3':                  'Based in Budapest, available for projects worldwide — whether you need someone in the room or remote.',
     'about.tools.label':         'Tools & DAWs',
 
     // Contact (homepage)
@@ -87,7 +87,7 @@ export const strings = {
     'about.title':               '<em>Rólam</em>',
     'about.p1':                  'Ötéves koromban kezdtem el zongorázni. Az elkövetkező húsz évben szereztem meg azt a hangoktatási alapot, ami Magyarországon keveseknek adatik meg: a Szent István Király Zeneművészeti Szakgimnáziumban hangtechnikát, stúdiófelvételt, szolfézst, zeneelméletet és utómunkát tanultam, majd elvégeztem egy kétéves hangtechnikusi képzést, végül a Színház- és Filmművészeti Egyetemen hangmesteri diplomát szereztem.',
     'about.p2':                  'Legutóbb Lendvai Kristóf Valami Igazi / Homebound című filmjén dolgoztam — sound designerként és zeneszerzőként egyszerre. Meghallgatom, mire van szüksége a projektnek — és további kreatív megoldásokkal egészítem ki.',
-    'about.p3':                  'Film és reklám, filmzene és podcast hang utómunkára elérhető vagyok.',
+    'about.p3':                  'Budapesten élek, de elérhető vagyok külföldi projektekre is — akár személyesen, akár távolról.',
     'about.tools.label':         'Eszközök és DAW-ok',
 
     // Kapcsolat (főoldal)
@@ -125,13 +125,23 @@ export function setLang(lang) {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     const val = strings[lang][key];
-    if (val !== undefined) el.innerHTML = val.replace(/\n/g, '<br>');
+    if (val !== undefined) {
+      el.innerHTML = val.replace(/\n/g, '<br>');
+    } else {
+      console.warn('[i18n] Missing key "%s" for lang "%s"', key, lang);
+    }
   });
 
   const enBtn = document.getElementById('lang-en');
   const huBtn = document.getElementById('lang-hu');
-  if (enBtn) enBtn.classList.toggle('active', lang === 'en');
-  if (huBtn) huBtn.classList.toggle('active', lang === 'hu');
+  if (enBtn) {
+    enBtn.classList.toggle('active', lang === 'en');
+    enBtn.setAttribute('aria-pressed', lang === 'en' ? 'true' : 'false');
+  }
+  if (huBtn) {
+    huBtn.classList.toggle('active', lang === 'hu');
+    huBtn.setAttribute('aria-pressed', lang === 'hu' ? 'true' : 'false');
+  }
 }
 
 export function init() {

@@ -40,7 +40,7 @@
   display: flex;
   gap: clamp(20px, 2.5vw, 32px);
   width: max-content;
-  padding-right: var(--gutter);
+  padding-inline: var(--gutter);
 }
 
 /* ══════════════════════════════════════════════════════

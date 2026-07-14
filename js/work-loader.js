@@ -5,7 +5,7 @@
  *             setLang from i18n.js (re-applies translations after DOM injection)
  */
 
-import { setLang, getLang } from './i18n.js';
+import { setLang, getLang } from './i18n.js?v=2';
 
 const SUPABASE_URL = 'https://zspmnnrmcfcxdudmiegc.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_hex89ktAS2X0tyrSenty4g_pPlrTACL';
@@ -711,22 +711,25 @@ function initYouTubeFacade() {
 async function loadAll() {
   if (!window.supabase) {
     console.error('[work-loader] Supabase SDK not available — CDN may be blocked');
+    document.querySelectorAll('.work-coming-soon').forEach(el => {
+      el.textContent = 'Content temporarily unavailable — please check your connection.';
+    });
     return;
   }
   try {
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // Standalone projects (no album)
-  const pRes = await sb.from('projects').select('*')
-    .eq('visible', true).is('album_id', null)
-    .order('display_order', { ascending: true })
-    .order('created_at',    { ascending: true });
-
-  // Albums
-  const aRes = await sb.from('albums').select('*')
-    .eq('visible', true)
-    .order('display_order', { ascending: true })
-    .order('created_at',    { ascending: true });
+  // Standalone projects (no album) + albums — fetched in parallel
+  const [pRes, aRes] = await Promise.all([
+    sb.from('projects').select('*')
+      .eq('visible', true).is('album_id', null)
+      .order('display_order', { ascending: true })
+      .order('created_at',    { ascending: true }),
+    sb.from('albums').select('*')
+      .eq('visible', true)
+      .order('display_order', { ascending: true })
+      .order('created_at',    { ascending: true }),
+  ]);
 
   if (pRes.error) throw new Error('Projects fetch failed: ' + pRes.error.message);
   if (aRes.error) throw new Error('Albums fetch failed: ' + aRes.error.message);

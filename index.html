@@ -7,9 +7,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Content Security Policy -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; object-src 'none'; base-uri 'self'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'" />
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <title>Okros — Sound Designer</title>
+  <title>Okros — Film Sound Designer | Budapest</title>
   <meta name="description" content="Okros is a sound designer working in film post-production, commercial audio, podcast production, and film score composition." />
 
   <!-- Favicon -->
@@ -29,6 +29,21 @@
   <!-- Canonical -->
   <link rel="canonical" href="https://okros.net/" />
 
+  <!-- Structured data — Person schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Okros",
+    "url": "https://okros.net/",
+    "jobTitle": "Sound Designer",
+    "description": "Budapest-based sound designer working in film post-production, commercial audio, podcast production, and film score composition.",
+    "email": "okros.sound@gmail.com",
+    "sameAs": ["https://www.linkedin.com/in/zsomborokros/"],
+    "knowsAbout": ["Film Sound Design", "Commercial Audio", "Podcast Production", "Film Score Composition", "Sound Editing", "Audio Mixing", "Post-Production"]
+  }
+  </script>
+
   <!-- Theme colour (browser chrome) -->
   <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#141820" />
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F5F2ED" />
@@ -42,15 +57,17 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&display=swap" /></noscript>
 
   <!-- External CSS — load order matters: tokens first, then components -->
-  <link rel="stylesheet" href="/css/tokens.css?v=1" />
-  <link rel="stylesheet" href="/css/base.css?v=1" />
+  <link rel="stylesheet" href="/css/tokens.css?v=2" />
+  <link rel="stylesheet" href="/css/base.css?v=2" />
   <link rel="stylesheet" href="/css/nav.css?v=2" />
-  <link rel="stylesheet" href="/css/hero.css?v=1" />
-  <link rel="stylesheet" href="/css/services.css?v=1" />
-  <link rel="stylesheet" href="/css/about-contact.css?v=1" />
+  <link rel="stylesheet" href="/css/hero.css?v=2" />
+  <link rel="stylesheet" href="/css/services.css?v=2" />
+  <link rel="stylesheet" href="/css/about-contact.css?v=2" />
   <link rel="stylesheet" href="/css/geo.css?v=2" />
 </head>
 <body>
+
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <!-- ─────────────────────────────────────────
        FIXED GEOMETRIC BACKGROUND LAYER
@@ -102,10 +119,10 @@
         <li><a href="/work" data-i18n="nav.work">Work</a></li>
         <li><a href="#about" data-i18n="nav.about">About</a></li>
         <li><a href="#contact" data-i18n="nav.contact">Contact</a></li>
-        <li class="lang-toggle" aria-label="Language selector">
-          <button class="lang-btn active" id="lang-en" data-lang="en">EN</button>
+        <li class="lang-toggle" role="group" aria-label="Language selector">
+          <button class="lang-btn active" id="lang-en" data-lang="en" aria-pressed="true">EN</button>
           <span class="lang-sep" aria-hidden="true">/</span>
-          <button class="lang-btn" id="lang-hu" data-lang="hu">HU</button>
+          <button class="lang-btn" id="lang-hu" data-lang="hu" aria-pressed="false">HU</button>
         </li>
         <li>
           <div class="theme-toggle" role="group" aria-label="Color scheme">
@@ -290,7 +307,7 @@
       <span class="ticker__item">Post-Production<span class="ticker__dot"></span></span>
       <span class="ticker__item">Sound Editing<span class="ticker__dot"></span></span>
       <span class="ticker__item">Audio Mixing<span class="ticker__dot"></span></span>
-      <span class="ticker__item">Sync Licensing<span class="ticker__dot"></span></span>
+      <span class="ticker__item">Sound Supervision<span class="ticker__dot"></span></span>
       <!-- Duplicate for seamless loop -->
       <span class="ticker__item">Film / Video Sound Design<span class="ticker__dot"></span></span>
       <span class="ticker__item">Commercial &amp; Brand<span class="ticker__dot"></span></span>
@@ -299,7 +316,7 @@
       <span class="ticker__item">Post-Production<span class="ticker__dot"></span></span>
       <span class="ticker__item">Sound Editing<span class="ticker__dot"></span></span>
       <span class="ticker__item">Audio Mixing<span class="ticker__dot"></span></span>
-      <span class="ticker__item">Sync Licensing<span class="ticker__dot"></span></span>
+      <span class="ticker__item">Sound Supervision<span class="ticker__dot"></span></span>
     </div>
   </div>
 

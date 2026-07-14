@@ -317,7 +317,7 @@
 
     .modal-overlay.open {
       opacity: 1;
-      pointer-events: all;
+      pointer-events: auto;
     }
 
     .modal {
@@ -440,7 +440,7 @@
       padding: 12px 20px;
       border-radius: 8px;
       font-size: 0.85rem;
-      background: #2A3444;
+      background: var(--bg-surface);
       border: 1px solid rgba(255,255,255,0.1);
       color: var(--text);
       box-shadow: 0 8px 32px rgba(0,0,0,0.4);
@@ -645,7 +645,7 @@
         <h1>Okros</h1>
         <span>Admin Panel</span>
       </div>
-      <label for="pw-input" style="position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap">Password</label>
+      <label for="pw-input" style="position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap">Password</label>
       <input type="password" id="pw-input" placeholder="Password" autocomplete="current-password">
       <button class="btn btn-primary" id="login-btn">Enter</button>
       <p class="login-error" id="login-error"></p>
@@ -943,11 +943,10 @@
       uploadBar.style.width = '0%';
       uploadStatus.textContent = 'Uploading…';
 
-      // Auto-detect resource type
+      // Cloudinary uses 'video' resource_type for both video AND audio uploads
       const isAudio = file.type.startsWith('audio/');
       const isVideo = file.type.startsWith('video/');
-      const resourceType = isAudio ? 'video' : (isVideo ? 'video' : 'auto');
-      // Note: Cloudinary uses 'video' resource_type for both video AND audio
+      const resourceType = 'video';
 
       const fd = new FormData();
       fd.append('file', file);
@@ -967,7 +966,12 @@
 
         xhr.addEventListener('load', () => {
           if (xhr.status === 200) {
-            const data = JSON.parse(xhr.responseText);
+            let data;
+            try { data = JSON.parse(xhr.responseText); } catch(e) {
+              uploadStatus.textContent = 'Upload error — invalid response.';
+              setTimeout(resetUploadZone, 2000);
+              reject(new Error('Invalid JSON response')); return;
+            }
             const url = data.secure_url;
 
             // Auto-detect media type from file and set dropdown
@@ -1112,7 +1116,12 @@
 
         xhr.addEventListener('load', () => {
           if (xhr.status === 200) {
-            const data = JSON.parse(xhr.responseText);
+            let data;
+            try { data = JSON.parse(xhr.responseText); } catch(e) {
+              coverStatus.textContent = 'Upload error — invalid response.';
+              setTimeout(resetCoverZone, 2000);
+              reject(new Error('Invalid JSON response')); return;
+            }
             const url = data.secure_url;
             coverUrlInput.value = url;
             coverProgress.style.display = 'none';
@@ -1213,7 +1222,11 @@
         });
         xhr.addEventListener('load', () => {
           if (xhr.status === 200) {
-            const data = JSON.parse(xhr.responseText);
+            let data;
+            try { data = JSON.parse(xhr.responseText); } catch(e) {
+              albumCoverStatus.textContent = 'Upload error — invalid response.';
+              setTimeout(resetAlbumCoverZone, 2000); reject(new Error('Invalid JSON response')); return;
+            }
             albumCoverUrlInput.value = data.secure_url; albumCoverProgress.style.display = 'none';
             albumCoverDone.style.display = ''; albumCoverPreview.src = data.secure_url;
             albumCoverFilename.textContent = file.name; resolve(data.secure_url);
@@ -1279,7 +1292,11 @@
         });
         xhr.addEventListener('load', () => {
           if (xhr.status === 200) {
-            const data = JSON.parse(xhr.responseText);
+            let data;
+            try { data = JSON.parse(xhr.responseText); } catch(e) {
+              trackAudioStatus.textContent = 'Upload error — invalid response.';
+              setTimeout(resetTrackAudioZone, 2000); reject(new Error('Invalid JSON response')); return;
+            }
             trackAudioUrlInput.value = data.secure_url; trackAudioProgress.style.display = 'none';
             trackAudioDone.style.display = ''; trackAudioFilename.textContent = file.name; resolve(data.secure_url);
           } else {
@@ -1398,7 +1415,7 @@
     }
 
     async function logout() {
-      await sb.auth.signOut();
+      try { await sb.auth.signOut(); } catch(e) { console.warn('signOut error:', e.message); }
       document.getElementById('dashboard').style.display = 'none';
       document.getElementById('login-screen').style.display = 'flex';
       document.getElementById('pw-input').value = '';
@@ -1522,8 +1539,8 @@
       document.getElementById('modal-id').value = p.id;
       document.getElementById('modal-category').value = p.category;
       document.getElementById('modal-proj-title').value = p.title;
-      document.getElementById('modal-desc').value = p.description;
-      document.getElementById('modal-url').value = p.cloudinary_url;
+      document.getElementById('modal-desc').value = p.description ?? '';
+      document.getElementById('modal-url').value = p.cloudinary_url ?? '';
       document.getElementById('modal-media-type').value = p.media_type;
       document.getElementById('modal-order').value = p.display_order;
       document.getElementById('modal-visible').checked = p.visible;
@@ -1545,21 +1562,26 @@
 
       if (!title) { toast('Title is required', 'error'); return; }
 
-      const payload = { category, title, description: desc, cloudinary_url: url,
-                        media_type: type, display_order: order, visible,
-                        cover_image_url: coverUrl };
-
-      let error;
-      if (id) {
-        ({ error } = await sb.from('projects').update(payload).eq('id', id));
-      } else {
-        ({ error } = await sb.from('projects').insert(payload));
+      const btn = document.getElementById('modal-save');
+      btn.disabled = true;
+      try {
+        const payload = { category, title, description: desc, cloudinary_url: url,
+                          media_type: type, display_order: order, visible,
+                          cover_image_url: coverUrl };
+        let error;
+        if (id) {
+          ({ error } = await sb.from('projects').update(payload).eq('id', id));
+        } else {
+          ({ error } = await sb.from('projects').insert(payload));
+        }
+        if (error) { toast('Save failed: ' + error.message, 'error'); btn.disabled = false; return; }
+        closeModal('project-modal');
+        toast(id ? 'Project updated ✓' : 'Project added ✓', 'success');
+        loadData();
+      } catch(e) {
+        toast('Save failed — network error.', 'error');
+        btn.disabled = false;
       }
-
-      if (error) { toast('Save failed: ' + error.message, 'error'); return; }
-      closeModal('project-modal');
-      toast(id ? 'Project updated ✓' : 'Project added ✓', 'success');
-      loadData();
     }
 
     // ── Album card HTML ────────────────────────────────────────────
@@ -1647,8 +1669,8 @@
       document.getElementById('album-modal-title').textContent = 'Edit album — ' + (a.title || 'album');
       document.getElementById('album-modal-id').value = a.id;
       document.getElementById('album-modal-category').value = a.category;
-      document.getElementById('album-modal-name').value = a.title;
-      document.getElementById('album-modal-desc').value = a.description;
+      document.getElementById('album-modal-name').value = a.title ?? '';
+      document.getElementById('album-modal-desc').value = a.description ?? '';
       document.getElementById('album-modal-order').value = a.display_order;
       document.getElementById('album-modal-visible').checked = a.visible;
       loadExistingAlbumCover(a.cover_image_url || '');
@@ -1666,17 +1688,24 @@
 
       if (!title) { toast('Album title is required', 'error'); return; }
 
-      const payload = { category: cat, title, description: desc, cover_image_url: cover, display_order: order, visible };
-      let error;
-      if (id) {
-        ({ error } = await sb.from('albums').update(payload).eq('id', id));
-      } else {
-        ({ error } = await sb.from('albums').insert(payload));
+      const btn = document.getElementById('album-modal-save');
+      btn.disabled = true;
+      try {
+        const payload = { category: cat, title, description: desc, cover_image_url: cover, display_order: order, visible };
+        let error;
+        if (id) {
+          ({ error } = await sb.from('albums').update(payload).eq('id', id));
+        } else {
+          ({ error } = await sb.from('albums').insert(payload));
+        }
+        if (error) { toast('Save failed: ' + error.message, 'error'); btn.disabled = false; return; }
+        closeModal('album-modal');
+        toast(id ? 'Album updated ✓' : 'Album added ✓', 'success');
+        loadData();
+      } catch(e) {
+        toast('Save failed — network error.', 'error');
+        btn.disabled = false;
       }
-      if (error) { toast('Save failed: ' + error.message, 'error'); return; }
-      closeModal('album-modal');
-      toast(id ? 'Album updated ✓' : 'Album added ✓', 'success');
-      loadData();
     }
 
     // ── Track modal ────────────────────────────────────────────────
@@ -1702,8 +1731,8 @@
       document.getElementById('track-modal-id').value = t.id;
       document.getElementById('track-modal-album-id').value = albumId;
       document.getElementById('track-modal-category').value = t.category;
-      document.getElementById('track-modal-name').value = t.title;
-      document.getElementById('track-modal-url').value = t.cloudinary_url;
+      document.getElementById('track-modal-name').value = t.title ?? '';
+      document.getElementById('track-modal-url').value = t.cloudinary_url ?? '';
       document.getElementById('track-modal-order').value = t.display_order;
       if (t.cloudinary_url) {
         trackAudioIdle.style.display = 'none';
@@ -1725,17 +1754,24 @@
 
       if (!title) { toast('Track title is required', 'error'); return; }
 
-      // Base payload — excludes visible/description so edits don't overwrite them
-      const basePayload = { album_id: albumId, category: cat, title,
-                            cloudinary_url: url, media_type: 'audio',
-                            display_order: order, cover_image_url: '' };
-      let error;
-      if (id) {
-        ({ error } = await sb.from('projects').update(basePayload).eq('id', id));
-      } else {
-        ({ error } = await sb.from('projects').insert({ ...basePayload, description: '', visible: true }));
+      const btn = document.getElementById('track-modal-save');
+      btn.disabled = true;
+      try {
+        // Base payload — excludes visible/description so edits don't overwrite them
+        const basePayload = { album_id: albumId, category: cat, title,
+                              cloudinary_url: url, media_type: 'audio',
+                              display_order: order, cover_image_url: '' };
+        let error;
+        if (id) {
+          ({ error } = await sb.from('projects').update(basePayload).eq('id', id));
+        } else {
+          ({ error } = await sb.from('projects').insert({ ...basePayload, description: '', visible: true }));
+        }
+        if (error) { toast('Save failed: ' + error.message, 'error'); btn.disabled = false; return; }
+      } catch(e) {
+        toast('Save failed — network error.', 'error');
+        btn.disabled = false; return;
       }
-      if (error) { toast('Save failed: ' + error.message, 'error'); return; }
       closeModal('track-modal');
       toast(id ? 'Track updated ✓' : 'Track added ✓', 'success');
       loadData();
@@ -1780,12 +1816,16 @@
       if (np.length < 6) { errEl.textContent = 'Minimum 6 characters.'; return; }
 
       // Updates the Supabase Auth user password (replaces settings-table hash)
-      const { error } = await sb.auth.updateUser({ password: np });
-      if (error) { errEl.textContent = 'Save failed: ' + error.message; return; }
-      closeModal('pw-modal');
-      document.getElementById('new-pw').value = '';
-      document.getElementById('confirm-pw').value = '';
-      toast('Password changed ✓', 'success');
+      try {
+        const { error } = await sb.auth.updateUser({ password: np });
+        if (error) { errEl.textContent = 'Save failed: ' + error.message; return; }
+        closeModal('pw-modal');
+        document.getElementById('new-pw').value = '';
+        document.getElementById('confirm-pw').value = '';
+        toast('Password changed ✓', 'success');
+      } catch(e) {
+        errEl.textContent = 'Save failed — network error.';
+      }
     }
 
     // ── Modal helpers ──────────────────────────────────────────────
@@ -1826,6 +1866,15 @@
     ['project-modal', 'pw-modal', 'album-modal', 'track-modal'].forEach(id => {
       document.getElementById(id).addEventListener('click', e => {
         if (e.target === e.currentTarget) closeModal(id);
+      });
+    });
+
+    // Close open modal on Escape key
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      ['project-modal', 'pw-modal', 'album-modal', 'track-modal'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el && el.classList.contains('open')) closeModal(id);
       });
     });
 

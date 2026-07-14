@@ -10,7 +10,7 @@
   <!-- Content Security Policy -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com https://img.youtube.com; media-src https://res.cloudinary.com; frame-src https://www.youtube.com https://player.vimeo.com; connect-src https://zspmnnrmcfcxdudmiegc.supabase.co; object-src 'none'; base-uri 'self'" />
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <title>Okros — Work</title>
+  <title>Work — Okros Film Sound Designer | Film, Commercial &amp; Podcast</title>
   <meta name="description" content="Selected work by Okros — sound design, film score, commercial audio, and podcast production." />
 
   <!-- Favicon -->
@@ -30,6 +30,22 @@
   <!-- Canonical -->
   <link rel="canonical" href="https://okros.net/work/" />
 
+  <!-- Structured data — WebPage schema -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Work — Okros Sound Designer",
+    "url": "https://okros.net/work/",
+    "description": "Selected sound design projects by Okros: film, commercial, podcast production, and film score.",
+    "author": {
+      "@type": "Person",
+      "name": "Okros",
+      "url": "https://okros.net/"
+    }
+  }
+  </script>
+
   <!-- Theme colour (browser chrome) -->
   <meta name="theme-color" media="(prefers-color-scheme: dark)"  content="#141820" />
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#F5F2ED" />
@@ -37,20 +53,25 @@
   <!-- Fonts — all async; font-display:swap prevents invisible text -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+  <link rel="preconnect" href="https://zspmnnrmcfcxdudmiegc.supabase.co" crossorigin />
+  <link rel="preconnect" href="https://res.cloudinary.com" />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" /></noscript>
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&display=swap" /></noscript>
 
   <!-- External CSS — tokens first, then shared, then work-page overrides last -->
-  <link rel="stylesheet" href="/css/tokens.css?v=1" />
-  <link rel="stylesheet" href="/css/base.css?v=1" />
+  <link rel="stylesheet" href="/css/tokens.css?v=2" />
+  <link rel="stylesheet" href="/css/base.css?v=2" />
   <link rel="stylesheet" href="/css/nav.css?v=2" />
-  <link rel="stylesheet" href="/css/about-contact.css?v=1" />
+  <link rel="stylesheet" href="/css/about-contact.css?v=2" />
   <link rel="stylesheet" href="/css/geo.css?v=2" />
   <link rel="stylesheet" href="/css/work-page.css?v=2" />
 </head>
 <body>
+
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <!-- ─────────────────────────────────────────
        FIXED GEOMETRIC BACKGROUND LAYER
@@ -102,10 +123,10 @@
         <li><a href="/work" class="nav__link--active" data-i18n="nav.work">Work</a></li>
         <li><a href="/#about" data-i18n="nav.about">About</a></li>
         <li><a href="/#contact" data-i18n="nav.contact">Contact</a></li>
-        <li class="lang-toggle" aria-label="Language selector">
-          <button class="lang-btn active" id="lang-en" data-lang="en">EN</button>
+        <li class="lang-toggle" role="group" aria-label="Language selector">
+          <button class="lang-btn active" id="lang-en" data-lang="en" aria-pressed="true">EN</button>
           <span class="lang-sep" aria-hidden="true">/</span>
-          <button class="lang-btn" id="lang-hu" data-lang="hu">HU</button>
+          <button class="lang-btn" id="lang-hu" data-lang="hu" aria-pressed="false">HU</button>
         </li>
         <li>
           <div class="theme-toggle" role="group" aria-label="Color scheme">
@@ -119,10 +140,12 @@
   </nav>
 
   <!-- Floating CTA -->
-  <a href="/#contact" class="work__float-cta" id="floatCta" aria-label="Contact">
+  <a href="/#contact" class="work__float-cta" id="floatCta">
     <span data-i18n="work.cta">Let's work together</span>
     <span class="work__float-cta__arrow" aria-hidden="true">→</span>
   </a>
+
+  <main id="main-content">
 
   <!-- ─────────────────────────────────────────
        WORK
@@ -190,7 +213,7 @@
         </div>
       </div>
       <div class="work__scroll-wrap" role="region" aria-label="Film / Video Sound Design projects">
-        <div class="work__track" style="padding-left:var(--gutter)">
+        <div class="work__track">
           <div class="work-coming-soon" data-i18n="work.coming_soon">Coming soon</div>
         </div>
       </div>
@@ -205,7 +228,7 @@
         </div>
       </div>
       <div class="work__scroll-wrap" role="region" aria-label="Commercial projects">
-        <div class="work__track" style="padding-left:var(--gutter)">
+        <div class="work__track">
           <div class="work-coming-soon" data-i18n="work.coming_soon">Coming soon</div>
         </div>
       </div>
@@ -220,7 +243,7 @@
         </div>
       </div>
       <div class="work__scroll-wrap" role="region" aria-label="Film score projects">
-        <div class="work__track" style="padding-left:var(--gutter)">
+        <div class="work__track">
           <div class="work-coming-soon" data-i18n="work.coming_soon">Coming soon</div>
         </div>
       </div>
@@ -235,12 +258,14 @@
         </div>
       </div>
       <div class="work__scroll-wrap" role="region" aria-label="Podcast projects">
-        <div class="work__track" style="padding-left:var(--gutter)">
+        <div class="work__track">
           <div class="work-coming-soon" data-i18n="work.coming_soon">Coming soon</div>
         </div>
       </div>
     </div>
   </section>
+
+  </main><!-- /#main-content -->
 
   <!-- ─────────────────────────────────────────
        FOOTER
@@ -270,7 +295,8 @@
   <!-- Supabase — loaded after body so it never blocks render -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.1/dist/umd/supabase.min.js"
           integrity="sha256-e8r2pElMb5qnByeHhLpJVDA2Z4F/qvWBbp+cggSXPjE="
-          crossorigin="anonymous"></script>
+          crossorigin="anonymous"
+          defer></script>
   <script type="module" src="/js/work-main.js?v=2"></script>
 </body>
 </html>

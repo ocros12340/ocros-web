@@ -26,6 +26,30 @@ body {
 img, video, audio { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 
+/* ── Skip-to-content link ───────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--accent);
+  color: #141820;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0 0 6px 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  z-index: 9999;
+  transition: top 0.2s;
+}
+.skip-link:focus-visible { top: 0; }
+
+/* ── Focus visible ring ─────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 /* ── Layout utility ────────────────────────────────────── */
 .container {
   max-width: var(--content-w);

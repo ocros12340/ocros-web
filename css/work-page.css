@@ -454,7 +454,7 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
 }
 .album-back__close:hover { opacity: 1; }
 .album-back__title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-heading);
   font-size: 1.05rem;
   font-weight: 400;
   color: var(--text-bright);
@@ -720,7 +720,7 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
 }
 
 .album-sheet__title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: var(--font-heading);
   font-size: 1.1rem;
   font-weight: 400;
   color: var(--text-bright, #E8E4DC);

@@ -4,12 +4,12 @@
  * Loaded via: <script type="module" src="/js/main.js">
  */
 
-import { init as initI18n } from './i18n.js';
-import { init as initNav }  from './nav.js';
-import { init as initAnims } from './animations.js';
-import { init as initLogo }  from './logo-home.js';
-import { init as initServices } from './services.js';
-import { initTheme } from './theme.js';
+import { init as initI18n } from './i18n.js?v=2';
+import { init as initNav }  from './nav.js?v=2';
+import { init as initAnims } from './animations.js?v=2';
+import { init as initLogo }  from './logo-home.js?v=2';
+import { init as initServices } from './services.js?v=2';
+import { initTheme } from './theme.js?v=2';
 
 // ── Hero name letter animation ───────────────────────────────────────────────
 function initLetterAnimation() {
