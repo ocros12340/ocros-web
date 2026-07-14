@@ -36,9 +36,9 @@
   /* Text */
   --text:        #F2EDE6;
   --text-muted:  #9A9088;
-  --text-dim:    #6B6258;
+  --text-dim:    #90867B;   /* raised from #6B6258 (2.72:1) → 4.55:1 WCAG AA */
   --text-bright: #F2EDE6;  /* alias — album flip card */
-  --muted:       #6B6258;  /* alias — album flip card */
+  --muted:       #90867B;  /* alias — album flip card */
 
   /* Fonts */
   --font-heading: 'Playfair Display', Georgia, serif;

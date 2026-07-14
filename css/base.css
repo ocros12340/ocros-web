@@ -3,6 +3,13 @@
    Depends on: tokens.css
    ═══════════════════════════════════════════════════════ */
 
+/* ── Shell custom elements (okros-nav / okros-footer) ───── */
+/* Reserve nav height and hide before JS upgrades the element */
+okros-nav:not(:defined) { display: block; visibility: hidden; height: var(--nav-h, 72px); }
+okros-footer:not(:defined) { display: block; visibility: hidden; }
+/* Once upgraded, make wrapper transparent to layout */
+okros-nav, okros-footer { display: contents; }
+
 /* ── Reset ─────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
