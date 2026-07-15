@@ -118,13 +118,16 @@ export function getLang() {
 }
 
 export function setLang(lang) {
+  // Reject unknown langs — fall back to 'en' to prevent TypeError on strings[lang]
+  if (!strings[lang]) lang = 'en';
   _currentLang = lang;
   localStorage.setItem('okros-lang', lang);
   document.documentElement.lang = lang;
 
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
-    const val = strings[lang][key];
+    // Fall back to English if key is missing in the active language
+    const val = strings[lang]?.[key] ?? strings.en?.[key];
     if (val !== undefined) {
       el.innerHTML = val.replace(/\n/g, '<br>');
     } else {

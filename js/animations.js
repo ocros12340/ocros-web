@@ -35,7 +35,7 @@ function initScrollParallax() {
   }
 
   window.addEventListener('scroll', () => {
-    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
   }, { passive: true });
 
   update();
@@ -63,9 +63,11 @@ function initMouseParallax() {
     targetY = Math.max(-0.5, Math.min(0.5, (e.beta - 45)  / 25));
   }, { passive: true });
 
+  let tickId = null;
+
   function tick() {
-    if (document.hidden) return;
-    requestAnimationFrame(tick);
+    if (document.hidden) { tickId = null; return; }
+    tickId = requestAnimationFrame(tick);
     currentX += (targetX - currentX) * LERP;
     currentY += (targetY - currentY) * LERP;
 
@@ -79,10 +81,10 @@ function initMouseParallax() {
   }
 
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) requestAnimationFrame(tick);
+    if (!document.hidden && tickId === null) tickId = requestAnimationFrame(tick);
   });
 
-  tick();
+  tickId = requestAnimationFrame(tick);
 }
 
 // ── Tab-hidden: pause CSS animations ────────────────────────────────────────

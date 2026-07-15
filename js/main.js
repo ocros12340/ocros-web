@@ -4,12 +4,12 @@
  * Loaded via: <script type="module" src="/js/main.js">
  */
 
-import { init as initI18n } from './i18n.js?v=2';
-import { init as initNav }  from './nav.js?v=2';
-import { init as initAnims } from './animations.js?v=2';
-import { init as initLogo }  from './logo-home.js?v=2';
-import { init as initServices } from './services.js?v=2';
-import { initTheme } from './theme.js?v=2';
+import { init as initI18n } from './i18n.js?v=3';
+import { init as initNav }  from './nav.js?v=3';
+import { init as initAnims } from './animations.js?v=3';
+import { init as initLogo }  from './logo-home.js?v=3';
+import { init as initServices } from './services.js?v=3';
+import { initTheme } from './theme.js?v=3';
 
 // ── Hero name letter animation ───────────────────────────────────────────────
 function initLetterAnimation() {
@@ -30,15 +30,20 @@ function initWaveform() {
 
   const ctx = canvas.getContext('2d');
 
+  let resizeTimer;
   function resize() {
     canvas.width  = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
   }
   resize();
-  window.addEventListener('resize', resize, { passive: true });
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(resize, 100);
+  }, { passive: true });
 
   const POINTS = 180;
-  let phase = 0;
+  let phase  = 0;
+  let animId = null;
 
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -77,14 +82,20 @@ function initWaveform() {
     ctx.stroke();
 
     phase += 0.006;
-    if (!document.hidden) requestAnimationFrame(draw);
+    if (!document.hidden) {
+      animId = requestAnimationFrame(draw);
+    } else {
+      animId = null;
+    }
   }
 
   document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) requestAnimationFrame(draw);
+    if (!document.hidden && animId === null) {
+      animId = requestAnimationFrame(draw);
+    }
   });
 
-  draw();
+  animId = requestAnimationFrame(draw);
 }
 
 // ── Ticker pause (Safari fix — CSS hover resets animation position) ──────────

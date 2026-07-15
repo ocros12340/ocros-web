@@ -6,8 +6,8 @@
  *   <okros-nav page="home"></okros-nav>   — anchor hrefs, Back-to-top footer
  *   <okros-nav page="work"></okros-nav>   — absolute hrefs, Work link active, ← Home footer
  *
- * Loaded as a sync (non-deferred) <script> in <head> so connectedCallback
- * fires immediately when the parser processes the custom element — no FOUC.
+ * Loaded with defer — connectedCallback fires after HTML is parsed, which is
+ * correct: custom elements in the body are upgraded when the script runs.
  */
 
 /* ── NAV ──────────────────────────────────────────────────── */

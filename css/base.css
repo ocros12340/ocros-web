@@ -274,4 +274,11 @@ section + section::before {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+  /* L-3: reveal elements start invisible — show them immediately for reduced-motion users */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  /* L-7: ticker scroll is a continuous animation — stop it entirely */
+  .ticker__track { animation: none; }
 }

@@ -5,14 +5,14 @@
  *             setLang from i18n.js (re-applies translations after DOM injection)
  */
 
-import { setLang, getLang } from './i18n.js?v=2';
+import { setLang, getLang } from './i18n.js?v=3';
 
 const SUPABASE_URL = 'https://zspmnnrmcfcxdudmiegc.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_hex89ktAS2X0tyrSenty4g_pPlrTACL';
 
 // ── HTML escaping helpers ────────────────────────────────────────────────────
 function escHtml(s) {
-  return String(s)
+  return String(s == null ? '' : s)
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
@@ -302,6 +302,13 @@ function initAlbumCards(container) {
       pFill.style.width = '0%';
       pThumb.style.left = '0%';
       pCur.textContent  = '0:00';
+      currentAlbumAudio = null;
+    });
+    audio.addEventListener('error', () => {
+      resetTracks();
+      pPlay.textContent = '▶';
+      pPlay.classList.remove('is-playing');
+      pTitle.textContent = 'Error loading audio';
       currentAlbumAudio = null;
     });
 
@@ -637,6 +644,16 @@ function initSheetPlayer() {
       sheetCurrentTrackEl.querySelector('.album-track__icon').textContent = '▶';
       sheetCurrentTrackEl = null;
     }
+  });
+  sheetAudio.addEventListener('error', () => {
+    pPlay.textContent = '▶';
+    pPlay.classList.remove('is-playing');
+    if (sheetCurrentTrackEl) {
+      sheetCurrentTrackEl.classList.remove('is-playing');
+      sheetCurrentTrackEl.querySelector('.album-track__icon').textContent = '▶';
+      sheetCurrentTrackEl = null;
+    }
+    pTitle.textContent = 'Error loading audio';
   });
 
   pPlay.addEventListener('click', e => {

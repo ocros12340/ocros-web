@@ -463,11 +463,11 @@ const CLD_CLOUD  = 'dlbardl1q';
     const ADMIN_EMAIL = 'okros.sound@gmail.com';
 
     // ── Login (brute-force protection: 5 attempts → 30s lockout) ──────
-    // Stored in sessionStorage — page reload does NOT reset the lockout counter
-    function _getAttempts()  { return parseInt(sessionStorage.getItem('_okros_attempts') || '0', 10); }
-    function _getLocked()    { return parseInt(sessionStorage.getItem('_okros_locked')   || '0', 10); }
-    function _setAttempts(n) { sessionStorage.setItem('_okros_attempts', n); }
-    function _setLocked(t)   { sessionStorage.setItem('_okros_locked', t);   }
+    // Stored in localStorage — persists across tab/window close so lockout survives a reload or new tab
+    function _getAttempts()  { return parseInt(localStorage.getItem('_okros_attempts') || '0', 10); }
+    function _getLocked()    { return parseInt(localStorage.getItem('_okros_locked')   || '0', 10); }
+    function _setAttempts(n) { localStorage.setItem('_okros_attempts', n); }
+    function _setLocked(t)   { localStorage.setItem('_okros_locked', t);   }
 
     async function login() {
       const pw = document.getElementById('pw-input').value.trim();
@@ -656,6 +656,8 @@ const CLD_CLOUD  = 'dlbardl1q';
       const coverUrl = document.getElementById('modal-cover-url').value.trim();
 
       if (!title) { toast('Title is required', 'error'); return; }
+      if (!CATEGORIES.find(c => c.id === category)) { toast('Invalid category', 'error'); return; }
+      if (url && !/^https?:\/\//i.test(url)) { toast('URL must start with http:// or https://', 'error'); return; }
 
       const btn = document.getElementById('modal-save');
       btn.disabled = true;
@@ -670,6 +672,7 @@ const CLD_CLOUD  = 'dlbardl1q';
           ({ error } = await sb.from('projects').insert(payload));
         }
         if (error) { toast('Save failed: ' + error.message, 'error'); btn.disabled = false; return; }
+        btn.disabled = false;
         closeModal('project-modal');
         toast(id ? 'Project updated ✓' : 'Project added ✓', 'success');
         loadData();
@@ -710,36 +713,40 @@ const CLD_CLOUD  = 'dlbardl1q';
 
     async function loadAllAlbumTracks() {
       if (!albums.length) return;
-      const { data: allTracks, error: tErr } = await sb.from('projects').select('*')
-        .in('album_id', albums.map(a => a.id))
-        .order('display_order', { ascending: true })
-        .order('created_at',    { ascending: true });
-      if (tErr) { toast('Failed to load tracks: ' + tErr.message, 'error'); return; }
-      const trackMap = {};
-      (allTracks || []).forEach(t => {
-        if (!trackMap[t.album_id]) trackMap[t.album_id] = [];
-        trackMap[t.album_id].push(t);
-      });
-      for (const a of albums) {
-        const container = document.getElementById('tracks-' + a.id);
-        if (!container) continue;
-        const tracks    = trackMap[a.id] || [];
-        const eAlbumId  = escHtml(a.id);
-        const eCategory = escHtml(a.category);
-        const trackHTML = tracks.map((t, i) => {
-          const eTId   = escHtml(t.id);
-          const eTitle = escHtml(t.title || '(no title)');
-          return `
-          <div class="track-admin-item">
-            <div class="track-num">${i + 1}</div>
-            <div class="track-title-cell">${eTitle}</div>
-            <div class="track-actions">
-              <button class="btn btn-edit" data-action="edit-track" data-id="${eTId}" data-album-id="${eAlbumId}">Edit</button>
-              <button class="btn btn-danger" data-action="delete" data-type="track" data-id="${eTId}" data-title="${escAttr(t.title||'this track')}">Delete</button>
+      try {
+        const { data: allTracks, error: tErr } = await sb.from('projects').select('*')
+          .in('album_id', albums.map(a => a.id))
+          .order('display_order', { ascending: true })
+          .order('created_at',    { ascending: true });
+        if (tErr) { toast('Failed to load tracks: ' + tErr.message, 'error'); return; }
+        const trackMap = {};
+        (allTracks || []).forEach(t => {
+          if (!trackMap[t.album_id]) trackMap[t.album_id] = [];
+          trackMap[t.album_id].push(t);
+        });
+        for (const a of albums) {
+          const container = document.getElementById('tracks-' + a.id);
+          if (!container) continue;
+          const tracks    = trackMap[a.id] || [];
+          const eAlbumId  = escHtml(a.id);
+          const eCategory = escHtml(a.category);
+          const trackHTML = tracks.map((t, i) => {
+            const eTId   = escHtml(t.id);
+            const eTitle = escHtml(t.title || '(no title)');
+            return `
+            <div class="track-admin-item">
+              <div class="track-num">${i + 1}</div>
+              <div class="track-title-cell">${eTitle}</div>
+              <div class="track-actions">
+                <button class="btn btn-edit" data-action="edit-track" data-id="${eTId}" data-album-id="${eAlbumId}">Edit</button>
+                <button class="btn btn-danger" data-action="delete" data-type="track" data-id="${eTId}" data-title="${escAttr(t.title||'this track')}">Delete</button>
+              </div>
             </div>
-          </div>
-        `;}).join('');
-        container.innerHTML = trackHTML + `<button class="add-track-btn" data-action="add-track" data-album-id="${eAlbumId}" data-category="${eCategory}">+ Add track</button>`;
+          `;}).join('');
+          container.innerHTML = trackHTML + `<button class="add-track-btn" data-action="add-track" data-album-id="${eAlbumId}" data-category="${eCategory}">+ Add track</button>`;
+        }
+      } catch (err) {
+        toast('Failed to load tracks — network error.', 'error');
       }
     }
 
@@ -782,6 +789,7 @@ const CLD_CLOUD  = 'dlbardl1q';
       const cover   = document.getElementById('album-modal-cover-url').value.trim();
 
       if (!title) { toast('Album title is required', 'error'); return; }
+      if (!CATEGORIES.find(c => c.id === cat)) { toast('Invalid category', 'error'); return; }
 
       const btn = document.getElementById('album-modal-save');
       btn.disabled = true;
@@ -794,6 +802,7 @@ const CLD_CLOUD  = 'dlbardl1q';
           ({ error } = await sb.from('albums').insert(payload));
         }
         if (error) { toast('Save failed: ' + error.message, 'error'); btn.disabled = false; return; }
+        btn.disabled = false;
         closeModal('album-modal');
         toast(id ? 'Album updated ✓' : 'Album added ✓', 'success');
         loadData();
@@ -848,6 +857,8 @@ const CLD_CLOUD  = 'dlbardl1q';
       const order   = parseInt(document.getElementById('track-modal-order').value) || 0;
 
       if (!title) { toast('Track title is required', 'error'); return; }
+      if (!CATEGORIES.find(c => c.id === cat)) { toast('Invalid category', 'error'); return; }
+      if (url && !/^https?:\/\//i.test(url)) { toast('URL must start with http:// or https://', 'error'); return; }
 
       const btn = document.getElementById('track-modal-save');
       btn.disabled = true;
@@ -867,6 +878,7 @@ const CLD_CLOUD  = 'dlbardl1q';
         toast('Save failed — network error.', 'error');
         btn.disabled = false; return;
       }
+      btn.disabled = false;
       closeModal('track-modal');
       toast(id ? 'Track updated ✓' : 'Track added ✓', 'success');
       loadData();
@@ -885,19 +897,23 @@ const CLD_CLOUD  = 'dlbardl1q';
       document.getElementById('confirm-overlay').classList.remove('open');
       deleteTarget = null;
 
-      let error;
-      if (type === 'album') {
-        const { error: tracksErr } = await sb.from('projects').delete().eq('album_id', id); // delete tracks first
-        if (tracksErr) { toast('Delete failed: ' + tracksErr.message, 'error'); return; }
-        ({ error } = await sb.from('albums').delete().eq('id', id));
-        if (error) { toast('Delete failed', 'error'); return; }
-        toast('Album deleted', 'success');
-      } else {
-        ({ error } = await sb.from('projects').delete().eq('id', id));
-        if (error) { toast('Delete failed', 'error'); return; }
-        toast(type === 'track' ? 'Track deleted' : 'Project deleted', 'success');
+      try {
+        let error;
+        if (type === 'album') {
+          const { error: tracksErr } = await sb.from('projects').delete().eq('album_id', id); // delete tracks first
+          if (tracksErr) { toast('Delete failed: ' + tracksErr.message, 'error'); return; }
+          ({ error } = await sb.from('albums').delete().eq('id', id));
+          if (error) { toast('Delete failed', 'error'); return; }
+          toast('Album deleted', 'success');
+        } else {
+          ({ error } = await sb.from('projects').delete().eq('id', id));
+          if (error) { toast('Delete failed', 'error'); return; }
+          toast(type === 'track' ? 'Track deleted' : 'Project deleted', 'success');
+        }
+        loadData();
+      } catch (err) {
+        toast('Delete failed — network error.', 'error');
       }
-      loadData();
     }
 
     // ── Change password ────────────────────────────────────────────
@@ -989,13 +1005,17 @@ const CLD_CLOUD  = 'dlbardl1q';
 
     // ── Auto-login if Supabase session exists (persists across reloads) ──
     (async () => {
-      const { data: { session } } = await sb.auth.getSession();
-      if (session) showDashboard();
+      try {
+        const { data: { session } } = await sb.auth.getSession();
+        if (session && session.user.email === ADMIN_EMAIL) showDashboard();
+      } catch (err) {
+        console.warn('Session restore failed:', err.message);
+      }
     })();
 
     // ── Session expiry guard — redirect to login when token expires ──
     sb.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
+      if (!session || session.user.email !== ADMIN_EMAIL) {
         document.getElementById('dashboard').style.display = 'none';
         document.getElementById('login-screen').style.display = 'flex';
       }

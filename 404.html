@@ -11,7 +11,8 @@
   <script>(function(){var t=localStorage.getItem('okros-theme')||'dark';document.documentElement.dataset.theme=t;})();</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:wght@300;400&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:wght@300;400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:wght@300;400&display=swap"></noscript>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -78,6 +79,7 @@
       display: inline-block;
       margin-top: 8px;
       padding: 10px 28px;
+      border: 1px solid rgba(196, 149, 106, 0.35); /* fallback */
       border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
       border-radius: 6px;
       color: var(--accent);
@@ -89,7 +91,9 @@
     }
 
     .home-link:hover {
+      background: rgba(196, 149, 106, 0.08); /* fallback */
       background: color-mix(in srgb, var(--accent) 8%, transparent);
+      border-color: rgba(196, 149, 106, 0.60); /* fallback */
       border-color: color-mix(in srgb, var(--accent) 60%, transparent);
     }
   </style>
@@ -97,7 +101,7 @@
 <body>
   <div class="wrap">
     <a href="/" class="wordmark" aria-label="Okros — back to home">Okros</a>
-    <h1 class="code" aria-hidden="true">404</h1>
+    <h1 class="code">404</h1>
     <p class="message">This page doesn't exist — or it used to, and it's gone now.</p>
     <a href="/" class="home-link">Back to home</a>
   </div>
