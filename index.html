@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Content Security Policy — must be first so it governs all subsequent scripts -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-WM54iygU+CFFAc2lH2D+lLNtxx+JPh0NRwxBK5T/TpI=' 'sha256-z7X3alVp6OmQV6Mvj0WEoDDXXvJwk8hfthid5LTnIYs='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'" />
   <script>if(location.pathname==='/index.html')history.replaceState(null,'','/');</script>
   <!-- Anti-FOUC: apply saved theme before first paint -->
   <script>(function(){var t=localStorage.getItem('okros-theme')||'dark';document.documentElement.dataset.theme=t;})();</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Content Security Policy -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-HKxubbsUEF/IAE6ffsiBBcAMyjf1lOOuEOr+prO0dDY='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'" />
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Okros — Film Sound Designer | Budapest</title>
   <meta name="description" content="Okros is a sound designer working in film post-production, commercial audio, podcast production, and film score composition." />
@@ -57,13 +57,13 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&display=swap" /></noscript>
 
   <!-- External CSS — load order matters: tokens first, then components -->
-  <link rel="stylesheet" href="/css/tokens.css?v=3" />
-  <link rel="stylesheet" href="/css/base.css?v=3" />
-  <link rel="stylesheet" href="/css/nav.css?v=3" />
-  <link rel="stylesheet" href="/css/hero.css?v=3" />
-  <link rel="stylesheet" href="/css/services.css?v=3" />
-  <link rel="stylesheet" href="/css/about-contact.css?v=3" />
-  <link rel="stylesheet" href="/css/geo.css?v=3" />
+  <link rel="stylesheet" href="/css/tokens.css?v=4" />
+  <link rel="stylesheet" href="/css/base.css?v=4" />
+  <link rel="stylesheet" href="/css/nav.css?v=4" />
+  <link rel="stylesheet" href="/css/hero.css?v=4" />
+  <link rel="stylesheet" href="/css/services.css?v=4" />
+  <link rel="stylesheet" href="/css/about-contact.css?v=4" />
+  <link rel="stylesheet" href="/css/geo.css?v=4" />
   <script src="/js/shell.js" defer></script>
 </head>
 <body>
@@ -247,10 +247,10 @@
       </p>
     </div>
 
-    <div class="hero__scroll" aria-hidden="true">
-      <span data-i18n="hero.scroll">Scroll</span>
-      <div class="hero__scroll-line"></div>
-    </div>
+    <a href="#services" class="hero__scroll" aria-label="Scroll to services">
+      <span data-i18n="hero.scroll" aria-hidden="true">Scroll</span>
+      <div class="hero__scroll-line" aria-hidden="true"></div>
+    </a>
   </section>
 
   <!-- ─────────────────────────────────────────
@@ -331,7 +331,7 @@
             <p class="service-card__desc" data-i18n="services.film.desc">
               Post-production sound editing and mixing for short and feature-length film. From silence to scene — every layer placed with precision.
             </p>
-            <a href="/work#film" class="service-card__link">See work <span aria-hidden="true">→</span></a>
+            <a href="/work#film" class="service-card__link"><span data-i18n="services.see_work">See work</span> <span aria-hidden="true">→</span></a>
           </div>
         </article>
 
@@ -342,7 +342,7 @@
             <p class="service-card__desc" data-i18n="services.commercial.desc">
               Sound design and audio finishing for ads, brand films, and digital content. Built for impact within tight timelines.
             </p>
-            <a href="/work#comm" class="service-card__link">See work <span aria-hidden="true">→</span></a>
+            <a href="/work#comm" class="service-card__link"><span data-i18n="services.see_work">See work</span> <span aria-hidden="true">→</span></a>
           </div>
         </article>
 
@@ -353,7 +353,7 @@
             <p class="service-card__desc" data-i18n="services.music.desc">
               Original score composition for film, documentary, and episodic content. Music built from the story — not placed over it.
             </p>
-            <a href="/work#music" class="service-card__link">See work <span aria-hidden="true">→</span></a>
+            <a href="/work#music" class="service-card__link"><span data-i18n="services.see_work">See work</span> <span aria-hidden="true">→</span></a>
           </div>
         </article>
 
@@ -364,7 +364,7 @@
             <p class="service-card__desc" data-i18n="services.podcast.desc">
               End-to-end editing, noise reduction, mixing, and mastering for spoken word. Consistent, clean audio that respects the listener's ears.
             </p>
-            <a href="/work#pod" class="service-card__link">See work <span aria-hidden="true">→</span></a>
+            <a href="/work#pod" class="service-card__link"><span data-i18n="services.see_work">See work</span> <span aria-hidden="true">→</span></a>
           </div>
         </article>
 
@@ -414,13 +414,13 @@
           </h2>
           <div class="about__text reveal reveal-delay-2">
             <p data-i18n="about.p1">
-              Okros is a Budapest-based sound designer working across film post-production, advertising, and film score composition. The work is built on a single conviction: that sound shapes emotional truth before the mind catches up.
+              I started playing piano at five. Over the next twenty years I built what is, by any measure, one of the most thorough audio educations available in Hungary — studying sound engineering, studio recording, music theory, and post-production at the Szent István Király Music High School, then completing a two-year audio technician programme, before graduating with a degree in Film Sound from the University of Theatre and Film Arts Budapest.
             </p>
             <p data-i18n="about.p2">
-              With a background in both technical audio engineering and music composition, Okros brings a dual sensitivity to every project — the precision of the editor and the ear of the composer.
+              Most recently I worked on Valami Igazi / Homebound, a film directed by Kristóf Lendvai — as both sound designer and composer. My approach: I listen carefully to what a project needs, then bring something more to it.
             </p>
             <p data-i18n="about.p3">
-              Available for projects worldwide, with experience in both independent and agency-facing workflows.
+              Based in Budapest, available for projects worldwide — whether you need someone in the room or remote.
             </p>
           </div>
         </div>
@@ -501,6 +501,6 @@
        JAVASCRIPT
   ───────────────────────────────────────── -->
 
-  <script type="module" src="/js/main.js?v=3"></script>
+  <script type="module" src="/js/main.js?v=4"></script>
 </body>
 </html>

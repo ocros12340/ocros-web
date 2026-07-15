@@ -85,9 +85,9 @@
 
   --text:        #1A120A;   /* warm dark brown — was green-tinted #0A1A14 */
   --text-muted:  #4A3828;   /* warm mid brown — was Cyprus #1E4A46 */
-  --text-dim:    #7A6858;   /* warm light brown — was teal #3A6460 */
+  --text-dim:    #5A4030;   /* M-22: raised to WCAG AA (5.83:1 on ticker #DDD9CC) */
   --text-bright: #120C06;   /* warm near-black */
-  --muted:       #7A6858;   /* alias */
+  --muted:       #5A4030;   /* alias */
 
   /* ── Nature palette expansion ── */
   --clay:        #C67B5C;   /* terracotta clay */

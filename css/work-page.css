@@ -9,7 +9,7 @@ body { background-color: var(--bg-work); }
 html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
 
 /* Nav logomark always visible — no hero crossfade on this page */
-.nav__logomark { opacity: 1 !important; transition: color 0.9s ease !important; }
+.nav__logomark { opacity: 1; transition: color 0.9s ease; }
 
 /* ── Reveal overrides: no Y translation — prevents content misalign ── */
 .reveal       { transform: none; }
@@ -999,3 +999,12 @@ html { overflow-y: scroll; } /* prevents scrollbar layout shift on load */
 [data-theme="light"] .album-sheet__player-thumb { background: #004741; }
 [data-theme="light"] .album-sheet__player-skip  { color: rgba(10,26,20,0.55); }
 [data-theme="light"] .album-sheet__player-skip:active { color: #004741; background: rgba(0,71,65,0.08); }
+
+/* M-22: light mode work-group label contrast — WCAG AA (4.5:1 min on #E6E2D8) */
+[data-theme="light"] .work-group__label {
+  color: var(--grp-label, var(--text-muted));
+}
+[data-theme="light"] .work-group[data-category="film"]  { --grp-label: #4A5A6A; } /* 5.04:1 */
+[data-theme="light"] .work-group[data-category="comm"]  { --grp-label: #7A5000; } /* 5.45:1 */
+[data-theme="light"] .work-group[data-category="pod"]   { --grp-label: #3D5830; } /* 6.15:1 */
+/* music: #6A4568 → 5.68:1 passes, no override needed */

@@ -254,3 +254,9 @@
     left: 4%; right: 4%;
   }
 }
+
+/* H-13: keyboard focus — make link visible for keyboard users */
+.service-card__link:focus-visible {
+  opacity: 1;
+  transform: translateY(0);
+}

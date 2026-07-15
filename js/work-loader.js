@@ -5,7 +5,7 @@
  *             setLang from i18n.js (re-applies translations after DOM injection)
  */
 
-import { setLang, getLang } from './i18n.js?v=3';
+import { setLang, getLang } from './i18n.js?v=4';
 
 const SUPABASE_URL = 'https://zspmnnrmcfcxdudmiegc.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_hex89ktAS2X0tyrSenty4g_pPlrTACL';
@@ -733,20 +733,29 @@ async function loadAll() {
     });
     return;
   }
+  // Show loading state
+  document.querySelectorAll('.work-coming-soon').forEach(el => {
+    el.textContent = 'Loading…';
+  });
   try {
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const ctrl = new AbortController();
+  const tid  = setTimeout(() => ctrl.abort(), 8000);
 
   // Standalone projects (no album) + albums — fetched in parallel
   const [pRes, aRes] = await Promise.all([
-    sb.from('projects').select('*')
+    sb.from('projects').select('id, title, description, category, album_id, media_type, cloudinary_url, cover_image_url, display_order, created_at, visible')
       .eq('visible', true).is('album_id', null)
       .order('display_order', { ascending: true })
-      .order('created_at',    { ascending: true }),
-    sb.from('albums').select('*')
+      .order('created_at',    { ascending: true })
+      .abortSignal(ctrl.signal),
+    sb.from('albums').select('id, title, description, category, cover_image_url, display_order, created_at, visible')
       .eq('visible', true)
       .order('display_order', { ascending: true })
-      .order('created_at',    { ascending: true }),
+      .order('created_at',    { ascending: true })
+      .abortSignal(ctrl.signal),
   ]);
+  clearTimeout(tid);
 
   if (pRes.error) throw new Error('Projects fetch failed: ' + pRes.error.message);
   if (aRes.error) throw new Error('Albums fetch failed: ' + aRes.error.message);
@@ -758,11 +767,13 @@ async function loadAll() {
   const albumTrackMap = {};
   albums.forEach(a => { albumTrackMap[a.id] = []; });
   if (albums.length > 0) {
-    const tRes = await sb.from('projects').select('*')
+    const tRes = await sb.from('projects').select('id, title, album_id, cloudinary_url, cover_image_url, media_type, display_order, created_at, visible')
       .in('album_id', albums.map(a => a.id))
       .eq('visible', true)
       .order('display_order', { ascending: true })
-      .order('created_at',    { ascending: true });
+      .order('created_at',    { ascending: true })
+      .abortSignal(ctrl.signal);
+    clearTimeout(tid);
     if (tRes.error) throw new Error('Tracks fetch failed: ' + tRes.error.message);
     (tRes.data || []).forEach(t => {
       if (t.album_id && albumTrackMap[t.album_id]) {
@@ -810,6 +821,7 @@ async function loadAll() {
   // Scroll to hash now that layout is settled
   if (typeof window.__scrollToHash === 'function') window.__scrollToHash();
   } catch (err) {
+    clearTimeout(tid);
     console.error('[work-loader] loadAll failed:', err);
     document.querySelectorAll('.work-group .work__track').forEach(track => {
       track.innerHTML = '<p class="work-load-error" style="color:var(--text-muted);font-size:0.85rem;padding:1rem 0">Content temporarily unavailable — please try again later.</p>';

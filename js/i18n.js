@@ -92,7 +92,7 @@ export const strings = {
 
     // Kapcsolat (főoldal)
     'contact.label':             'Keress meg',
-    'contact.title':             'Adjunk hangot az elképzelésednek.',
+    'contact.title':             'Adjunk hangot az <em>elképzelésednek.</em>',
     'contact.sub':               'Keress bátran film és reklámhang utómunkára, film zeneszerzésre vagy podcast utómunkára.\nVálasz 24 órán belül.',
     'contact.social.linkedin':   'LinkedIn',
 
@@ -129,7 +129,11 @@ export function setLang(lang) {
     // Fall back to English if key is missing in the active language
     const val = strings[lang]?.[key] ?? strings.en?.[key];
     if (val !== undefined) {
-      el.innerHTML = val.replace(/\n/g, '<br>');
+      if (val.includes('<') || val.includes('&') || val.includes('\n')) {
+        el.innerHTML = val.replace(/\n/g, '<br>');
+      } else {
+        el.textContent = val;
+      }
     } else {
       console.warn('[i18n] Missing key "%s" for lang "%s"', key, lang);
     }

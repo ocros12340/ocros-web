@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Content Security Policy — must be first so it governs all subsequent scripts -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-z7X3alVp6OmQV6Mvj0WEoDDXXvJwk8hfthid5LTnIYs=' 'sha256-lvLiq08fQt/W8c2Iq9pzwKBqI90kCtPWVf3EQ82pJW8=' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com https://img.youtube.com; media-src https://res.cloudinary.com; frame-src https://www.youtube.com https://player.vimeo.com; connect-src https://zspmnnrmcfcxdudmiegc.supabase.co; object-src 'none'; base-uri 'self'" />
   <!-- Anti-FOUC: apply saved theme before first paint -->
   <script>(function(){var t=localStorage.getItem('okros-theme')||'dark';document.documentElement.dataset.theme=t;})();</script>
   <!-- Scroll restoration must run before any paint to prevent jump -->
   <script>history.scrollRestoration = 'manual'; window.scrollTo(0, 0);</script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Content Security Policy -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-HKxubbsUEF/IAE6ffsiBBcAMyjf1lOOuEOr+prO0dDY=' 'sha256-lvLiq08fQt/W8c2Iq9pzwKBqI90kCtPWVf3EQ82pJW8=' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://res.cloudinary.com https://img.youtube.com; media-src https://res.cloudinary.com; frame-src https://www.youtube.com https://player.vimeo.com; connect-src https://zspmnnrmcfcxdudmiegc.supabase.co; object-src 'none'; base-uri 'self'" />
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Work — Okros Film Sound Designer | Film, Commercial &amp; Podcast</title>
   <meta name="description" content="Selected work by Okros — sound design, film score, commercial audio, and podcast production." />
@@ -62,12 +62,12 @@
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;600&display=swap" /></noscript>
 
   <!-- External CSS — tokens first, then shared, then work-page overrides last -->
-  <link rel="stylesheet" href="/css/tokens.css?v=3" />
-  <link rel="stylesheet" href="/css/base.css?v=3" />
-  <link rel="stylesheet" href="/css/nav.css?v=3" />
-  <link rel="stylesheet" href="/css/about-contact.css?v=3" />
-  <link rel="stylesheet" href="/css/geo.css?v=3" />
-  <link rel="stylesheet" href="/css/work-page.css?v=3" />
+  <link rel="stylesheet" href="/css/tokens.css?v=4" />
+  <link rel="stylesheet" href="/css/base.css?v=4" />
+  <link rel="stylesheet" href="/css/nav.css?v=4" />
+  <link rel="stylesheet" href="/css/about-contact.css?v=4" />
+  <link rel="stylesheet" href="/css/geo.css?v=4" />
+  <link rel="stylesheet" href="/css/work-page.css?v=4" />
   <script src="/js/shell.js" defer></script>
 </head>
 <body>
@@ -240,6 +240,6 @@
           integrity="sha256-e8r2pElMb5qnByeHhLpJVDA2Z4F/qvWBbp+cggSXPjE="
           crossorigin="anonymous"
           defer></script>
-  <script type="module" src="/js/work-main.js?v=3"></script>
+  <script type="module" src="/js/work-main.js?v=4"></script>
 </body>
 </html>

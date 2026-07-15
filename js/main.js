@@ -4,12 +4,12 @@
  * Loaded via: <script type="module" src="/js/main.js">
  */
 
-import { init as initI18n } from './i18n.js?v=3';
-import { init as initNav }  from './nav.js?v=3';
-import { init as initAnims } from './animations.js?v=3';
-import { init as initLogo }  from './logo-home.js?v=3';
-import { init as initServices } from './services.js?v=3';
-import { initTheme } from './theme.js?v=3';
+import { init as initI18n } from './i18n.js?v=4';
+import { init as initNav }  from './nav.js?v=4';
+import { init as initAnims } from './animations.js?v=4';
+import { init as initLogo }  from './logo-home.js?v=4';
+import { init as initServices } from './services.js?v=4';
+import { initTheme } from './theme.js?v=4';
 
 // ── Hero name letter animation ───────────────────────────────────────────────
 function initLetterAnimation() {
@@ -29,6 +29,7 @@ function initWaveform() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
   let resizeTimer;
   function resize() {
